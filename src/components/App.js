@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from 'components/logo.svg';
-import 'components/App.scss';
+import React, { useState, useEffect, useRef } from 'react';
+import Screen from 'components/Screen';
+import ModalManager from 'components/ModalManager';
+import './App.scss';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/components/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return [
+    <ModalManager />,
+    <Screen>
+      <div className="layout">
+        <div className="layout__main">
+          {/* <PanelManager />
+          <Visualisation /> */}
+        </div>
+        <div className="layout__start-bar">
+          {/* <ControlBar /> */}
+        </div>
+      </div>
+    </Screen>,
+  ];
 }
 
 export default App;
