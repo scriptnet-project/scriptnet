@@ -8,9 +8,9 @@ const transition = {
 };
 
 const variants = {
-  start: { opacity: 0, scaleX: 0, scaleY: 0, transition },
+  start: { opacity: 0, scaleX: 1.1, scaleY: 1.1, transition },
   in: { opacity: 1, scaleX: 1, scaleY: 1, transition },
-  out: { opacity: 0, translateY: '100%', transition },
+  out: { opacity: 0, scaleX: 0.8, scaleY: 0.8, transition },
 };
 
 const Screen = ({ index, children }) => (
