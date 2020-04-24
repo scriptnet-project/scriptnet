@@ -1,11 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { animation } from 'config';
 import './Screen.scss';
 
-const screenVariants = {
-  start: { opacity: 0, translateX: '-100%' },
-  in: { opacity: 1, translateX: ['-100%', 0] },
-  out: { opacity: 0, translateX: [0, '100%']  },
+const transition = {
+  duration: animation.duration.slow,
+};
+
+const variants = {
+  start: { opacity: 0, scaleX: 0, scaleY: 0, transition },
+  in: { opacity: 1, scaleX: 1, scaleY: 1, transition },
+  out: { opacity: 0, translateY: '100%', transition },
 };
 
 const Screen = ({ index, children }) => (
@@ -13,7 +18,7 @@ const Screen = ({ index, children }) => (
     initial="start"
     animate="in"
     exit="out"
-    variants={screenVariants}
+    variants={variants}
     className="Screen"
     style={{ zIndex: index }}
   >

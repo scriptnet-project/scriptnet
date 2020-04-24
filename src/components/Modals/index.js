@@ -1,11 +1,11 @@
 import React from 'react';
-// import Screen from 'components/Screen';
+// import Portal from 'components/Portal';
 
 const Modals = () => (
   <div />
-  // <Screen index={1000}>
+  // <Portal index={1000}>
   //   Modals
-  // </Screen>
+  // </Portal>
 );
 
 export default Modals;

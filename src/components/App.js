@@ -1,26 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import VisualisationScreen from 'components/Screens/Visualisation';
+import React, { useState } from 'react';
 import Modals from 'components/Modals';
+import Navigation from 'components/Navigation';
+import Screens from 'components/Screens';
 import './App.scss';
-import { AnimatePresence } from 'framer-motion';
 
 function App() {
-  const [show, setShow] = useState(true);
+  const [screen, setScreen] = useState('default');
+
+  const onNavigate = (screen) => {
+    console.log(screen);
+    setScreen(screen);
+  };
+
   return [
-    // <Modals />,
-    (
-      <div
-        style={{ position: 'absolute', top: 0, right: 0, zIndex: 100 }}
-        onClick={() => setShow((v) => !v)}
-      >click</div>
-    ),
-    (
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden'}}>
-        <AnimatePresence>
-          { show && <VisualisationScreen /> }
-        </AnimatePresence>
-      </div>
-    )
+    <Screens screen={screen} key="screen" />,
+    <Navigation onNavigate={onNavigate} key="navigation" />,
+    <Modals key="modals" />,
   ];
 }
 
