@@ -9,7 +9,10 @@ const panelModes = {
   [modes.ADD_EDGE]: [<Panels.AddEdgePanel key="AddEdgePanel"  />],
   [modes.ASSIGN_ATTRIBUTES]: [<Panels.AssignAttributesPanel key="AssignAttributesPanel" />],
   [modes.VIEW_DETAILS]: [<Panels.ViewDetailsPanel key="ViewDetailsPanel" />],
-  [modes.CONFIGURE]: [<Panels.ConfigurePanel key="ConfigurePanel" />],
+  [modes.CONFIGURE]: [
+    <Panels.ConfigurePanel key="ConfigurePanel" />,
+    <Panels.PlaceholderPanel key="PlaceholderPanel" />
+  ],
 };
 
 const getPanels = (mode) =>
