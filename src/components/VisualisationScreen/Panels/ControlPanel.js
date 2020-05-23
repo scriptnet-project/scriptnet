@@ -1,6 +1,6 @@
 import React from 'react';
-import Panel from '../Panel';
-import { modes } from '../config';
+import Panel from 'components/VisualisationScreen/Panel';
+import { modes } from 'components/VisualisationScreen/config';
 
 const ControlBar = ({
   onSetMode,

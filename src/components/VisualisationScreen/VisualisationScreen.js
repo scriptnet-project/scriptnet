@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Screen from 'components/Screen';
-import Visualisation from './Visualisation';
-import PanelManager from './PanelManager';
+import Visualisation from 'components/VisualisationScreen/Visualisation';
+import PanelManager from 'components/VisualisationScreen/PanelManager';
 
 const VisualisationScreen = () => {
   const [mode, setMode] = useState('default');

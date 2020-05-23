@@ -1,5 +1,5 @@
 import React from 'react';
-import Panel from '../Panel';
+import Panel from 'components/VisualisationScreen/Panel';
 
 const AssignAttributesPanel = () => (
   <Panel type="side">
