@@ -9,7 +9,7 @@ const screens = {
   default: <WelcomeScreen key="welcome" />,
 };
 
-const Screens = ({ screen = "default" }) => (
+const ScreensManager = ({ screen = "default" }) => (
   <div className="Screens">
     <AnimatePresence>
       { screens[screen] }
@@ -17,4 +17,4 @@ const Screens = ({ screen = "default" }) => (
   </div>
 );
 
-export default Screens;
+export default ScreensManager;

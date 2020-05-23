@@ -19,6 +19,11 @@ const variants = {
     'enter': { translateY: ['100%', 0], opacity: 1, transition, },
     'exit': { translateY: 0, opacity: 0, transition,  },
   },
+  window: {
+    'initial': { translateY: '100%', translateX: '-50%', opacity: 0, transition, },
+    'enter': { translateY: ['100%', '-50%'], translateX: '-50%', opacity: 1, transition, },
+    'exit': { translateY: 0, translateX: '-50%', opacity: 0, transition,  },
+  },
 };
 
 const Panel = ({
