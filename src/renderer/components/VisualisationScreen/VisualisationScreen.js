@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Screen from 'components/Screen';
-import Visualisation from 'components/VisualisationScreen/Visualisation';
-import PanelManager from 'components/VisualisationScreen/PanelManager';
+import Screen from 'Components/Screen';
+import Visualisation from 'Components/VisualisationScreen/Visualisation';
+import PanelManager from 'Components/VisualisationScreen/PanelManager';
 
 const VisualisationScreen = () => {
   // This might become useReducer, and contain othher
