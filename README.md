@@ -1,4 +1,12 @@
-# electron-webpack-quick-start
+# Scriptnet
+
+Main point of interest is probably `src/components/VisualisationScreen`, it includes:
+
+<Visualisation /> - which is intended to hold the graph visualisation
+<PanelsManager /> - which displays the appropriate panel(s) depending on where we are in the app.
+
+
+## This is built on top of electron-webpack-quick-start
 > A bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
 
 Thanks to the power of `electron-webpack` this template comes packed with...
@@ -9,25 +17,6 @@ Thanks to the power of `electron-webpack` this template comes packed with...
 * Use of [`electron-builder`](https://github.com/electron-userland/electron-builder) to package and build a distributable electron application
 
 Make sure to check out [`electron-webpack`'s documentation](https://webpack.electron.build/) for more details.
-
-## Getting Started
-Simply clone down this repository, install dependencies, and get started on your application.
-
-The use of the [yarn](https://yarnpkg.com/) package manager is **strongly** recommended, as opposed to using `npm`.
-
-```bash
-# create a directory of your choice, and copy template using curl
-mkdir new-electron-webpack-project && cd new-electron-webpack-project
-curl -fsSL https://github.com/electron-userland/electron-webpack-quick-start/archive/master.tar.gz | tar -xz --strip-components 1
-
-# or copy template using git clone
-git clone https://github.com/electron-userland/electron-webpack-quick-start.git
-cd electron-webpack-quick-start
-rm -rf .git
-
-# install dependencies
-yarn
-```
 
 ### Development Scripts
 
@@ -44,3 +33,4 @@ yarn dist
 # `yarn compile` & create unpacked build with electron-builder
 yarn dist:dir
 ```
+
