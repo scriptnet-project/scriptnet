@@ -11,6 +11,7 @@
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
   "dependencies": {
+    "@fluentui/react": "^7.124.1",
     "classnames": "^2.2.6",
     "framer-motion": "^1.10.3",
     "react": "^16.13.1",
