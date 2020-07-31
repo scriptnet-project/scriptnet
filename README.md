@@ -29,6 +29,7 @@ yarn compile
 
 # `yarn compile` & create build with electron-builder
 yarn dist
+# To disable code signing on macOS set the env var CSC_IDENTITY_AUTO_DISCOVERY=false
 
 # `yarn compile` & create unpacked build with electron-builder
 yarn dist:dir
