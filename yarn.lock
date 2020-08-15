@@ -6280,7 +6280,7 @@ obuf@^1.0.0, obuf@^1.1.2:
 
 office-ui-fabric-react@^7.124.1:
   version "7.124.1"
-  resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-7.124.1.tgz#e9b748d4fdb7e3e4445a284e67090401b1673944"
+  resolved "https://registry.yarnpkg.com/@fluentui/react/-/office-ui-fabric-react-7.124.1.tgz#e9b748d4fdb7e3e4445a284e67090401b1673944"
   integrity sha512-ZP20wkOX3AjwdFjLa+/4YgLg7Tm2Ew+VlzqBfcRWANrjzEnpVshnjwxhejMbWoTHpiTGMmQazNjB/xTEydGa0A==
   dependencies:
     "@fluentui/date-time-utilities" "^7.3.0"
