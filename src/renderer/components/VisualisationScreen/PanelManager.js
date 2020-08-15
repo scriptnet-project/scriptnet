@@ -27,7 +27,7 @@ const PanelManager = ({ mode, onSetMode }) => {
     <React.Fragment>
       <Panels.AddNodePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addNode')(mode)} />
       <Panels.AddEdgePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addEdge')(mode)} />
-      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttribuse')(mode)} />
+      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
       <Panels.ViewDetailsPanel onDismiss={handleDismiss} isOpen={isPanelOpen('viewDetails')(mode)} />
       <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
     </React.Fragment>

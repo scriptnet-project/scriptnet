@@ -13,8 +13,12 @@ const iconClass = mergeStyles({
 
 const Visualisation = () => (
   <div className="Visualisation">
-    <Text>This is the visualisation screen</Text>
-    <FontIcon iconName="CompassNW" className={iconClass} />
+    <Text>
+      This is the visualisation screen.
+
+      Here is an icon<FontIcon iconName="CompassNW" className={iconClass} />
+    </Text>
+
   </div>
 );
 
