@@ -1,9 +1,10 @@
 import React from 'react';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const ViewDetailsPanel = ({ open }) => (
+const ViewDetailsPanel = ({ isOpen, onDismiss }) => (
   <Panel
-    isOpen={open}
+    isOpen={isOpen}
+    onDismiss={onDismiss}
     headerText="Actor Details"
     closeButtonAriaLabel="Close"
   >

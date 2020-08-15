@@ -1,11 +1,10 @@
 import React from 'react';
+import { Text } from '@fluentui/react/lib/Text';
 import Screen from './Screen';
 
 const WelcomeScreen = () => (
   <Screen>
-    <div style={{position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'blue' }}>
-      Welcome
-    </div>
+    <Text>This is the welcome screen</Text>
   </Screen>
 );
 

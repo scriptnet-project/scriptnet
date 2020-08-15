@@ -12,19 +12,24 @@ const panelModes = {
   [modes.CONFIGURE]: ['configure'],
 };
 
-const getPanels = (mode) =>
+const getOpenPanelsForMode = mode =>
   get(panelModes, mode, []);
 
-const showPanel = (panel) => (mode) => getPanels(mode).includes(panel);
+const isPanelOpen = panel =>
+  mode =>
+    getOpenPanelsForMode(mode).includes(panel);
 
-const PanelManager = ({ mode }) => {
+const PanelManager = ({ mode, onSetMode }) => {
+  const handleDismiss = () =>
+    onSetMode(modes.DEFAULT);
+
   return (
     <React.Fragment>
-      <Panels.AddNodePanel open={showPanel('addNode')(mode)} />
-      <Panels.AddEdgePanel open={showPanel('addEdge')(mode)} />
-      <Panels.AssignAttributesPanel open={showPanel('assignAttribuse')(mode)} />
-      <Panels.ViewDetailsPanel open={showPanel('viewDetails')(mode)} />
-      <Panels.ConfigurePanel open={showPanel('configure')(mode)} />
+      <Panels.AddNodePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addNode')(mode)} />
+      <Panels.AddEdgePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addEdge')(mode)} />
+      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttribuse')(mode)} />
+      <Panels.ViewDetailsPanel onDismiss={handleDismiss} isOpen={isPanelOpen('viewDetails')(mode)} />
+      <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
     </React.Fragment>
   );
 };

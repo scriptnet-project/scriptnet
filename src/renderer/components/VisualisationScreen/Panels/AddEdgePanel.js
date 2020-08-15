@@ -1,9 +1,10 @@
 import React from 'react';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const AddEdgePanel = ({ open }) => (
+const AddEdgePanel = ({ isOpen, onDismiss }) => (
   <Panel
-    isOpen={open}
+    isOpen={isOpen}
+    onDismiss={onDismiss}
     headerText="Add edge"
     closeButtonAriaLabel="Close"
   >

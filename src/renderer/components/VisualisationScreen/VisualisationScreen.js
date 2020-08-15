@@ -18,7 +18,7 @@ const VisualisationScreen = () => {
     <Screen>
       <Visualisation />
       <ControlBar onSetMode={handleSetMode} />
-      <PanelManager mode={mode} />
+      <PanelManager mode={mode} onSetMode={handleSetMode} />
     </Screen>
   );
 };
