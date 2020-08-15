@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import Modals from 'components/Modals';
-import Navigation from 'components/Navigation';
-import ScreensManager from 'components/ScreensManager';
-import './App.scss';
+import Navigation from 'Components/Navigation';
+import ScreensManager from 'Components/ScreensManager';
+import 'Components/App.scss';
 
 function App() {
   const [screen, setScreen] = useState('visualisation');
@@ -15,7 +14,6 @@ function App() {
   return [
     <ScreensManager screen={screen} key="screen" />,
     <Navigation onNavigate={onNavigate} key="navigation" />,
-    <Modals key="modals" />,
   ];
 }
 

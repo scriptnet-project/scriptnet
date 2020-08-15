@@ -1,41 +1,43 @@
 {
   "name": "scriptnet",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "University of Manchester",
+  "description": "A tool for visualising networks",
+  "scripts": {
+    "dev": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "yarn compile && electron-builder",
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
     "classnames": "^2.2.6",
     "framer-motion": "^1.10.3",
-    "node-sass": "^4.13.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-redux": "^7.1.3",
-    "react-scripts": "3.3.1",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "source-map-support": "^0.5.16"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.1.0",
+    "cross-env": "^7.0.2",
+    "electron": "8.2.0",
+    "electron-builder": "^22.4.1",
+    "electron-webpack": "^2.8.2",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.2",
+    "webpack": "~4.42.1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "electronWebpack": {
+    "renderer": {
+      "webpackConfig": "renderer.webpack.additions.js"
+    }
   }
 }

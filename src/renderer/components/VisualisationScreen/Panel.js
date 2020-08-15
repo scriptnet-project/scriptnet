@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import cx from 'classnames';
-import { animation } from 'config';
+import { animation } from 'Renderer/config';
 import './Panel.scss';
 
 const transition = {

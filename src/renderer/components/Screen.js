@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { animation } from 'config';
+import { animation } from 'Renderer/config';
 import './Screen.scss';
 
 const transition = {

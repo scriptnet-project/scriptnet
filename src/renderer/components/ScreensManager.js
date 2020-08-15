@@ -1,7 +1,7 @@
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
-import VisualisationScreen from 'components/VisualisationScreen';
-import WelcomeScreen from 'components/WelcomeScreen';
+import VisualisationScreen from 'Components/VisualisationScreen';
+import WelcomeScreen from 'Components/WelcomeScreen';
 import './Screens.scss';
 
 const screens = {
