@@ -1,10 +1,14 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const AddLinksPanel = () => (
-  <Panel type="side">
-    <h3>Add Links</h3>
+const AddEdgePanel = ({ open }) => (
+  <Panel
+    isOpen={open}
+    headerText="Add edge"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 
-export default AddLinksPanel;
+export default AddEdgePanel;

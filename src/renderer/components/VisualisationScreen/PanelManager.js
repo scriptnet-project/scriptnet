@@ -1,29 +1,31 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { get } from 'lodash';
 import { modes } from './config';
 import * as Panels from './Panels';
 
 const panelModes = {
   [modes.DEFAULT]: [],
-  [modes.ADD_NODE]: [<Panels.AddNodePanel key="AddNodePanel" />],
-  [modes.ADD_EDGE]: [<Panels.AddEdgePanel key="AddEdgePanel"  />],
-  [modes.ASSIGN_ATTRIBUTES]: [<Panels.AssignAttributesPanel key="AssignAttributesPanel" />],
-  [modes.VIEW_DETAILS]: [<Panels.ViewDetailsPanel key="ViewDetailsPanel" />],
-  [modes.CONFIGURE]: [
-    <Panels.ConfigurePanel key="ConfigurePanel" />,
-    <Panels.PlaceholderPanel key="PlaceholderPanel" />
-  ],
+  [modes.ADD_NODE]: ['addNode'],
+  [modes.ADD_EDGE]: ['addEdge'],
+  [modes.ASSIGN_ATTRIBUTES]: ['assignAttributes'],
+  [modes.VIEW_DETAILS]: ['viewDetails'],
+  [modes.CONFIGURE]: ['configure'],
 };
 
 const getPanels = (mode) =>
-  panelModes[mode];
+  get(panelModes, mode, []);
 
-const PanelManager = ({ mode, onSetMode }) => {
+const showPanel = (panel) => (mode) => getPanels(mode).includes(panel);
+
+const PanelManager = ({ mode }) => {
   return (
-    <AnimatePresence>
-      {getPanels(mode)}
-      <Panels.ControlPanel onSetMode={onSetMode}/>
-    </AnimatePresence>
+    <React.Fragment>
+      <Panels.AddNodePanel open={showPanel('addNode')(mode)} />
+      <Panels.AddEdgePanel open={showPanel('addEdge')(mode)} />
+      <Panels.AssignAttributesPanel open={showPanel('assignAttribuse')(mode)} />
+      <Panels.ViewDetailsPanel open={showPanel('viewDetails')(mode)} />
+      <Panels.ConfigurePanel open={showPanel('configure')(mode)} />
+    </React.Fragment>
   );
 };
 

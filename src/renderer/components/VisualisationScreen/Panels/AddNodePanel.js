@@ -1,10 +1,14 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const AddNodesPanel = () => (
-  <Panel type="window">
-    <h3>Add Actors</h3>
+const AddNodePanel = ({ open }) => (
+  <Panel
+    isOpen={open}
+    headerText="Add node"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 
-export default AddNodesPanel;
+export default AddNodePanel;

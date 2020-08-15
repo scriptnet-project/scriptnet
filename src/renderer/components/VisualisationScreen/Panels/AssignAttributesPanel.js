@@ -1,9 +1,13 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const AssignAttributesPanel = () => (
-  <Panel type="side">
-    <h3>Assign Attributes</h3>
+const AssignAttributesPanel = ({ open }) => (
+  <Panel
+    isOpen={open}
+    headerText="Assign node attributes"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 

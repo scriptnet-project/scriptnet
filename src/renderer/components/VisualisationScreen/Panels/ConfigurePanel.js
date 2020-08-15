@@ -1,9 +1,13 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from 'office-ui-fabric-react/lib/Panel';
 
-const ConfigurePanel = () => (
-  <Panel type="side">
-    <h3>Configure Visualisation</h3>
+const ConfigurePanel = ({ open }) => (
+  <Panel
+    isOpen={open}
+    headerText="Configure app"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 
