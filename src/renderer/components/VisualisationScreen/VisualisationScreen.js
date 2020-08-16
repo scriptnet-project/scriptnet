@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Screen from 'Components/Screen';
 import Visualisation from 'Components/VisualisationScreen/Visualisation';
+import ControlBar from 'Components/VisualisationScreen/ControlBar';
 import PanelManager from 'Components/VisualisationScreen/PanelManager';
 
 const VisualisationScreen = () => {
@@ -16,6 +17,7 @@ const VisualisationScreen = () => {
   return (
     <Screen>
       <Visualisation />
+      <ControlBar onSetMode={handleSetMode} />
       <PanelManager mode={mode} onSetMode={handleSetMode} />
     </Screen>
   );

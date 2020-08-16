@@ -1,10 +1,15 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from '@fluentui/react/lib/Panel';
 
-const AddLinksPanel = () => (
-  <Panel type="side">
-    <h3>Add Links</h3>
+const AddEdgePanel = ({ isOpen, onDismiss }) => (
+  <Panel
+    isOpen={isOpen}
+    onDismiss={onDismiss}
+    headerText="Add edge"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 
-export default AddLinksPanel;
+export default AddEdgePanel;

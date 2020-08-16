@@ -1,29 +1,36 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { get } from 'lodash';
 import { modes } from './config';
 import * as Panels from './Panels';
 
 const panelModes = {
   [modes.DEFAULT]: [],
-  [modes.ADD_NODE]: [<Panels.AddNodePanel key="AddNodePanel" />],
-  [modes.ADD_EDGE]: [<Panels.AddEdgePanel key="AddEdgePanel"  />],
-  [modes.ASSIGN_ATTRIBUTES]: [<Panels.AssignAttributesPanel key="AssignAttributesPanel" />],
-  [modes.VIEW_DETAILS]: [<Panels.ViewDetailsPanel key="ViewDetailsPanel" />],
-  [modes.CONFIGURE]: [
-    <Panels.ConfigurePanel key="ConfigurePanel" />,
-    <Panels.PlaceholderPanel key="PlaceholderPanel" />
-  ],
+  [modes.ADD_NODE]: ['addNode'],
+  [modes.ADD_EDGE]: ['addEdge'],
+  [modes.ASSIGN_ATTRIBUTES]: ['assignAttributes'],
+  [modes.VIEW_DETAILS]: ['viewDetails'],
+  [modes.CONFIGURE]: ['configure'],
 };
 
-const getPanels = (mode) =>
-  panelModes[mode];
+const getOpenPanelsForMode = mode =>
+  get(panelModes, mode, []);
+
+const isPanelOpen = panel =>
+  mode =>
+    getOpenPanelsForMode(mode).includes(panel);
 
 const PanelManager = ({ mode, onSetMode }) => {
+  const handleDismiss = () =>
+    onSetMode(modes.DEFAULT);
+
   return (
-    <AnimatePresence>
-      {getPanels(mode)}
-      <Panels.ControlPanel onSetMode={onSetMode}/>
-    </AnimatePresence>
+    <React.Fragment>
+      <Panels.AddNodePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addNode')(mode)} />
+      <Panels.AddEdgePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addEdge')(mode)} />
+      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
+      <Panels.ViewDetailsPanel onDismiss={handleDismiss} isOpen={isPanelOpen('viewDetails')(mode)} />
+      <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
+    </React.Fragment>
   );
 };
 

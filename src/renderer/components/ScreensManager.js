@@ -1,18 +1,16 @@
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import VisualisationScreen from 'Components/VisualisationScreen';
-import WelcomeScreen from 'Components/WelcomeScreen';
 import './Screens.scss';
 
-const screens = {
-  visualisation: <VisualisationScreen key="visualisation" />,
-  default: <WelcomeScreen key="welcome" />,
-};
+const getScreen = (name) => ({
+  default: <VisualisationScreen key="visualisation" />,
+}[name]);
 
-const ScreensManager = ({ screen = "default" }) => (
+const ScreensManager = ({ screenName = "default" }) => (
   <div className="Screens">
     <AnimatePresence>
-      { screens[screen] }
+      { getScreen(screenName) }
     </AnimatePresence>
   </div>
 );

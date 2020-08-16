@@ -1,9 +1,14 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from '@fluentui/react/lib/Panel';
 
-const ViewDetailsPanel = () => (
-  <Panel type="side">
-    <h3>Actor Details</h3>
+const ViewDetailsPanel = ({ isOpen, onDismiss }) => (
+  <Panel
+    isOpen={isOpen}
+    onDismiss={onDismiss}
+    headerText="Actor Details"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 

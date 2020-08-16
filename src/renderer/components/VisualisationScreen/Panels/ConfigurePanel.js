@@ -1,9 +1,14 @@
 import React from 'react';
-import Panel from 'Components/VisualisationScreen/Panel';
+import { Panel } from '@fluentui/react/lib/Panel';
 
-const ConfigurePanel = () => (
-  <Panel type="side">
-    <h3>Configure Visualisation</h3>
+const ConfigurePanel = ({ isOpen, onDismiss }) => (
+  <Panel
+    isOpen={isOpen}
+    onDismiss={onDismiss}
+    headerText="Configure app"
+    closeButtonAriaLabel="Close"
+  >
+    content here
   </Panel>
 );
 
