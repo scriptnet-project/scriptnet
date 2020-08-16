@@ -1,25 +1,89 @@
-import React from 'react';
-import { FontIcon } from '@fluentui/react/lib/Icon';
-import { mergeStyles } from '@fluentui/react/lib/Styling';
-import { Text } from '@fluentui/react/lib/Text';
+import React, { useRef, useCallback } from 'react';
+import CytoscapeComponent from 'react-cytoscapejs';
 import './Visualisation.scss';
 
-const iconClass = mergeStyles({
-  fontSize: 50,
-  height: 50,
-  width: 50,
-  margin: '0 25px',
-});
+const network = [
+  { data: { id: 'one', label: 'Node 1', type: 'person' }, position: { x: 0, y: 0 } },
+  { data: { id: 'two', label: 'Node 2', type: 'person' }, position: { x: 100, y: 0 } },
+  { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
+];
 
-const Visualisation = () => (
-  <div className="Visualisation">
-    <Text>
-      This is the visualisation screen.
+const Visualisation = (props) => {
+  const cy = useRef(null);
 
-      Here is an icon<FontIcon iconName="CompassNW" className={iconClass} />
-    </Text>
+  const setCytoscape = useCallback(
+    (ref) => {
+      cy.current = ref;
+      cy.current.center();
 
-  </div>
-);
+      cy.current.on('add', (event) => {
+        console.log('something added to graph', event);
+
+        // Run the layout again
+        cy.current.layout({
+          name: 'random'
+        });
+
+        // Animate the viewport to the graph using the nodes selector
+        cy.current.animate({
+          fit: {
+            eles: 'node',
+            padding: 100,
+          }
+        }, {
+          duration: 500
+        });
+      });
+
+      cy.current.on('select', (event) => {
+        console.log('A node or edge was selected', event);
+      });
+
+    },
+    [cy],
+  );
+
+  // Simulate adding a new node
+  setTimeout(() => {
+    cy.current.add({
+      group: 'nodes',
+      data: { type: 'organisation' },
+      position: { x: 600, y: 200 }
+    });
+  }, 2000);
+
+  const layout = { name: 'random' };
+
+  return (
+    <div className="Visualisation">
+      <CytoscapeComponent
+        layout={layout}
+        cy={setCytoscape}
+        elements={network}
+        style={{
+          height: '100%'
+        }}
+        stylesheet={[
+          {
+            selector: 'node[type = "person"]',
+            style: {
+              label: "data(id)",
+              'background-color': 'blue',
+              shape: 'rectangle',
+            },
+          },
+          {
+            selector: 'node[type = "organisation"]',
+            style: {
+              label: "data(id)",
+              'background-color': 'tomato',
+              shape: 'circle',
+            },
+          },
+        ]}
+      />
+    </div>
+  );
+}
 
 export default Visualisation;
