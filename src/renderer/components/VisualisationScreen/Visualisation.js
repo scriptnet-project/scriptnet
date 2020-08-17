@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import './Visualisation.scss';
 
@@ -11,46 +11,50 @@ const network = [
 const Visualisation = (props) => {
   const cy = useRef(null);
 
-  const setCytoscape = useCallback(
-    (ref) => {
-      cy.current = ref;
-      cy.current.center();
+  useEffect(() => {
+    // this only runs once
+    console.log('ran me', cy.current);
 
-      cy.current.on('add', (event) => {
-        console.log('something added to graph', event);
+    cy.current.center();
 
-        // Run the layout again
-        cy.current.layout({
-          name: 'random'
-        });
+    cy.current.on('add', (event) => {
+      console.log('something added to graph', event);
 
-        // Animate the viewport to the graph using the nodes selector
-        cy.current.animate({
-          fit: {
-            eles: 'node',
-            padding: 100,
-          }
-        }, {
-          duration: 500
-        });
+      // Run the layout again
+      cy.current.layout({
+        name: 'random'
       });
 
-      cy.current.on('select', (event) => {
-        console.log('A node or edge was selected', event);
+      // Animate the viewport to the graph using the nodes selector
+      cy.current.animate({
+        fit: {
+          eles: 'node',
+          padding: 100,
+        }
+      }, {
+        duration: 500
       });
-
-    },
-    [cy],
-  );
-
-  // Simulate adding a new node
-  setTimeout(() => {
-    cy.current.add({
-      group: 'nodes',
-      data: { type: 'organisation' },
-      position: { x: 600, y: 200 }
     });
-  }, 2000);
+
+    cy.current.on('select', (event) => {
+      console.log('A node or edge was selected', event);
+    });
+
+    console.log(cy.current.nodes().length);
+  }, [cy.current]);
+
+  const nodeCount = cy.current && cy.current.nodes().length;
+
+  useEffect(() => {
+    // Simulate adding a new node on first run
+    setTimeout(() => {
+      cy.current.add({
+        group: 'nodes',
+        data: { type: 'organisation' },
+        position: { x: 600, y: 200 }
+      });
+    }, 2000);
+  }, []);
 
   const layout = { name: 'random' };
 
@@ -58,7 +62,7 @@ const Visualisation = (props) => {
     <div className="Visualisation">
       <CytoscapeComponent
         layout={layout}
-        cy={setCytoscape}
+        cy={(cyRef) => cy.current = cyRef}
         elements={network}
         style={{
           height: '100%'
