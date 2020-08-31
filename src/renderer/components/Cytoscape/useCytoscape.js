@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { CyContext } from './CyProvider';
 
 const useCytoscape = () => {
