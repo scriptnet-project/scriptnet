@@ -1,15 +1,9 @@
-import Cytoscape from 'cytoscape';
-
-const CytoscapeContext = React.createContext(new Cytoscape());
-
-const CytoscapeProvider = CytoscapeContext.Provider;
+import { CyContext } from './CyProvider';
 
 const useCytoscape = () => {
-  const cy = useContext(CytoscapeContext);
+  const cy = useContext(CyContext);
 
   return cy;
 };
-
-export { CytoscapeProvider };
 
 export default useCytoscape;
