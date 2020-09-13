@@ -12,6 +12,23 @@ const initialState = {
   filePath: null,
 };
 
+const centerCy = () => {
+  // Run the layout again
+  cy.layout({
+    name: 'random'
+  });
+
+  // Animate the viewport to the graph using the nodes selector
+  cy.animate({
+    fit: {
+      eles: 'node',
+      padding: 100,
+    }
+  }, {
+    duration: 500
+  });
+};
+
 const CyLoader = ({ children }) => {
   const cyRef = useRef(cy);
   const [state, setState] = useState(initialState);
@@ -28,6 +45,7 @@ const CyLoader = ({ children }) => {
         cy.elements().remove();
         cy.reset();
         cy.add(elements);
+        centerCy();
       });
   };
 
