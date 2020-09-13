@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import useCytoscape from './useCytoscape';
+import useCytoscape from '../hooks/useCytoscape';
 
 /**
  * Render cytoscape from the closest Provider

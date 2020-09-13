@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import Cytoscape, { useCytoscape } from '../Cytoscape';
+import useCytoscape from '../../hooks/useCytoscape';
+import Cytoscape from '../Cytoscape';
 import './Visualisation.scss';
 
 const layout = { name: 'random' };
