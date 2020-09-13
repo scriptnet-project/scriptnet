@@ -1,2 +1,2 @@
 export { default } from './useCytoscape';
-export { default as CyProvider } from './CyProvider';
+export { default as CyContext } from './CyContext';
