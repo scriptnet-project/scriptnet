@@ -14,6 +14,7 @@
     "@fluentui/react": "^7.124.1",
     "classnames": "^2.2.6",
     "framer-motion": "^2.4.2",
+    "fs-extra": "^9.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.1.3",

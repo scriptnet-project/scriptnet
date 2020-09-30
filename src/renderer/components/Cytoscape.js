@@ -1,12 +1,12 @@
 import React, { useRef, useEffect } from 'react';
-import useCytoscape from './useCytoscape';
+import useCytoscape from '../hooks/useCytoscape';
 
 /**
  * Render cytoscape from the closest Provider
  */
 const Cytoscape = (props) => {
   const cyContainer = useRef();
-  const cy = useCytoscape();
+  const [cy] = useCytoscape();
 
   useEffect(() => {
     if (cyContainer.current) {
