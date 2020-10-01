@@ -4,6 +4,7 @@ import useCytoscape from '../../hooks/useCytoscape';
 import Cytoscape from '../Cytoscape';
 
 import './Visualisation.scss';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const theme = getTheme();
 const stylesheet = [
@@ -77,6 +78,13 @@ const stylesheet = [
     }
   },
   {
+    selector: 'node:selected',
+    style: {
+      'border-width': 5,
+      'border-color': theme.palette.yellow
+    }
+  },
+  {
     selector: 'node[type = "person"]',
     style: {
       label: "data(name)",
@@ -112,6 +120,7 @@ const stylesheet = [
 
 const Visualisation = (props) => {
   const [cy, cyActions] = useCytoscape();
+  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
 
   useEffect(() => {
@@ -128,11 +137,28 @@ const Visualisation = (props) => {
 
     cy.on('select', (event) => {
       console.log('A node or edge was selected', event);
+
+      // Animate to the selected node
+      cy.animate({
+        fit: {
+          eles: 'node:selected',
+          padding: 100,
+        }
+      }, {
+        duration: 500
+      });
+      setSelectedNode('boom');
+    });
+
+    cy.on('unselect', (event) => {
+      console.log('A node or edge was de-selected', event);
+      setSelectedNode(null);
     });
   }, []);
 
+  const isPanelOpen = true;
   return (
-    <div className="Visualisation">
+    <div className={(`Visualisation ${isPanelOpen ? 'Visualisation--openPanel' : ''}`)}>
       <Cytoscape
         style={{
           height: '100%'

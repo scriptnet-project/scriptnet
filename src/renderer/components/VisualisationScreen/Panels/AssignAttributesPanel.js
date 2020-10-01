@@ -7,6 +7,7 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => (
     onDismiss={onDismiss}
     headerText="Assign node attributes"
     closeButtonAriaLabel="Close"
+    isBlocking={false}
   >
     content here
   </Panel>

@@ -12,9 +12,9 @@ import {
   FontIcon,
   CommandBar,
   CommandBarButton,
-  Toggle
 } from '@fluentui/react';
 import useCytoscape from '../../hooks/useCytoscape';
+import './CommandBar.scss';
 
 const TopCommandBar = ({
 }) => {
@@ -42,6 +42,12 @@ const TopCommandBar = ({
   ];
 
   const farItems = [
+    {
+      key: 'Search',
+      placeholder: 'Search...',
+      underlined: true,
+      commandBarButtonAs: SearchBox,
+    },
     {
       key: 'Export',
       text: 'Export Screenshot',

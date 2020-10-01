@@ -1,8 +1,12 @@
 @import '../../theme';
 
 .Visualisation {
-  width: 100%;
-  height: 100%;
-  flex: 1 auto;
+  // width: 400px;
+  // height: 400px;
+  flex: 1;
   background: $palette_themeLighterAlt;
+
+  &--openPanel {
+    margin-left: 350px;
+  }
 }

@@ -11,8 +11,8 @@ Cytoscape.use(cola);
 Cytoscape.use(edgeHandles);
 
 const dialog = electron.remote.dialog;
-const cy = new Cytoscape({ maxZoom: 2, headless: true });
-const eh = cy.edgehandles();
+const cy = new Cytoscape({ maxZoom: 1.5, headless: true });
+let eh;
 
 const initialState = {
   isLoading: false,
@@ -70,7 +70,25 @@ const CyLoader = ({ children }) => {
     cy.layout(layoutOptions).run();
   }
 
-  const actions = { openNetwork, saveNetwork, runLayout };
+  const enableEdgeCreation = () => {
+    eh = cy.edgehandles();
+    eh.enable();
+  }
+
+  const disableEdgeCreation = () => {
+    if (eh) {
+      eh.disable();
+      eh.destroy();
+    }
+  }
+
+  const actions = {
+    openNetwork,
+    saveNetwork,
+    runLayout,
+    enableEdgeCreation,
+    disableEdgeCreation,
+  };
   const value = [cyRef.current, actions];
 
   return (

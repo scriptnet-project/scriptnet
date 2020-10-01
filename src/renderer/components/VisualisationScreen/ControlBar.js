@@ -2,13 +2,20 @@ import React from 'react';
 import {
   CompoundButton,
   Stack,
-  SearchBox
+  SearchBox,
+  VerticalDivider
 } from '@fluentui/react';
+import { modes } from 'Components/VisualisationScreen/config';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
 import { AddPersonForm, AddPlaceForm } from './AddEntityForms';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { isPanelOpen } from './PanelManager';
 
-const ControlBar = () => {
+const ControlBar = ({
+  onSetMode,
+  mode,
+}) => {
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
   const [hidePlaceDialog, { toggle: toggleHidePlaceDialog }] = useBoolean(true);
 
@@ -21,9 +28,7 @@ const ControlBar = () => {
           <CompoundButton className="primary-action-button__button"
             secondaryText="Add a new actor to this case"
             text="Add Actors"
-            tokens={{
-              maxWidth: 25,
-            }}
+            primary
             menuProps={{
               items: [
                 {
@@ -56,39 +61,43 @@ const ControlBar = () => {
             }}
             iconProps={{ iconName: "addFriend"}}
             verticalFill
+            primary={mode === modes.DEFAULT}
         />
         </Stack.Item>
+        <VerticalDivider />
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
             secondaryText="Add a new relationship between actors"
-            onClick={toggleHidePersonDialog}
             text="Add Relationships"
             iconProps={{ iconName: "GitGraph"}}
             verticalFill
+            onClick={() => onSetMode(modes.CREATE_EDGES)}
+            primary={mode === modes.CREATE_EDGES}
           />
         </Stack.Item>
+        <VerticalDivider />
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
             secondaryText="Assign actors to certain actions within the case"
-            onClick={toggleHidePersonDialog}
             text="Assign Actions"
             iconProps={{ iconName: "Fingerprint"}}
             verticalFill
+            onClick={() => onSetMode(modes.ASSIGN_ATTRIBUTES)}
+            primary={mode === modes.ASSIGN_ATTRIBUTES}
           />
         </Stack.Item>
+        <VerticalDivider />
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
             secondaryText="Change the way the network is displayed"
-            onClick={toggleHidePersonDialog}
             text="Change Visualisation"
             iconProps={{ iconName: "PictureFill"}}
             verticalFill
+            onClick={() => onSetMode(modes.CONFIGURE)}
+            primary={mode === modes.CONFIGURE}
           />
         </Stack.Item>
       </Stack>
-      {/* <Stack>
-        <SearchBox placeholder="Find in network..." onSearch={newValue => console.log('value is ' + newValue)} />
-      </Stack> */}
     </div>
   );
 };

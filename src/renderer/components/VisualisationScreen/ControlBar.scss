@@ -1,11 +1,13 @@
 @import '../../theme';
 
 .ControlBar {
-  padding: 2rem;
+  padding: 1rem;
   background: $palette_white;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  z-index: 1;
 
   .primary-stack {
     .primary-action-button {
@@ -15,6 +17,11 @@
       &__button {
         height: 100%;
         width: 100%;
+        border: 0;
+
+        &:not(.ms-Button--compoundPrimary) {
+          color: #0078d4;
+        }
       }
     }
   }

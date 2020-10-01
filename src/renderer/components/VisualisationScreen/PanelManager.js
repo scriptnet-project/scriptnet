@@ -5,7 +5,7 @@ import * as Panels from './Panels';
 
 const panelModes = {
   [modes.DEFAULT]: [],
-  [modes.ADD_EDGE]: ['addEdge'],
+  [modes.CREATE_EDGES]: ['createEdges'],
   [modes.ASSIGN_ATTRIBUTES]: ['assignAttributes'],
   [modes.VIEW_DETAILS]: ['viewDetails'],
   [modes.CONFIGURE]: ['configure'],
@@ -24,7 +24,7 @@ const PanelManager = ({ mode, onSetMode }) => {
 
   return (
     <React.Fragment>
-      <Panels.AddEdgePanel onDismiss={handleDismiss} isOpen={isPanelOpen('addEdge')(mode)} />
+      <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('createEdges')(mode)} />
       <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
       <Panels.ViewDetailsPanel onDismiss={handleDismiss} isOpen={isPanelOpen('viewDetails')(mode)} />
       <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
