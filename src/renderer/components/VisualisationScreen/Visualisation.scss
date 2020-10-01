@@ -2,6 +2,7 @@
 
 .Visualisation {
   width: 100%;
-  height: calc(100% - #{$control-bar-height});
-  background: $palette_neutralQuaternary;
+  height: 100%;
+  flex: 1 auto;
+  background: $palette_themeLighterAlt;
 }

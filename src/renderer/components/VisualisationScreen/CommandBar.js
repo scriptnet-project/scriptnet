@@ -1,0 +1,65 @@
+import React from 'react';
+import {
+  DefaultButton,
+  PrimaryButton,
+  Dialog,
+  DialogType,
+  DialogFooter,
+  ChoiceGroup,
+  Stack,
+  SearchBox,
+  TextField,
+  FontIcon,
+  CommandBar,
+  CommandBarButton,
+  Toggle
+} from '@fluentui/react';
+import useCytoscape from '../../hooks/useCytoscape';
+
+const TopCommandBar = ({
+}) => {
+  const [, cyActions] = useCytoscape();
+
+  const items = [
+    {
+      key: 'New',
+      text: 'New Case',
+      iconProps: { iconName: 'Add' },
+      onClick: () => console.log('Open'),
+    },
+    {
+      key: 'Save',
+      text: 'Save Case',
+      iconProps: { iconName: 'Save' },
+      onClick: cyActions.saveNetwork,
+    },
+    {
+      key: 'Open',
+      text: 'Open Case...',
+      iconProps: { iconName: 'FolderOpen' },
+      onClick: cyActions.openNetwork,
+    }
+  ];
+
+  const farItems = [
+    {
+      key: 'Export',
+      text: 'Export Screenshot',
+      iconProps: { iconName: 'Share' },
+      onClick: () => console.log('Export'),
+    }
+  ];
+
+  return (
+    <div className="CommandBar">
+      <CommandBar
+        items={items}
+        farItems={farItems}
+        ariaLabel="Use left and right arrow keys to navigate between commands"
+      />
+    </div>
+  );
+};
+
+export default TopCommandBar;
+

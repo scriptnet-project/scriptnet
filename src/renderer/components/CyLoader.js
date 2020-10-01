@@ -2,10 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import electron from 'electron';
 import fse from 'fs-extra';
 import Cytoscape from 'cytoscape';
+import cola from 'cytoscape-cola';
+import edgeHandles from 'cytoscape-edgehandles';
 import { CyContext } from '../hooks/useCytoscape';
 
+// Initialise extensions
+Cytoscape.use(cola);
+Cytoscape.use(edgeHandles);
+
 const dialog = electron.remote.dialog;
-const cy = new Cytoscape({ headless: true });
+const cy = new Cytoscape({ maxZoom: 2, headless: true });
+const eh = cy.edgehandles();
 
 const initialState = {
   isLoading: false,
@@ -13,11 +20,6 @@ const initialState = {
 };
 
 const centerCy = () => {
-  // Run the layout again
-  cy.layout({
-    name: 'random'
-  });
-
   // Animate the viewport to the graph using the nodes selector
   cy.animate({
     fit: {
@@ -62,7 +64,13 @@ const CyLoader = ({ children }) => {
       });
   };
 
-  const actions = { openNetwork, saveNetwork };
+  const runLayout = () => {
+    // See: https://github.com/cytoscape/cytoscape.js-cola#api
+    const layoutOptions = { name: 'cose' };
+    cy.layout(layoutOptions).run();
+  }
+
+  const actions = { openNetwork, saveNetwork, runLayout };
   const value = [cyRef.current, actions];
 
   return (

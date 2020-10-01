@@ -1,13 +1,21 @@
 @import '../../theme';
 
 .ControlBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: $control-bar-height;
+  padding: 2rem;
   background: $palette_white;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .primary-stack {
+    .primary-action-button {
+      flex: 1;
+      height: 100%;
+
+      &__button {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
 }

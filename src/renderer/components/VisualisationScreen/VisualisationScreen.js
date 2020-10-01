@@ -3,9 +3,10 @@ import Screen from 'Components/Screen';
 import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import ControlBar from 'Components/VisualisationScreen/ControlBar';
 import PanelManager from 'Components/VisualisationScreen/PanelManager';
+import TopCommandBar from './CommandBar';
 
 const VisualisationScreen = () => {
-  // This might become useReducer, and contain othher
+  // This might become useReducer, and contain other
   // info about the vis state, like which node is selected
   const [mode, setMode] = useState('default');
 
@@ -16,6 +17,7 @@ const VisualisationScreen = () => {
 
   return (
     <Screen>
+      <TopCommandBar />
       <Visualisation />
       <ControlBar onSetMode={handleSetMode} />
       <PanelManager mode={mode} onSetMode={handleSetMode} />
