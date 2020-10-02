@@ -32,11 +32,21 @@ const Panel = ({
     },
   }
 
-  const [, cyActions] = useCytoscape();
+  const [cy, cyActions] = useCytoscape();
 
   useEffect(() => {
-    console.log('panel effect');
-    cyActions.recalculateSize();
+    return () => {
+      setTimeout(() => {
+        cy.animate({
+          fit: {
+            eles: 'node',
+            padding: 100,
+          }
+        }, {
+          duration: 200
+        });
+      }, 200);
+    }
   }, [isOpen])
 
   if (!isOpen) return false;

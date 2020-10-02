@@ -98,6 +98,36 @@ const CyLoader = ({ children }) => {
     }
   }
 
+  const enableNodeHighlighting = (attribute) => {
+    console.log('enabling node highlighting', attribute)
+    cy.autounselectify(true);
+
+    // Get nodes with attribute and apply .highlighted class
+    const selector = `node[${attribute} = "true"]`;
+    cy.nodes(selector).addClass('highlighted') ;
+    console.log('enable', selector);
+
+    cy.on('tap', (event) => {
+      // determine if attribute is already set
+      console.log('A node or edge was TAPPED', event.target.data());
+      if (event.target.data(attribute) === 'true') {
+        event.target.data(attribute, 'false');
+        event.target.removeClass('highlighted');
+        return;
+      }
+
+      event.target.data(attribute, 'true');
+      event.target.addClass('highlighted');
+    });
+  }
+
+  const disableNodeHighlighting = () => {
+    console.log('disabling node highlighting');
+    cy.autounselectify(false);
+    cy.nodes().removeClass('highlighted') ;
+    cy.removeListener('tap');
+  }
+
   const recalculateSize = () => {
     console.log('recalculateSize');
 
@@ -114,6 +144,8 @@ const CyLoader = ({ children }) => {
     runLayout,
     enableEdgeCreation,
     disableEdgeCreation,
+    enableNodeHighlighting,
+    disableNodeHighlighting,
     recalculateSize,
   };
   const value = [cyRef.current, actions];

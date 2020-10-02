@@ -106,6 +106,13 @@ const stylesheet = [
     }
   },
   {
+    selector: '.highlighted',
+    style: {
+      'border-width': 5,
+      'border-color': theme.palette.yellowLight
+    }
+  },
+  {
     selector: 'node[type = "person"]',
     style: {
       label: "data(name)",
@@ -162,14 +169,14 @@ const Visualisation = ({
       const selectedID = event.target.data().id;
       console.log('A node or edge was selected', selectedID);
       // Animate to the selected node
-      cy.animate({
-        fit: {
-          eles: 'node:selected',
-          padding: 100,
-        }
-      }, {
-        duration: 200
-      });
+      // cy.animate({
+      //   fit: {
+      //     eles: 'node:selected',
+      //     padding: 100,
+      //   }
+      // }, {
+      //   duration: 200
+      // });
       setSelectedNode(selectedID);
 
     });
