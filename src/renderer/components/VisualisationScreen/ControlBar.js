@@ -8,7 +8,7 @@ import {
 import { modes } from 'Components/VisualisationScreen/config';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
-import { AddPersonForm, AddPlaceForm } from './AddEntityForms';
+import { AddPersonForm, AddPlaceForm, AddResourceForm, AddBusinessForm } from './AddEntityForms';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { isPanelOpen } from './PanelManager';
 
@@ -18,12 +18,16 @@ const ControlBar = ({
 }) => {
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
   const [hidePlaceDialog, { toggle: toggleHidePlaceDialog }] = useBoolean(true);
+  const [hideResourceDialog, { toggle: toggleHideResourceDialog }] = useBoolean(true);
+  const [hideBusinessDialog, { toggle: toggleHideBusinessDialog }] = useBoolean(true);
   const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
   return (
     <div className="ControlBar">
       <AddPersonForm hideDialog={hidePersonDialog} toggleHideDialog={toggleHidePersonDialog}/>
       <AddPlaceForm hideDialog={hidePlaceDialog} toggleHideDialog={toggleHidePlaceDialog}/>
+      <AddResourceForm hideDialog={hideResourceDialog} toggleHideDialog={toggleHideResourceDialog}/>
+      <AddBusinessForm hideDialog={hideBusinessDialog} toggleHideDialog={toggleHideBusinessDialog}/>
       <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
