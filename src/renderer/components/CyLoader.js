@@ -5,6 +5,7 @@ import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
 import { CyContext } from '../hooks/useCytoscape';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -70,12 +71,27 @@ const CyLoader = ({ children }) => {
     cy.layout(layoutOptions).run();
   }
 
-  const enableEdgeCreation = () => {
-    eh = cy.edgehandles();
+  const enableEdgeCreation = (type) => {
+    console.log('enabling', type)
+    cy.autounselectify(true);
+    eh = cy.edgehandles({
+      edgeParams: ( sourceNode, targetNode, i ) => {
+        console.log('edge params', sourceNode, targetNode, i);
+        // for edges between the specified source and target
+        // return element object to be passed to cy.add() for edge
+        // NB: i indicates edge index in case of edgeType: 'node'
+        return {
+          data: {
+            type,
+          }
+        };
+      },
+    });
     eh.enableDrawMode();
   }
 
   const disableEdgeCreation = () => {
+    cy.autounselectify(false);
     if (eh) {
       eh.disableDrawMode();
       eh.destroy();

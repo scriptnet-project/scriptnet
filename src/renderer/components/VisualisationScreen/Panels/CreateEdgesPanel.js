@@ -1,14 +1,22 @@
-import React, { useEffect } from 'react';
-import { ChoiceGroup, CompoundButton, Stack, Text } from '@fluentui/react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { ChoiceGroup, Stack, Text } from '@fluentui/react';
 import { Panel } from '.';
 import useCytoscape from '../../../hooks/useCytoscape';
 
 const AddEdgePanel = ({ isOpen, onDismiss }) => {
-  const [cy, cyActions] = useCytoscape();
+  const [, cyActions] = useCytoscape();
+  const [createEdgeType, setCreateEdgeType] = useState('social');
+
+  const onChange = useCallback((event, option) => {
+    console.log('changed edge type:', option.key);
+    setCreateEdgeType(option.key);
+    cyActions.disableEdgeCreation();
+    cyActions.enableEdgeCreation(option.key);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
-      cyActions.enableEdgeCreation();
+      cyActions.enableEdgeCreation(createEdgeType);
     }
     return () => {
       cyActions.disableEdgeCreation();
@@ -25,11 +33,12 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
         <Text>Select a relationship type below, and create links between actors by dragging a line between them.</Text>
         <ChoiceGroup
           label="Select relationship type to create"
-          defaultSelectedKey="social"
+          onChange={onChange}
+          selectedKey={createEdgeType}
           options={[
-            { key: 'social', text: 'Social Relationship', iconProps: { iconName: 'CalendarDay' } },
-            { key: 'financial', text: 'Financial Relationship', iconProps: { iconName: 'CalendarWeek' } },
-            { key: 'gang', text: 'Gang or Organization', iconProps: { iconName: 'Calendar' } },
+            { key: 'social', text: 'Social Relationship'},
+            { key: 'financial', text: 'Financial Relationship'},
+            { key: 'gang', text: 'Gang or Organization'},
           ]}
         />
       </Stack>

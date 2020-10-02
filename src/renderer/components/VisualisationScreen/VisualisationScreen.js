@@ -10,7 +10,7 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 const VisualisationScreen = () => {
   // This might become useReducer, and contain other
   // info about the vis state, like which node is selected
-  const [mode, setMode] = useState('default');
+  const [mode, setMode] = useState(modes.DEFAULT);
   const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
   const handleSetMode = (mode) => {

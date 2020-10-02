@@ -71,10 +71,28 @@ const stylesheet = [
     }
   },
   {
+    selector: 'edge[type = "social"]',
+    style: {
+      'lineColor': theme.palette.themeTertiary,
+    },
+  },
+  {
+    selector: 'edge[type = "financial"]',
+    style: {
+      'lineColor': theme.palette.purpleLight,
+    },
+  },
+  {
+    selector: 'edge[type = "gang"]',
+    style: {
+      'lineColor': theme.palette.greenLight,
+    },
+  },
+  {
     selector: 'node',
     style: {
       'font-size': 12,
-      'color': theme.palette.themePrimary,
+      'color': theme.palette.themeDarker,
       'text-margin-y': 5,
       "text-valign": "bottom",
       "text-halign": "bottom",
@@ -137,7 +155,7 @@ const Visualisation = ({
     cy.center();
 
     cy.on('add', (event) => {
-      console.log('something added to graph', event);
+      console.log('something added to graph', event.target.data());
     });
 
     cy.on('select', 'node', (event) => {

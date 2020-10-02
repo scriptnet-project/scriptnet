@@ -64,7 +64,7 @@ const ControlBar = ({
             }}
             iconProps={{ iconName: "addFriend"}}
             verticalFill
-            primary={mode === modes.DEFAULT}
+            primary={mode === modes.DEFAULT && !selectedNode}
         />
         </Stack.Item>
         <VerticalDivider />
