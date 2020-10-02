@@ -3,8 +3,6 @@
 .Visualisation {
   flex: 1 1 auto;
   background: $palette_themeLighterAlt;
-  border: 16px solid red;
-  box-sizing: border-box;
 
   &--openPanel {
     width: calc(100% - 350px) !important;

@@ -19,7 +19,7 @@ const Cytoscape = (props) => {
     };
   }, [cyContainer.current]);
 
-  return <motion.div layout ref={cyContainer} {...props} className="cyContainer"/>;
+  return <div ref={cyContainer} {...props} className="cyContainer"/>;
 };
 
 export default Cytoscape;

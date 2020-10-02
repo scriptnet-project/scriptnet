@@ -66,7 +66,7 @@ const CyLoader = ({ children }) => {
 
   const runLayout = () => {
     // See: https://github.com/cytoscape/cytoscape.js-cola#api
-    const layoutOptions = { name: 'cose' };
+    const layoutOptions = { name: 'cola' };
     cy.layout(layoutOptions).run();
   }
 
@@ -86,7 +86,7 @@ const CyLoader = ({ children }) => {
     console.log('recalculateSize');
 
     // setTimeout(() => {
-    //   cy.resize();
+    //   // cy.resize();
     //   cy.fit();
     //   centerCy();
     // }, 500);

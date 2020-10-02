@@ -16,6 +16,7 @@ const VisualisationScreen = () => {
   const handleSetMode = (mode) => {
     console.log(mode);
     setMode(mode);
+    setSelectedNode(null);
   }
 
 

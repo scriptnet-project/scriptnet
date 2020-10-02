@@ -18,6 +18,7 @@ const ControlBar = ({
 }) => {
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
   const [hidePlaceDialog, { toggle: toggleHidePlaceDialog }] = useBoolean(true);
+  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
   return (
     <div className="ControlBar">
@@ -28,7 +29,9 @@ const ControlBar = ({
           <CompoundButton className="primary-action-button__button"
             secondaryText="Add a new actor to this case"
             text="Add Actors"
-            primary
+            onMenuClick={() => {
+              onSetMode(modes.DEFAULT);
+            }}
             menuProps={{
               items: [
                 {
@@ -71,7 +74,9 @@ const ControlBar = ({
             text="Add Relationships"
             iconProps={{ iconName: "GitGraph"}}
             verticalFill
-            onClick={() => onSetMode(modes.CREATE_EDGES)}
+            onClick={() => {
+              onSetMode(modes.CREATE_EDGES);
+            }}
             primary={mode === modes.CREATE_EDGES}
           />
         </Stack.Item>

@@ -25,6 +25,10 @@ const Panel = ({
     },
     hide: {
       x: '-100%',
+      transition: {
+        ease: [0.76, 0, 0.24, 1],
+        duration: 0.5,
+      },
     },
   }
 
@@ -35,9 +39,9 @@ const Panel = ({
     cyActions.recalculateSize();
   }, [isOpen])
 
+  if (!isOpen) return false;
+
   return(
-    <AnimatePresence>
-      { isOpen && (
         <motion.div
           variants={variants}
           initial="hide"
@@ -55,8 +59,6 @@ const Panel = ({
             <PrimaryButton text="Close" onClick={onDismiss}/>
           </footer>
         </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 

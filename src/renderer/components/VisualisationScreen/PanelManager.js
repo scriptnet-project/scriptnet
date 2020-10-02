@@ -1,4 +1,5 @@
 import React from 'react';
+import { AnimatePresence} from 'framer-motion';
 import { get } from 'lodash';
 import { modes } from './config';
 import * as Panels from './Panels';
@@ -25,15 +26,13 @@ const PanelManager = ({ mode, onSetMode }) => {
 
   const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
-  console.log('pan man', selectedNode);
-
   return (
-    <React.Fragment>
-      <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('createEdges')(mode)} />
-      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
-      <Panels.ViewDetailsPanel selectedNode={selectedNode} setSelectedNode={setSelectedNode}/>
-      <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
-    </React.Fragment>
+    <AnimatePresence>
+      <Panels.CreateEdgesPanel key="one" onDismiss={handleDismiss} isOpen={isPanelOpen('createEdges')(mode)} />
+      <Panels.AssignAttributesPanel key="two" onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
+      <Panels.ViewDetailsPanel key="three" selectedNode={selectedNode} setSelectedNode={setSelectedNode}/>
+      <Panels.ConfigurePanel key="four" onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
+    </AnimatePresence>
   );
 };
 

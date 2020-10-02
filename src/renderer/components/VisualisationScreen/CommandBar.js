@@ -18,7 +18,7 @@ import './CommandBar.scss';
 
 const TopCommandBar = ({
 }) => {
-  const [, cyActions] = useCytoscape();
+  const [cy, cyActions] = useCytoscape();
 
   const items = [
     {
@@ -43,11 +43,50 @@ const TopCommandBar = ({
 
   const farItems = [
     {
-      key: 'Search',
-      placeholder: 'Search...',
-      underlined: true,
-      commandBarButtonAs: SearchBox,
+      key: 'layout',
+      text: 'Automatically Position',
+      iconProps: { iconName: 'AutoEnhanceOn' },
+      onClick: () => cyActions.runLayout(),
     },
+    {
+      key: 'zoomin',
+      iconOnly: true,
+      iconProps: { iconName: 'ZoomIn' },
+      onClick: () => {
+        cy.animate({
+          'zoom': cy.zoom() + 0.5,
+       });
+      },
+    },
+    {
+      key: 'zoomout',
+      iconOnly: true,
+      iconProps: { iconName: 'ZoomOut' },
+      onClick: () => {
+        cy.animate({
+          'zoom': cy.zoom() - 0.5,
+       });
+      },
+    },
+    {
+      key: 'fit',
+      iconOnly: true,
+      iconProps: { iconName: 'ZoomToFit' },
+      onClick: () => cy.animate({
+        fit: {
+          eles: 'node',
+          padding: 100,
+        }
+      }, {
+        duration: 500
+      }),
+    },
+    // {
+    //   key: 'Search',
+    //   placeholder: 'Search...',
+    //   underlined: true,
+    //   commandBarButtonAs: SearchBox,
+    // },
     {
       key: 'Export',
       text: 'Export Screenshot',

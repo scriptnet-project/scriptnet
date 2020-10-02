@@ -163,9 +163,9 @@ const Visualisation = ({
   }, []);
 
   return (
-    <motion.div layout className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>
+    <div className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>
       <Cytoscape />
-    </motion.div>
+    </div>
   );
 }
 
