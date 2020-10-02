@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React, { useEffect } from 'react';
 import {
   DefaultButton,
   PrimaryButton,
@@ -7,6 +7,7 @@ import {
 } from '@fluentui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './Panel.scss';
+import useCytoscape from '../../../hooks/useCytoscape';
 
 const Panel = ({
   isOpen,
@@ -26,6 +27,14 @@ const Panel = ({
       x: '-100%',
     },
   }
+
+  const [, cyActions] = useCytoscape();
+
+  useEffect(() => {
+    console.log('panel effect');
+    cyActions.recalculateSize();
+  }, [isOpen])
+
   return(
     <AnimatePresence>
       { isOpen && (

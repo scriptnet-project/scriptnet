@@ -1,12 +1,15 @@
 @import '../../theme';
 
 .Visualisation {
-  // width: 400px;
-  // height: 400px;
-  flex: 1;
+  flex: 1 1 auto;
   background: $palette_themeLighterAlt;
+  border: 16px solid red;
+  box-sizing: border-box;
 
   &--openPanel {
-    margin-left: 350px;
+    width: calc(100% - 350px) !important;
+      .cyContainer {
+        width: calc(100%) !important;
+      }
   }
 }

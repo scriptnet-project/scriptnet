@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { getTheme } from '@fluentui/react';
 import useCytoscape from '../../hooks/useCytoscape';
 import Cytoscape from '../Cytoscape';
@@ -65,6 +66,8 @@ const stylesheet = [
       'curve-style': 'bezier',
       'target-arrow-shape': 'triangle',
       'lineColor': theme.palette.themeTertiary,
+      'target-arrow-color': theme.palette.themeTertiary,
+      'source-arrow-color': theme.palette.themeTertiary
     }
   },
   {
@@ -118,7 +121,9 @@ const stylesheet = [
   },
 ];
 
-const Visualisation = (props) => {
+const Visualisation = ({
+  panelOpen
+}) => {
   const [cy, cyActions] = useCytoscape();
   const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
 
@@ -135,9 +140,9 @@ const Visualisation = (props) => {
       console.log('something added to graph', event);
     });
 
-    cy.on('select', (event) => {
-      console.log('A node or edge was selected', event);
-
+    cy.on('select', 'node', (event) => {
+      const selectedID = event.target.data().id;
+      console.log('A node or edge was selected', selectedID);
       // Animate to the selected node
       cy.animate({
         fit: {
@@ -145,26 +150,22 @@ const Visualisation = (props) => {
           padding: 100,
         }
       }, {
-        duration: 500
+        duration: 200
       });
-      setSelectedNode('boom');
+      setSelectedNode(selectedID);
+
     });
 
     cy.on('unselect', (event) => {
       console.log('A node or edge was de-selected', event);
       setSelectedNode(null);
-    });
+  });
   }, []);
 
-  const isPanelOpen = true;
   return (
-    <div className={(`Visualisation ${isPanelOpen ? 'Visualisation--openPanel' : ''}`)}>
-      <Cytoscape
-        style={{
-          height: '100%'
-        }}
-      />
-    </div>
+    <motion.div layout className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>
+      <Cytoscape />
+    </motion.div>
   );
 }
 

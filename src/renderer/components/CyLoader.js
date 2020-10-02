@@ -72,14 +72,24 @@ const CyLoader = ({ children }) => {
 
   const enableEdgeCreation = () => {
     eh = cy.edgehandles();
-    eh.enable();
+    eh.enableDrawMode();
   }
 
   const disableEdgeCreation = () => {
     if (eh) {
-      eh.disable();
+      eh.disableDrawMode();
       eh.destroy();
     }
+  }
+
+  const recalculateSize = () => {
+    console.log('recalculateSize');
+
+    // setTimeout(() => {
+    //   cy.resize();
+    //   cy.fit();
+    //   centerCy();
+    // }, 500);
   }
 
   const actions = {
@@ -88,6 +98,7 @@ const CyLoader = ({ children }) => {
     runLayout,
     enableEdgeCreation,
     disableEdgeCreation,
+    recalculateSize,
   };
   const value = [cyRef.current, actions];
 

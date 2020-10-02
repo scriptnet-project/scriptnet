@@ -2,6 +2,7 @@ import React from 'react';
 import { get } from 'lodash';
 import { modes } from './config';
 import * as Panels from './Panels';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const panelModes = {
   [modes.DEFAULT]: [],
@@ -22,11 +23,15 @@ const PanelManager = ({ mode, onSetMode }) => {
   const handleDismiss = () =>
     onSetMode(modes.DEFAULT);
 
+  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
+
+  console.log('pan man', selectedNode);
+
   return (
     <React.Fragment>
       <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('createEdges')(mode)} />
       <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
-      <Panels.ViewDetailsPanel onDismiss={handleDismiss} isOpen={isPanelOpen('viewDetails')(mode)} />
+      <Panels.ViewDetailsPanel selectedNode={selectedNode} setSelectedNode={setSelectedNode}/>
       <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
     </React.Fragment>
   );

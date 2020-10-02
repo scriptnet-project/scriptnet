@@ -10,7 +10,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow
 
 function createMainWindow() {
-  const window = new BrowserWindow({webPreferences: {nodeIntegration: true}})
+  const window = new BrowserWindow({webPreferences: {nodeIntegration: true, enableRemoteModule: true}})
 
   if (isDevelopment) {
     window.webContents.openDevTools()

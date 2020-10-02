@@ -91,7 +91,6 @@ const AddNodeForm = ({
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: 'Add an Actor',
-        subText: 'Use the form below to enter the details of an actor (person, place, resource, or business) that was involved in this crime.',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
