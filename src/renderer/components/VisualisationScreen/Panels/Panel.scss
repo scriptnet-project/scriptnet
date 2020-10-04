@@ -3,15 +3,16 @@
 .panel {
   background: $palette_themeLighter;
   padding: 2rem;
+  // padding-bottom: 8rem;
+  // padding-top: 4rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 0 0 350px;
-  width: 100%;
-}
-
-.cyContainer {
-  height: 100%;
-  width: 100%;
+  width: 350px;
+  position: absolute;
+  top: 2rem;
+  bottom: 7rem;
+  left: 0;
+  // z-index: 1;
 }

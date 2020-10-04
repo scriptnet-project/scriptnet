@@ -1,38 +1,28 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as modeActions, modes } from '../../store/mode';
 import { AnimatePresence} from 'framer-motion';
-import { get } from 'lodash';
-import { modes } from './config';
 import * as Panels from './Panels';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
 
-const panelModes = {
-  [modes.DEFAULT]: [],
-  [modes.CREATE_EDGES]: ['createEdges'],
-  [modes.ASSIGN_ATTRIBUTES]: ['assignAttributes'],
-  [modes.VIEW_DETAILS]: ['viewDetails'],
-  [modes.CONFIGURE]: ['configure'],
-};
+const PanelManager = () => {
+  const mode = useSelector(state => state.mode);
+  const selectedNode = useSelector(state => state.selectedNode);
+  const dispatch = useDispatch();
+  const setMode = (mode) => dispatch(modeActions.setMode(mode));
+  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
-const getOpenPanelsForMode = mode =>
-  get(panelModes, mode, []);
-
-const isPanelOpen = panel =>
-  mode =>
-    getOpenPanelsForMode(mode).includes(panel);
-
-const PanelManager = ({ mode, onSetMode }) => {
   const handleDismiss = () =>
-    onSetMode(modes.DEFAULT);
+    setMode(modes.DEFAULT);
 
-  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
+  console.log('pan man', mode);
 
   return (
-    <AnimatePresence>
-      <Panels.CreateEdgesPanel key="one" onDismiss={handleDismiss} isOpen={isPanelOpen('createEdges')(mode)} />
-      <Panels.AssignAttributesPanel key="two" onDismiss={handleDismiss} isOpen={isPanelOpen('assignAttributes')(mode)} />
-      <Panels.ViewDetailsPanel key="three" selectedNode={selectedNode} setSelectedNode={setSelectedNode}/>
-      <Panels.ConfigurePanel key="four" onDismiss={handleDismiss} isOpen={isPanelOpen('configure')(mode)} />
-    </AnimatePresence>
+    <React.Fragment>
+      <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={ mode === modes.CREATE_EDGES } />
+      <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={ mode === modes.ASSIGN_ATTRIBUTES } />
+      <Panels.ViewDetailsPanel isOpen={selectedNode}/>
+      {/* <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE } /> */}
+    </React.Fragment>
   );
 };
 

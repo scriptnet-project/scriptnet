@@ -24,6 +24,7 @@
     "react-storage-hooks": "^4.0.1",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "source-map-support": "^0.5.16"
   },

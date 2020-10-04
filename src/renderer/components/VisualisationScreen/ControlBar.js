@@ -5,22 +5,27 @@ import {
   SearchBox,
   VerticalDivider
 } from '@fluentui/react';
-import { modes } from 'Components/VisualisationScreen/config';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
 import { AddPersonForm, AddPlaceForm, AddResourceForm, AddBusinessForm } from './AddEntityForms';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
-import { isPanelOpen } from './PanelManager';
 
 const ControlBar = ({
-  onSetMode,
-  mode,
+
 }) => {
+  const mode = useSelector(state => state.mode);
+  const selectedNode = useSelector(state => state.selectedNode);
+  const dispatch = useDispatch();
+  const setMode = (mode) => dispatch(modeActions.setMode(mode));
+  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
+
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
   const [hidePlaceDialog, { toggle: toggleHidePlaceDialog }] = useBoolean(true);
   const [hideResourceDialog, { toggle: toggleHideResourceDialog }] = useBoolean(true);
   const [hideBusinessDialog, { toggle: toggleHideBusinessDialog }] = useBoolean(true);
-  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
+
 
   return (
     <div className="ControlBar">
@@ -34,7 +39,7 @@ const ControlBar = ({
             secondaryText="Add a new actor to this case"
             text="Add Actors"
             onMenuClick={() => {
-              onSetMode(modes.DEFAULT);
+              setMode(modes.DEFAULT);
             }}
             menuProps={{
               items: [
@@ -79,7 +84,7 @@ const ControlBar = ({
             iconProps={{ iconName: "GitGraph"}}
             verticalFill
             onClick={() => {
-              onSetMode(modes.CREATE_EDGES);
+              setMode(modes.CREATE_EDGES);
             }}
             primary={mode === modes.CREATE_EDGES}
           />
@@ -91,7 +96,7 @@ const ControlBar = ({
             text="Assign Actions"
             iconProps={{ iconName: "Fingerprint"}}
             verticalFill
-            onClick={() => onSetMode(modes.ASSIGN_ATTRIBUTES)}
+            onClick={() => setMode(modes.ASSIGN_ATTRIBUTES)}
             primary={mode === modes.ASSIGN_ATTRIBUTES}
           />
         </Stack.Item>
@@ -102,7 +107,7 @@ const ControlBar = ({
             text="Change Visualisation"
             iconProps={{ iconName: "PictureFill"}}
             verticalFill
-            onClick={() => onSetMode(modes.CONFIGURE)}
+            onClick={() => setMode(modes.CONFIGURE)}
             primary={mode === modes.CONFIGURE}
           />
         </Stack.Item>

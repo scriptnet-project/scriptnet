@@ -1,27 +1,22 @@
 import React, { useEffect } from 'react';
-import { ChoiceGroup, CompoundButton, DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as selectedNodeActions} from '../../../store/selectedNode';
+import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
 import { Panel } from '.';
 import useCytoscape from '../../../hooks/useCytoscape';
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
 
 const ViewDetailsPanel = ({
-  selectedNode,
-  setSelectedNode
+  isOpen,
 }) => {
-  const [cy, cyActions] = useCytoscape();
+  const [cy] = useCytoscape();
+  const selectedNode = useSelector(state => state.selectedNode);
+  const dispatch = useDispatch();
+  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
+
 
   const details = cy.getElementById(selectedNode).data();
 
-  useEffect(() => {
-    return () => {
-      cy.getElementById(selectedNode).unselect();
-    }
-  }, [selectedNode])
-
-
-  if (!selectedNode || !details) { return false; }
-
-  console.log('view details render', details);
+  if (!isOpen || !details) return false;
 
   const {
     name,
@@ -36,12 +31,16 @@ const ViewDetailsPanel = ({
     }
   });
 
-  console.log('form', formattedAttributes);
+  const handleDismiss = () => {
+    cy.getElementById(selectedNode).unselect();
+    setSelectedNode(null);
+  }
 
   return (
     <Panel
-      isOpen={selectedNode}
-      onDismiss={() => setSelectedNode(null)}
+      name="view-details-panel"
+      isOpen={isOpen}
+      onDismiss={handleDismiss}
       headerText="Actor Details"
     >
       <Stack tokens={{ childrenGap: 10 }}>

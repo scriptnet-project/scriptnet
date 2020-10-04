@@ -26,6 +26,7 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
 
   return (
     <Panel
+      name="assign-attributes-panel"
       isOpen={isOpen}
       onDismiss={onDismiss}
       headerText="Assign Scenes"

@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { getTheme } from '@fluentui/react';
 import useCytoscape from '../../hooks/useCytoscape';
 import Cytoscape from '../Cytoscape';
-
 import './Visualisation.scss';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+
 
 const theme = getTheme();
-const stylesheet = [
+export const stylesheet = [
   {
     selector: '.eh-handle',
     style: {
@@ -149,42 +147,13 @@ const stylesheet = [
 const Visualisation = ({
   panelOpen
 }) => {
-  const [cy, cyActions] = useCytoscape();
-  const [selectedNode, setSelectedNode] = useSessionStorage('selectedNode', null);
+  const [cy] = useCytoscape();
+
 
 
   useEffect(() => {
     // this only runs once, this might make more sense to live in useCytoscape
-    console.log('ran me', cy);
 
-    cy.style(stylesheet);
-
-    cy.center();
-
-    cy.on('add', (event) => {
-      console.log('something added to graph', event.target.data());
-    });
-
-    cy.on('select', 'node', (event) => {
-      const selectedID = event.target.data().id;
-      console.log('A node or edge was selected', selectedID);
-      // Animate to the selected node
-      // cy.animate({
-      //   fit: {
-      //     eles: 'node:selected',
-      //     padding: 100,
-      //   }
-      // }, {
-      //   duration: 200
-      // });
-      setSelectedNode(selectedID);
-
-    });
-
-    cy.on('unselect', (event) => {
-      console.log('A node or edge was de-selected', event);
-      setSelectedNode(null);
-  });
   }, []);
 
   return (

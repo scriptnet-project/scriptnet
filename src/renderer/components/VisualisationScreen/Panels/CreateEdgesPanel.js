@@ -25,6 +25,7 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
 
   return (
     <Panel
+
       isOpen={isOpen}
       onDismiss={onDismiss}
       headerText="Add Relationship"

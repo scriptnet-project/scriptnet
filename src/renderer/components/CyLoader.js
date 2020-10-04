@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { actionCreators as selectedNodeActions } from '../store/selectedNode';
 import electron from 'electron';
 import fse from 'fs-extra';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
 import { CyContext } from '../hooks/useCytoscape';
-import { useSessionStorage } from '../hooks/useSessionStorage';
+import { stylesheet } from './VisualisationScreen/Visualisation';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -13,7 +15,7 @@ Cytoscape.use(edgeHandles);
 
 const dialog = electron.remote.dialog;
 const cy = new Cytoscape({ maxZoom: 1.5, headless: true });
-let eh;
+let eh; // edge handler - extension for edge creation
 
 const initialState = {
   isLoading: false,
@@ -28,14 +30,49 @@ const centerCy = () => {
       padding: 100,
     }
   }, {
-    duration: 500
+    duration: 200
   });
 };
 
 const CyLoader = ({ children }) => {
   const cyRef = useRef(cy);
   const [state, setState] = useState(initialState);
+  const dispatch = useDispatch();
+  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
+  // Event bindings
+  console.log('ran me', cy);
+
+  cy.style(stylesheet);
+
+  cy.center();
+
+  cy.on('add', (event) => {
+    console.log('something added to graph', event.target.data());
+  });
+
+  cy.on('select', 'node', (event) => {
+    const selectedID = event.target.data().id;
+    console.log('A node or edge was selected', selectedID);
+    // Animate to the selected node
+    cy.animate({
+      fit: {
+        eles: 'node:selected',
+        padding: 100,
+      }
+    }, {
+      duration: 200
+    });
+
+    setSelectedNode(selectedID);
+  });
+
+  cy.on('unselect', (event) => {
+    console.log('A node or edge was de-selected', event);
+    setSelectedNode(null);
+  });
+
+  // Actions
   const openNetwork = () => {
     dialog.showOpenDialog()
       .then(({ cancelled, filePaths }) => {
@@ -107,7 +144,7 @@ const CyLoader = ({ children }) => {
     cy.nodes(selector).addClass('highlighted') ;
     console.log('enable', selector);
 
-    cy.on('tap', (event) => {
+    cy.on('tap', 'node', (event) => {
       // determine if attribute is already set
       console.log('A node or edge was TAPPED', event.target.data());
       if (event.target.data(attribute) === 'true') {

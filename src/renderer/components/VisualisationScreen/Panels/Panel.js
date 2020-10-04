@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-  DefaultButton,
   PrimaryButton,
   Text,
   Stack,
 } from '@fluentui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './Panel.scss';
-import useCytoscape from '../../../hooks/useCytoscape';
 
 const Panel = ({
+  name,
   isOpen,
   onDismiss,
   headerText,
@@ -31,28 +30,11 @@ const Panel = ({
       },
     },
   }
-
-  const [cy, cyActions] = useCytoscape();
-
-  useEffect(() => {
-    return () => {
-      setTimeout(() => {
-        cy.animate({
-          fit: {
-            eles: 'node',
-            padding: 100,
-          }
-        }, {
-          duration: 200
-        });
-      }, 200);
-    }
-  }, [isOpen])
-
-  if (!isOpen) return false;
-
   return(
+      <AnimatePresence>
+        { isOpen && (
         <motion.div
+          key={name}
           variants={variants}
           initial="hide"
           animate="show"
@@ -69,6 +51,9 @@ const Panel = ({
             <PrimaryButton text="Close" onClick={onDismiss}/>
           </footer>
         </motion.div>
+        )}
+
+      </AnimatePresence>
   );
 }
 
