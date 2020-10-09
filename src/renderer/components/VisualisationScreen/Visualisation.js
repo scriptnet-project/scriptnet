@@ -62,7 +62,7 @@ export const stylesheet = [
     selector: 'edge',
     style: {
       'curve-style': 'bezier',
-      'target-arrow-shape': 'triangle',
+      // 'target-arrow-shape': 'triangle',
       'lineColor': theme.palette.themeTertiary,
       'target-arrow-color': theme.palette.themeTertiary,
       'source-arrow-color': theme.palette.themeTertiary

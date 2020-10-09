@@ -23,7 +23,7 @@ const ViewDetailsPanel = ({
     ...attributes
   } = details;
 
-  const formattedAttributes = Object.keys(attributes).map((value, index) => {
+  const formattedAttributes = Object.keys(details).map((value, index) => {
     return {
       key: index,
       name: value,
@@ -43,9 +43,9 @@ const ViewDetailsPanel = ({
       onDismiss={handleDismiss}
       headerText="Actor Details"
     >
-      <Stack tokens={{ childrenGap: 10 }}>
+      {/* <Stack tokens={{ childrenGap: 10 }}>
         <Text variant={'large'}>Name: {name}</Text>
-      </Stack>
+      </Stack> */}
       <Stack tokens={{ childrenGap: 10 }}>
         <DetailsList
           items={formattedAttributes}

@@ -72,9 +72,16 @@ const CyLoader = ({ children }) => {
     setSelectedNode(null);
   });
 
+  const baseOptions = {
+    filters: [{
+      name: 'ScriptNet Case File',
+      extensions: ['json']
+    }]
+  };
+
   // Actions
   const openNetwork = () => {
-    dialog.showOpenDialog()
+    dialog.showOpenDialog({ ...baseOptions })
       .then(({ cancelled, filePaths }) => {
         if (cancelled) { return; }
         return filePaths[0];
@@ -90,7 +97,8 @@ const CyLoader = ({ children }) => {
   };
 
   const saveNetwork = () => {
-    const options = state.filePath ? { defaultPath: state.filePath } : {};
+
+    const options = state.filePath ? { defaultPath: state.filePath, ...baseOptions } : { ...baseOptions };
     dialog.showSaveDialog(options)
       .then(({ cancelled, filePath }) => {
         if (cancelled) { return; }
@@ -106,6 +114,10 @@ const CyLoader = ({ children }) => {
     // See: https://github.com/cytoscape/cytoscape.js-cola#api
     const layoutOptions = { name: 'cola' };
     cy.layout(layoutOptions).run();
+
+    // TODO: If there's a selected node, center on it instead
+    centerCy();
+
   }
 
   const enableEdgeCreation = (type) => {
@@ -170,8 +182,8 @@ const CyLoader = ({ children }) => {
 
     // setTimeout(() => {
     //   // cy.resize();
-    //   cy.fit();
-    //   centerCy();
+      // cy.fit();
+      // centerCy();
     // }, 500);
   }
 

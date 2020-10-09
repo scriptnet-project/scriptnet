@@ -1,6 +1,6 @@
 {
-  "name": "scriptnet",
-  "version": "0.0.0",
+  "name": "ScriptNet",
+  "version": "0.0.2",
   "license": "MIT",
   "author": "University of Manchester",
   "description": "A tool for visualising networks",
