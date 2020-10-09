@@ -14,6 +14,7 @@ Cytoscape.use(cola);
 Cytoscape.use(edgeHandles);
 
 const dialog = electron.remote.dialog;
+const browserWindow = electron.remote.getCurrentWindow();
 const cy = new Cytoscape({ maxZoom: 1.5, headless: true });
 let eh; // edge handler - extension for edge creation
 
@@ -81,7 +82,7 @@ const CyLoader = ({ children }) => {
 
   // Actions
   const openNetwork = () => {
-    dialog.showOpenDialog({ ...baseOptions })
+    dialog.showOpenDialog(browserWindow, { ...baseOptions })
       .then(({ cancelled, filePaths }) => {
         if (cancelled) { return; }
         return filePaths[0];
@@ -99,7 +100,7 @@ const CyLoader = ({ children }) => {
   const saveNetwork = () => {
 
     const options = state.filePath ? { defaultPath: state.filePath, ...baseOptions } : { ...baseOptions };
-    dialog.showSaveDialog(options)
+    dialog.showSaveDialog(browserWindow, options)
       .then(({ cancelled, filePath }) => {
         if (cancelled) { return; }
         return filePath;
