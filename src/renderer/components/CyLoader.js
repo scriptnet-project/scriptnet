@@ -89,7 +89,8 @@ const CyLoader = ({ children }) => {
       })
       .then(filePath => fse.readFile(filePath, 'utf8'))
       .then((data) => {
-        const elements = JSON.parse(data);
+        const parsedData = JSON.parse(data);
+        const { elements } = parsedData.network;
         cy.elements().remove();
         cy.reset();
         cy.add(elements);
@@ -106,7 +107,8 @@ const CyLoader = ({ children }) => {
         return filePath;
       })
       .then((filePath) => {
-        const data = JSON.stringify(cy.elements().jsons());
+        const elements = cy.elements().jsons()
+        const data = JSON.stringify({ network: { elements } });
         fse.writeFile(filePath, data, 'utf8');
       });
   };
