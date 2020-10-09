@@ -18,16 +18,13 @@ const ViewDetailsPanel = ({
 
   if (!isOpen || !details) return false;
 
-  const {
-    name,
-    ...attributes
-  } = details;
+  console.log('details', details);
 
   const formattedAttributes = Object.keys(details).map((value, index) => {
     return {
       key: index,
       name: value,
-      value: attributes[value]
+      value: details[value]
     }
   });
 
