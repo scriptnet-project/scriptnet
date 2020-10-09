@@ -13,7 +13,7 @@ const variants = {
   out: { opacity: 0, scaleX: 0.8, scaleY: 0.8, transition },
 };
 
-const Screen = ({ index, children }) => (
+const Screen = ({ index, onAnimationComplete, children }) => (
   <motion.div
     initial="start"
     animate="in"
@@ -21,9 +21,14 @@ const Screen = ({ index, children }) => (
     variants={variants}
     className="Screen"
     style={{ zIndex: index }}
+    onAnimationComplete={onAnimationComplete}
   >
     {children}
   </motion.div>
 );
+
+Screen.defaultProps = {
+  onAnimationComplete: null,
+};
 
 export default Screen;
