@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import Screen from 'Components/Screen';
 import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import ControlBar from 'Components/VisualisationScreen/ControlBar';
@@ -8,17 +8,16 @@ import useCytoscape from '../../hooks/useCytoscape';
 
 const VisualisationScreen = () => {
   const [cy] = useCytoscape();
-  const [state, setState] = useState({ animationComplete: false });
 
   const handleAnimationComplete = useCallback(() => {
-    setState({ animationComplete: true });
+    cy.resize();
   }, [cy]);
 
   return (
     <Screen onAnimationComplete={handleAnimationComplete}>
       <TopCommandBar />
       <div style={{ flex: '1 auto', display: 'flex' }}>
-        { state.animationComplete && <Visualisation/> }
+        <Visualisation/>
         <PanelManager/>
       </div>
       <ControlBar />
