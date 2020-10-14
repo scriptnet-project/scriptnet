@@ -10,7 +10,7 @@ module.exports = {
       'Renderer': path.resolve(__dirname, 'src', 'renderer'),
       'Components': path.resolve(__dirname, 'src', 'renderer', 'components'),
       'Hooks': path.resolve(__dirname, 'src', 'renderer', 'hooks'),
-      'Ducks': path.resolve(__dirname, 'src', 'renderer', 'store'),
+      'Store': path.resolve(__dirname, 'src', 'renderer', 'store'),
     },
   },
 };

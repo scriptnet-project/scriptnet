@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as selectedNodeActions} from '../../../store/selectedNode';
 import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
+import { actionCreators as selectedNodeActions} from 'Store/selectedNode';
+import useCytoscape from 'Hooks/useCytoscape';
 import { Panel } from '.';
-import useCytoscape from '../../../hooks/useCytoscape';
 
 const ViewDetailsPanel = ({
   isOpen,
@@ -13,8 +13,18 @@ const ViewDetailsPanel = ({
   const dispatch = useDispatch();
   const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
-
   const details = cy.getElementById(selectedNode).data();
+
+  const handleRemove = useCallback(() => {
+    if (!selectedNode) { return; }
+    cy.getElementById(selectedNode).remove();
+    setSelectedNode(null);
+  }, [selectedNode]);
+
+  const handleDismiss = useCallback(() => {
+    cy.getElementById(selectedNode).unselect();
+    setSelectedNode(null);
+  }, [selectedNode]);
 
   if (!isOpen || !details) return false;
 
@@ -27,11 +37,6 @@ const ViewDetailsPanel = ({
       value: details[value]
     }
   });
-
-  const handleDismiss = () => {
-    cy.getElementById(selectedNode).unselect();
-    setSelectedNode(null);
-  }
 
   return (
     <Panel
@@ -58,7 +63,7 @@ const ViewDetailsPanel = ({
       </Stack>
       <Stack>
         <DefaultButton text="Edit" />
-        <DefaultButton text="Delete" />
+        <DefaultButton text="Delete" onClick={handleRemove}/>
       </Stack>
     </Panel>
   );
