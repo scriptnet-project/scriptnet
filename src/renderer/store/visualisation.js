@@ -17,7 +17,7 @@ const reducer = handleActions({
       ...action.payload,
     },
   }),
-  [actionCreators.CLEAR_SELECTED]: () => ({
+  [actionCreators.clearSelected]: () => ({
     ...intialState,
   }),
   [modeActionTypes.SET_MODE]: () => ({
