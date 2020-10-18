@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
-import { getSelectedNode } from 'Store/selectors/visualisation';
+import { getSelectedId } from 'Store/selectors/visualisation';
 import useCytoscape from 'Hooks/useCytoscape';
 import { Panel } from '.';
 
@@ -10,21 +10,21 @@ const ViewDetailsPanel = ({
   isOpen,
 }) => {
   const [cy] = useCytoscape();
-  const selectedNode = useSelector(getSelectedNode);
+  const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
 
-  const details = cy.getElementById(selectedNode).data();
+  const details = cy.getElementById(selectedElement).data();
 
   const handleRemove = useCallback(() => {
-    if (!selectedNode) { return; }
-    cy.getElementById(selectedNode).remove();
+    if (!selectedElement) { return; }
+    cy.getElementById(selectedElement).remove();
     dispatch(visualisationActions.clearSelected());
-  }, [selectedNode]);
+  }, [selectedElement]);
 
   const handleDismiss = useCallback(() => {
-    cy.getElementById(selectedNode).unselect();
+    cy.getElementById(selectedElement).unselect();
     dispatch(visualisationActions.clearSelected());
-  }, [selectedNode]);
+  }, [selectedElement]);
 
   if (!isOpen || !details) return false;
 
