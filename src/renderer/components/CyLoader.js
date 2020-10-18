@@ -5,7 +5,6 @@ import fse from 'fs-extra';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
-import { actionCreators as selectedNodeActions } from 'Store/selectedNode';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { CyContext } from 'Hooks/useCytoscape';
 import { stylesheet } from './VisualisationScreen/Visualisation';
@@ -40,7 +39,6 @@ const CyLoader = ({ children }) => {
   const cyRef = useRef(cy);
   const [state, setState] = useState(initialState);
   const dispatch = useDispatch();
-  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
   // Event bindings
   console.log('ran me', cy);
