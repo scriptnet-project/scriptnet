@@ -153,8 +153,9 @@ const Visualisation = ({
 
   useEffect(() => {
     // this only runs once, this might make more sense to live in useCytoscape
+    console.log('cy changed');
 
-  }, []);
+  }, [cy]);
 
   return (
     <div className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>

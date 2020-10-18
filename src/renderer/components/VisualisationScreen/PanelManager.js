@@ -1,20 +1,21 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as modeActions, modes } from '../../store/mode';
-import { AnimatePresence} from 'framer-motion';
+import { getSelectedNode } from 'Store/selectors/visualisation';
+import { actionCreators as modeActions, modes } from 'Store/mode';
 import * as Panels from './Panels';
 
 const PanelManager = () => {
   const mode = useSelector(state => state.mode);
-  const selectedNode = useSelector(state => state.selectedNode);
+  const selectedNode = useSelector(getSelectedNode);
   const dispatch = useDispatch();
   const setMode = (mode) => dispatch(modeActions.setMode(mode));
-  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
   const handleDismiss = () =>
     setMode(modes.DEFAULT);
 
   console.log('pan man', mode);
+
+  console.log({ selectedNode });
 
   return (
     <React.Fragment>

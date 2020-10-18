@@ -11,11 +11,10 @@ const intialState = {
 };
 
 const reducer = handleActions({
-  [actionCreators.SET_SELECTED]: (state, { payload }) => ({
+  [actionCreators.setSelected]: (state, action) => ({
     ...state,
     selected: {
-      id: payload.id,
-      type: payload.type,
+      ...action.payload,
     },
   }),
   [actionCreators.CLEAR_SELECTED]: () => ({

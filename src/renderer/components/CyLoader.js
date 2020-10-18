@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { actionCreators as selectedNodeActions } from '../store/selectedNode';
 import electron from 'electron';
 import fse from 'fs-extra';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
-import { CyContext } from '../hooks/useCytoscape';
+import { actionCreators as selectedNodeActions } from 'Store/selectedNode';
+import { actionCreators as visualisationActions } from 'Store/visualisation';
+import { CyContext } from 'Hooks/useCytoscape';
 import { stylesheet } from './VisualisationScreen/Visualisation';
 
 // Initialise extensions
@@ -54,7 +55,7 @@ const CyLoader = ({ children }) => {
 
   cy.on('select', 'node', (event) => {
     const selectedID = event.target.data().id;
-    console.log('A node or edge was selected', selectedID);
+    console.log('A node was selected', selectedID);
     // Animate to the selected node
     cy.animate({
       fit: {
@@ -65,12 +66,28 @@ const CyLoader = ({ children }) => {
       duration: 200
     });
 
-    setSelectedNode(selectedID);
+    dispatch(visualisationActions.setSelected(selectedID));
+  });
+
+  cy.on('select', 'edge', (event) => {
+    const selectedID = event.target.data().id;
+    console.log('An edge was selected', selectedID);
+    // Animate to the selected node
+    cy.animate({
+      fit: {
+        eles: 'node:selected',
+        padding: 100,
+      }
+    }, {
+      duration: 200
+    });
+
+    dispatch(visualisationActions.setSelected(selectedID, 'edge'));
   });
 
   cy.on('unselect', (event) => {
     console.log('A node or edge was de-selected', event);
-    setSelectedNode(null);
+    dispatch(visualisationActions.clearSelected());
   });
 
   const baseOptions = {
