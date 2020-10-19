@@ -9,8 +9,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
-import { AddPersonForm, AddPlaceForm, AddResourceForm, AddBusinessForm } from './AddEntityForms';
+import { AddPlaceForm, AddResourceForm, AddBusinessForm } from './AddEntityForms';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import AddPersonForm from '../AddPersonForm';
 
 const ControlBar = ({
 
@@ -36,8 +37,8 @@ const ControlBar = ({
       <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
-            secondaryText="Add a new actor to this case"
-            text="Add Actors"
+            secondaryText="Add a new node to this case"
+            text="Add Nodes"
             onMenuClick={() => {
               setMode(modes.DEFAULT);
             }}

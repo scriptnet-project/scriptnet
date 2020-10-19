@@ -108,7 +108,6 @@ const AddNodeForm = ({
   );
 }
 
-export const AddPersonForm = (props) => (<AddNodeForm type="person" {...props} />);
 export const AddPlaceForm = (props) => (<AddNodeForm type="place" {...props} />);
 export const AddResourceForm = (props) => (<AddNodeForm type="resource" {...props} />);
 export const AddBusinessForm = (props) => (<AddNodeForm type="business" {...props} />);
