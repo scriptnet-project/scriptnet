@@ -38,6 +38,18 @@ const TopCommandBar = ({
       text: 'Open Case...',
       iconProps: { iconName: 'FolderOpen' },
       onClick: cyActions.openNetwork,
+    },
+    {
+      key: 'Import',
+      text: 'Import...',
+      iconProps: { iconName: 'Import' },
+      onClick: cyActions.import,
+    },
+    {
+      key: 'Export',
+      text: 'Export...',
+      iconProps: { iconName: 'Export' },
+      onClick: cyActions.export,
     }
   ];
 

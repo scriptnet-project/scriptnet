@@ -114,7 +114,6 @@ const CyLoader = ({ children }) => {
   };
 
   const saveNetwork = () => {
-
     const options = state.filePath ? { defaultPath: state.filePath, ...baseOptions } : { ...baseOptions };
     dialog.showSaveDialog(browserWindow, options)
       .then(({ cancelled, filePath }) => {
@@ -127,6 +126,10 @@ const CyLoader = ({ children }) => {
         fse.writeFile(filePath, data, 'utf8');
       });
   };
+
+  const importCsv = () => {};
+
+  const exportCsv = () => {};
 
   const runLayout = () => {
     // See: https://github.com/cytoscape/cytoscape.js-cola#api
@@ -208,6 +211,8 @@ const CyLoader = ({ children }) => {
   const actions = {
     openNetwork,
     saveNetwork,
+    importCsv,
+    exportCsv,
     runLayout,
     enableEdgeCreation,
     disableEdgeCreation,
