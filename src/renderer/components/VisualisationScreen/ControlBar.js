@@ -9,10 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
-import AddPersonForm from '../AddPersonForm';
-import AddLocationForm from '../AddLocationForm';
-import AddOrganisationForm from '../AddOrganisationForm';
-import AddResourceForm from '../AddResourceForm';
+import AddPersonForm from '../Forms/AddPersonForm';
+import AddLocationForm from '../Forms/AddLocationForm';
+import AddOrganisationForm from '../Forms/AddOrganisationForm';
+import AddResourceForm from '../Forms/AddResourceForm';
 
 const ControlBar = ({
 
