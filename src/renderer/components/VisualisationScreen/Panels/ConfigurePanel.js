@@ -7,6 +7,7 @@ const ConfigurePanel = ({ isOpen, onDismiss }) => (
     onDismiss={onDismiss}
     headerText="Configure app"
     closeButtonAriaLabel="Close"
+    isBlocking={false}
   >
     content here
   </Panel>

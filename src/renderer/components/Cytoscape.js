@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import useCytoscape from '../hooks/useCytoscape';
 
 /**
@@ -18,7 +19,7 @@ const Cytoscape = (props) => {
     };
   }, [cyContainer.current]);
 
-  return <div ref={cyContainer} {...props} />;
+  return <div ref={cyContainer} {...props} className="cyContainer"/>;
 };
 
 export default Cytoscape;

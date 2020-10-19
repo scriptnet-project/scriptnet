@@ -1,7 +1,18 @@
 @import '../../theme';
 
 .Visualisation {
-  width: 100%;
-  height: calc(100% - #{$control-bar-height});
-  background: $palette_neutralQuaternary;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: $palette_themeLighterAlt;
+
+  .cyContainer {
+    height: 100%;
+  }
+
+  &--openPanel {
+  }
 }

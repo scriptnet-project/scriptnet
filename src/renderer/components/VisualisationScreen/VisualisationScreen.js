@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import Screen from 'Components/Screen';
 import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import ControlBar from 'Components/VisualisationScreen/ControlBar';
 import PanelManager from 'Components/VisualisationScreen/PanelManager';
+import TopCommandBar from './CommandBar';
+import useCytoscape from '../../hooks/useCytoscape';
 
 const VisualisationScreen = () => {
-  // This might become useReducer, and contain othher
-  // info about the vis state, like which node is selected
-  const [mode, setMode] = useState('default');
+  const [cy] = useCytoscape();
 
-  const handleSetMode = (mode) => {
-    console.log(mode);
-    setMode(mode);
-  }
+  const handleAnimationComplete = useCallback(() => {
+    cy.resize();
+  }, [cy]);
 
   return (
-    <Screen>
-      <Visualisation />
-      <ControlBar onSetMode={handleSetMode} />
-      <PanelManager mode={mode} onSetMode={handleSetMode} />
+    <Screen onAnimationComplete={handleAnimationComplete}>
+      <TopCommandBar />
+      <div style={{ flex: '1 auto', display: 'flex' }}>
+        <Visualisation/>
+        <PanelManager/>
+      </div>
+      <ControlBar />
     </Screen>
   );
 };
