@@ -41,13 +41,13 @@ const TopCommandBar = ({
     },
     {
       key: 'Import',
-      text: 'Import...',
+      text: 'Import CSV...',
       iconProps: { iconName: 'Import' },
       onClick: cyActions.importCsv,
     },
     {
       key: 'Export',
-      text: 'Export...',
+      text: 'Export CSV...',
       iconProps: { iconName: 'Export' },
       onClick: cyActions.exportCsv,
     }
