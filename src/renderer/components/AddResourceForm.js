@@ -5,13 +5,13 @@ import {
   Dialog,
   DialogType,
   DialogFooter,
-  ComboBox,
 } from '@fluentui/react';
 import useCytoscape from 'Hooks/useCytoscape';
 import { Field, Form, Formik } from 'formik';
-import { FormikTextField, FormikChoiceGroup, FormikDropdown } from 'formik-office-ui-fabric-react'
+import { FormikTextField, FormikDropdown } from 'formik-office-ui-fabric-react'
 
 const locationOptions = [
+  {key: 'N/A', text: 'N/A'},
   {key: 'Ireland', text: 'Ireland'},
   {key: 'United Kingdom', text: 'United Kingdom'},
   {key: 'Afghanistan', text: 'Afghanistan'},
@@ -264,21 +264,16 @@ const jurisdictionOptions = [
   {key: 'transnational', text: 'Transnational' },
 ];
 
-const roleOptions = [
-  {key: 'Suspected Primary Offender', text: 'Suspected Primary Offender' },
-  {key: 'Suspected Secondary/Co-offender', text: 'Suspected Secondary/Co-offender' },
-  {key: 'Suspected Facilitator', text: 'Suspected Facilitator' },
-  {key: 'Suspected Victim', text: 'Suspected Victim' },
-  {key: 'Regulator', text: 'Regulator' },
+const functionOptions = [
+  {key: 'Production', text: 'Production' },
+  {key: 'Distribution', text: 'Distribution' },
+  {key: 'Aquisition', text: 'Aquisition' },
+  {key: 'Exchange', text: 'Exchange' },
+  {key: 'Facilitation', text: 'Facilitation' },
+  {key: 'Finances', text: 'Finances' },
 ];
 
-const sexOptions = [
-  {key: 'Male', text: 'Male' },
-  {key: 'Female', text: 'Female' },
-  {key: 'Unknown', text: 'Unknown' },
-];
-
-const AddPersonForm = ({
+const AddResourceForm = ({
   toggleHideDialog,
   hideDialog,
 }) => {
@@ -289,7 +284,7 @@ const AddPersonForm = ({
     cy.add({
       group: 'nodes',
       data: {
-        type: 'person',
+        type: 'resource',
         ...formData
       },
     });
@@ -299,24 +294,26 @@ const AddPersonForm = ({
     return true;
   }
 
+
   const initialValues = {
     name: '',
-    location: 'Ireland',
+    location: 'N/A',
     jurisdiction: 'local',
+    organisationType: 'Private',
+    function: '',
     role: '',
-    sex: 'Male',
-  }
+  };
 
   const validate = (values) => {
     console.log('validate', values);
     const errors = {};
 
     if (!values.name) {
-      errors.name = 'Please enter a name'
+      errors.name = 'Please enter a name';
     }
 
-    if (!values.role) {
-      errors.role = 'Please select a role'
+    if (!values.function) {
+      errors.function = 'Please select a function';
     }
 
     return errors
@@ -328,7 +325,7 @@ const AddPersonForm = ({
       onDismiss={toggleHideDialog}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Person',
+        title: 'Add a Resource',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -346,16 +343,9 @@ const AddPersonForm = ({
         <Form>
           <Field
             name="name"
-            label="Name"
-            placeholder="Enter the person's name"
+            label="Type [e.g. van, website, distillery, product/goods]"
+            placeholder="Enter the resource type"
             component={FormikTextField}
-          />
-          <Field
-            name="role"
-            label="Role"
-            placeholder="Select a role"
-            component={FormikDropdown}
-            options={roleOptions}
           />
           <Field
             name="location"
@@ -372,10 +362,11 @@ const AddPersonForm = ({
             options={jurisdictionOptions}
           />
           <Field
-            name="sex"
-            label="Sex"
-            component={FormikChoiceGroup}
-            options={sexOptions}
+            name="function"
+            label="Function"
+            placeholder="Select a function"
+            component={FormikDropdown}
+            options={functionOptions}
           />
           <DialogFooter>
             <DefaultButton onClick={toggleHideDialog} text="Cancel" />
@@ -388,35 +379,4 @@ const AddPersonForm = ({
   );
 }
 
-export default AddPersonForm;
-
-
-// Attempt at wrapping <ComboBox>.
-// Works except for creating new items
-const FormikComboBox = ({
-  field, // { name, value, onChange, onBlur }
-  form: { touched, errors, handleChange, setFieldValue }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-  ...props
-})  => {
-  return (
-    <ComboBox
-      {...field}
-      {...props}
-      onChange={(event, option, index, value) => {
-        console.log('change', option, index, value);
-        if (option && option.key) {
-          setFieldValue(field.name, option.key);
-          return;
-        }
-        locationOptions.push({
-          key: value,
-          text: value,
-        });
-
-        setFieldValue(field.name, value);
-      }}
-    />
-  );
-};
-
-
+export default AddResourceForm;
