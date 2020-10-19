@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import Screen from 'Components/Screen';
-import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import ControlBar from 'Components/VisualisationScreen/ControlBar';
 import PanelManager from 'Components/VisualisationScreen/PanelManager';
-import TopCommandBar from './CommandBar';
-import useCytoscape from '../../hooks/useCytoscape';
+import TopCommandBar from 'Components/VisualisationScreen/CommandBar';
+import Visualisation from 'Components/VisualisationScreen/Visualisation';
+import WelcomeNotice from 'Components/VisualisationScreen/WelcomeNotice';
+import useCytoscape from 'Hooks/useCytoscape';
 
 const VisualisationScreen = () => {
   const [cy] = useCytoscape();
@@ -17,6 +18,7 @@ const VisualisationScreen = () => {
     <Screen onAnimationComplete={handleAnimationComplete}>
       <TopCommandBar />
       <div style={{ flex: '1 auto', display: 'flex' }}>
+        <WelcomeNotice />
         <Visualisation/>
         <PanelManager/>
       </div>
