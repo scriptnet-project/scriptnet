@@ -153,7 +153,10 @@ const CyLoader = ({ children }) => {
           cy.add({
             group: 'nodes',
             data,
-            position,
+            position: {
+              x: parseFloat(position.x),
+              y: parseFloat(position.y),
+            },
           });
         });
       });
