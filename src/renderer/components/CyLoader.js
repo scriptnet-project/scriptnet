@@ -1,10 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import electron from 'electron';
+import path from 'path';
+import { pick, omit } from 'lodash';
 import fse from 'fs-extra';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
+import Papa from 'papaparse';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { CyContext } from 'Hooks/useCytoscape';
 import { stylesheet } from './VisualisationScreen/Visualisation';
@@ -95,6 +98,13 @@ const CyLoader = ({ children }) => {
     }]
   };
 
+  const csvOptions = {
+    filters: [{
+      name: 'CSV File',
+      extensions: ['csv']
+    }]
+  };
+
   // Actions
   const openNetwork = () => {
     dialog.showOpenDialog(browserWindow, { ...baseOptions })
@@ -127,9 +137,44 @@ const CyLoader = ({ children }) => {
       });
   };
 
-  const importCsv = () => {};
+  const importCsv = () => {
+    dialog.showOpenDialog(browserWindow, { ...csvOptions })
+      .then(({ cancelled, filePaths }) => {
+        if (cancelled) { return; }
+        return filePaths[0];
+      })
+      .then(filePath => fse.readFile(filePath, 'utf8'))
+      .then(csvData => Papa.parse(csvData, { header: true }))
+      .then((parsedData) => {
+        parsedData.data.forEach((node) => {
+          const position = pick(node, ['x', 'y']);
+          const data = omit(node, ['x', 'y']);
 
-  const exportCsv = () => {};
+          cy.add({
+            group: 'nodes',
+            data,
+            position,
+          });
+        });
+      });
+  };
+
+  const exportCsv = () => {
+    const defaultPath = state.filePath ? path.basename(state.filePath, 'csv') : null;
+    const options = defaultPath ? { defaultPath, ...csvOptions } : { ...csvOptions };
+    dialog.showSaveDialog(browserWindow, options)
+      .then(({ cancelled, filePath }) => {
+        if (cancelled) { return; }
+        return filePath;
+      })
+      .then((filePath) => {
+        const nodes = cy.nodes().map((node) => ({
+          ...node.data(),
+          ...node.position(),
+        }));
+        fse.writeFile(filePath, Papa.unparse(nodes), 'utf8');
+      });
+  };
 
   const runLayout = () => {
     // See: https://github.com/cytoscape/cytoscape.js-cola#api
