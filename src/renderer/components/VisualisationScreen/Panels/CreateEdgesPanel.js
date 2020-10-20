@@ -39,7 +39,7 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
           options={[
             { key: 'social', text: 'Social Relationship'},
             { key: 'financial', text: 'Financial Relationship'},
-            { key: 'gang', text: 'Gang or Organization'},
+            { key: 'gang', text: 'Gang or Organisation'},
           ]}
         />
       </Stack>

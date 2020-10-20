@@ -9,8 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
-import { AddPersonForm, AddPlaceForm, AddResourceForm, AddBusinessForm } from './AddEntityForms';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import AddPersonForm from '../Forms/AddPersonForm';
+import AddLocationForm from '../Forms/AddLocationForm';
+import AddOrganisationForm from '../Forms/AddOrganisationForm';
+import AddResourceForm from '../Forms/AddResourceForm';
 
 const ControlBar = ({
 
@@ -22,22 +24,22 @@ const ControlBar = ({
   const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
 
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
-  const [hidePlaceDialog, { toggle: toggleHidePlaceDialog }] = useBoolean(true);
+  const [hideLocationDialog, { toggle: toggleHideLocationDialog }] = useBoolean(true);
   const [hideResourceDialog, { toggle: toggleHideResourceDialog }] = useBoolean(true);
-  const [hideBusinessDialog, { toggle: toggleHideBusinessDialog }] = useBoolean(true);
+  const [hideOrganisationDialog, { toggle: toggleHideOrganisationDialog }] = useBoolean(true);
 
 
   return (
     <div className="ControlBar">
       <AddPersonForm hideDialog={hidePersonDialog} toggleHideDialog={toggleHidePersonDialog}/>
-      <AddPlaceForm hideDialog={hidePlaceDialog} toggleHideDialog={toggleHidePlaceDialog}/>
+      <AddLocationForm hideDialog={hideLocationDialog} toggleHideDialog={toggleHideLocationDialog}/>
       <AddResourceForm hideDialog={hideResourceDialog} toggleHideDialog={toggleHideResourceDialog}/>
-      <AddBusinessForm hideDialog={hideBusinessDialog} toggleHideDialog={toggleHideBusinessDialog}/>
+      <AddOrganisationForm hideDialog={hideOrganisationDialog} toggleHideDialog={toggleHideOrganisationDialog}/>
       <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
-            secondaryText="Add a new actor to this case"
-            text="Add Actors"
+            secondaryText="Add a new node to this case"
+            text="Add Nodes"
             onMenuClick={() => {
               setMode(modes.DEFAULT);
             }}
@@ -51,23 +53,25 @@ const ControlBar = ({
                   onClick: toggleHidePersonDialog
                 },
                 {
-                  key: 'place',
-                  value: 'place',
-                  text: 'Place',
+                  key: 'location',
+                  value: 'location',
+                  text: 'Location',
                   iconProps: { iconName: 'MapPin' },
-                  onClick: toggleHidePlaceDialog
+                  onClick: toggleHideLocationDialog
                 },
                 {
                   key: 'resource',
                   value: 'resource',
                   text: 'Resource',
                   iconProps: { iconName: 'SharepointAppIcon16' },
+                  onClick: toggleHideResourceDialog
                 },
                 {
-                  key: 'business',
-                  value: 'business',
-                  text: 'Business',
+                  key: 'organisation',
+                  value: 'organisation',
+                  text: 'Organisation',
                   iconProps: { iconName: 'Work' },
+                  onClick: toggleHideOrganisationDialog
                 },
               ],
             }}

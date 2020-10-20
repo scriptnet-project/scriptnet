@@ -119,7 +119,7 @@ export const stylesheet = [
     },
   },
   {
-    selector: 'node[type = "place"]',
+    selector: 'node[type = "location"]',
     style: {
       label: "data(name)",
       'background-color': theme.palette.purple,
@@ -135,7 +135,7 @@ export const stylesheet = [
     },
   },
   {
-    selector: 'node[type = "business"]',
+    selector: 'node[type = "organisation"]',
     style: {
       label: "data(name)",
       'background-color': theme.palette.orange,

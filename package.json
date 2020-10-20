@@ -15,6 +15,8 @@
     "classnames": "^2.2.6",
     "cytoscape-cola": "^2.4.0",
     "cytoscape-edgehandles": "^3.6.0",
+    "formik": "^2.2.0",
+    "formik-office-ui-fabric-react": "^1.0.0",
     "framer-motion": "^2.7.7",
     "fs-extra": "^9.0.1",
     "react": "^16.13.1",
