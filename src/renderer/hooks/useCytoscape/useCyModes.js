@@ -1,15 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { modes } from 'Store/mode';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { stylesheet } from 'Components/VisualisationScreen/Visualisation';
 
-const initialState = {
-  mode: null,
-  options: {},
-};
-
 const useCyModes = (cy, id) => {
-  const [state, setState] = useState(initialState);
+  const state = useSelector(s => s.mode);
   const dispatch = useDispatch();
   const eh = useRef(null);
 
@@ -89,7 +85,7 @@ const useCyModes = (cy, id) => {
     console.log('enabling', type);
     if (!cy.current) { return; }
     cy.current.autounselectify(true);
-    eh.current = cy.edgehandles({
+    eh.current = cy.current.edgehandles({
       edgeParams: ( sourceNode, targetNode, i ) => {
         console.log('edge params', sourceNode, targetNode, i);
         // for edges between the specified source and target
@@ -107,10 +103,10 @@ const useCyModes = (cy, id) => {
 
   const disableEdgeCreation = () => {
     if (!cy.current) { return; }
-    cy.autounselectify(false);
+    cy.current.autounselectify(false);
     if (!eh.current) { return; }
     eh.current.disableDrawMode();
-    eh.destroy();
+    eh.current.destroy();
   };
 
   const enableNodeHighlighting = (attribute) => {
@@ -147,15 +143,17 @@ const useCyModes = (cy, id) => {
   useEffect(() => {
     if (!cy.current) { return; }
 
+    disableNodeHighlighting();
+    disableEdgeCreation();
+
     switch (state.mode) {
+      case modes.ASSIGN_ATTRIBUTES:
+        enableNodeHighlighting(state.options.highlightScene);
       default:
         runLayout();
         break;
     };
-  }, [id, state.mode]);
-
-  const setMode = (mode, options = {}) =>
-    setState({ options, mode });
+  }, [id, state.mode]); // could even respond to state.options?
 
   const actions = {
     runLayout,
@@ -163,7 +161,6 @@ const useCyModes = (cy, id) => {
     disableEdgeCreation,
     enableNodeHighlighting,
     disableNodeHighlighting,
-    setMode
   };
 
   return [state, actions];

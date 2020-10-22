@@ -4,12 +4,12 @@ import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
 import useCytoscape from 'Hooks/useCytoscape';
-import { Panel } from '.';
+import { Panel } from './';
 
 const ViewDetailsPanel = ({
   isOpen,
 }) => {
-  const [cy] = useCytoscape();
+  const [cy, id] = useCytoscape();
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
 
@@ -21,12 +21,12 @@ const ViewDetailsPanel = ({
     if (!selectedElement) { return; }
     cy.current.getElementById(selectedElement).remove();
     dispatch(visualisationActions.clearSelected());
-  }, [selectedElement]);
+  }, [selectedElement, id]);
 
   const handleDismiss = useCallback(() => {
     cy.current.getElementById(selectedElement).unselect();
     dispatch(visualisationActions.clearSelected());
-  }, [selectedElement]);
+  }, [selectedElement, id]);
 
   if (!isOpen || !details) return false;
 

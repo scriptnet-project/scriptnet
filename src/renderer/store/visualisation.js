@@ -1,5 +1,5 @@
 import { createActions, handleActions } from 'redux-actions';
-import { actionTypes as modeActionTypes } from './mode';
+import { actionCreators as modeActions } from './mode';
 
 const actionCreators = createActions({
   SET_SELECTED: (id, type = 'node') => ({ id, type }),
@@ -20,7 +20,10 @@ const reducer = handleActions({
   [actionCreators.clearSelected]: () => ({
     ...intialState,
   }),
-  [modeActionTypes.SET_MODE]: () => ({
+  [modeActions.setMode]: () => ({
+    ...intialState,
+  }),
+  [modeActions.resetMode]: () => ({
     ...intialState,
   }),
 }, intialState);
