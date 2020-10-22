@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import uuid from 'uuid';
-import electron from 'electron';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
@@ -31,7 +30,6 @@ const CyProvider = ({ children }) => {
 
   const [loadState, loadActions] = useCyLoader(cyRef, setCy);
   const [modeState, modeActions] = useCyModes(cyRef, state.id);
-  // const [utilityActions] = useCyUtilities(cyState);
 
   const value = [
     cyRef,
