@@ -96,8 +96,8 @@ const ControlBar = ({
         <VerticalDivider />
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
-            secondaryText="Assign actors to certain actions within the case"
-            text="Assign Actions"
+            secondaryText="Assign actors to certain scenes within the case"
+            text="Assign Scenes"
             iconProps={{ iconName: "Fingerprint"}}
             verticalFill
             onClick={() => setMode(modes.ASSIGN_ATTRIBUTES)}

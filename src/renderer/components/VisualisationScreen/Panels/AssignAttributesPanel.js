@@ -45,9 +45,6 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
             ]}
           />
       </Stack>
-      <Stack>
-          <DefaultButton text="Manage Actions" />
-        </Stack>
     </Panel>
   );
 }
