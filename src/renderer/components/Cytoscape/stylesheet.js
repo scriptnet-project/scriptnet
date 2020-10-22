@@ -2,7 +2,7 @@ import { getTheme } from '@fluentui/react';
 
 const theme = getTheme();
 
-const stylesheet = [
+export const stylesheet = [
   {
     selector: '.eh-handle',
     style: {
@@ -58,28 +58,37 @@ const stylesheet = [
     selector: 'edge',
     style: {
       'curve-style': 'bezier',
-      // 'target-arrow-shape': 'triangle',
       'lineColor': theme.palette.themeTertiary,
-      'target-arrow-color': theme.palette.themeTertiary,
-      'source-arrow-color': theme.palette.themeTertiary
     }
   },
   {
-    selector: 'edge[type = "social"]',
+    selector: 'edge[type = "personal"]',
     style: {
-      'lineColor': theme.palette.themeTertiary,
+      'lineColor': theme.palette.yellow,
     },
   },
   {
-    selector: 'edge[type = "financial"]',
+    selector: 'edge[type = "communication"]',
     style: {
       'lineColor': theme.palette.purpleLight,
     },
   },
   {
-    selector: 'edge[type = "gang"]',
+    selector: 'edge[type = "financial"]',
     style: {
       'lineColor': theme.palette.greenLight,
+    },
+  },
+  {
+    selector: 'edge[type = "business"]',
+    style: {
+      'lineColor': theme.palette.tealLight,
+    },
+  },
+  {
+    selector: 'edge[type = "ownership"]',
+    style: {
+      'lineColor': theme.palette.magentaLight,
     },
   },
   {
@@ -110,7 +119,7 @@ const stylesheet = [
     selector: 'node[type = "person"]',
     style: {
       label: "data(name)",
-      'background-color': theme.palette.themePrimary,
+      'background-color': theme.palette.blue,
       shape: 'circle'
     },
   },

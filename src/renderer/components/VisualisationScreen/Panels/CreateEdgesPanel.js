@@ -28,9 +28,11 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
           onChange={onChange}
           selectedKey={options.createEdgeType}
           options={[
-            { key: 'social', text: 'Social Relationship'},
+            { key: 'personal', text: 'Personal Relationship'},
+            { key: 'communication', text: 'Communication Relationship'},
             { key: 'financial', text: 'Financial Relationship'},
-            { key: 'gang', text: 'Gang or Organisation'},
+            { key: 'business', text: 'Business Relationship'},
+            { key: 'ownership', text: 'Ownership Relationship'},
           ]}
         />
       </Stack>
