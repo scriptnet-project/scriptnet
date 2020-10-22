@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import useCytoscape from '../hooks/useCytoscape';
 
 /**
@@ -7,17 +6,18 @@ import useCytoscape from '../hooks/useCytoscape';
  */
 const Cytoscape = (props) => {
   const cyContainer = useRef();
-  const [cy] = useCytoscape();
+  const [cy, id] = useCytoscape();
 
   useEffect(() => {
-    if (cyContainer.current) {
-      cy.mount(cyContainer.current);
-    }
+    if (!cyContainer.current || !cy.current) { return; }
+    cy.current.mount(cyContainer.current);
 
     return () => {
-      cy.unmount(cyContainer.current);
+      if (!cyContainer.current || cy.current) { return; }
+
+      cy.current.unmount(cyContainer.current);
     };
-  }, [cyContainer.current]);
+  }, [!!cyContainer.current, id]);
 
   return <div ref={cyContainer} {...props} className="cyContainer"/>;
 };

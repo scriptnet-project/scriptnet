@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CyLoader from 'Components/CyLoader';
+import CyProvider from 'Hooks/useCytoscape/CyProvider';
 import ScreensManager from 'Components/ScreensManager';
 import 'Components/App.scss';
 
@@ -7,9 +7,9 @@ function App() {
   const [screen, setScreen] = useState('default');
 
   return (
-    <CyLoader>
+    <CyProvider>
       <ScreensManager screen={screen} key="screen" />
-    </CyLoader>
+    </CyProvider>
   );
 }
 

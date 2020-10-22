@@ -18,7 +18,7 @@ import './CommandBar.scss';
 
 const TopCommandBar = ({
 }) => {
-  const [cy, cyActions] = useCytoscape();
+  const [cy,,, cyActions] = useCytoscape();
 
   const items = [
     {
@@ -53,8 +53,8 @@ const TopCommandBar = ({
       iconOnly: true,
       iconProps: { iconName: 'ZoomIn' },
       onClick: () => {
-        cy.animate({
-          'zoom': cy.zoom() + 0.5,
+        cy.current.animate({
+          'zoom': cy.current.zoom() + 0.5,
        });
       },
     },
@@ -63,8 +63,8 @@ const TopCommandBar = ({
       iconOnly: true,
       iconProps: { iconName: 'ZoomOut' },
       onClick: () => {
-        cy.animate({
-          'zoom': cy.zoom() - 0.5,
+        cy.current.animate({
+          'zoom': cy.current.zoom() - 0.5,
        });
       },
     },
@@ -72,7 +72,7 @@ const TopCommandBar = ({
       key: 'fit',
       iconOnly: true,
       iconProps: { iconName: 'ZoomToFit' },
-      onClick: () => cy.animate({
+      onClick: () => cy.current.animate({
         fit: {
           eles: 'node',
           padding: 100,

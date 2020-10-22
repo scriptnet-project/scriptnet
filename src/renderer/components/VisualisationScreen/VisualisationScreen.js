@@ -8,11 +8,12 @@ import WelcomeNotice from 'Components/VisualisationScreen/WelcomeNotice';
 import useCytoscape from 'Hooks/useCytoscape';
 
 const VisualisationScreen = () => {
-  const [cy] = useCytoscape();
+  const [cy, cyId] = useCytoscape();
 
   const handleAnimationComplete = useCallback(() => {
-    cy.resize();
-  }, [cy]);
+    if (!cy.current) { return; }
+    cy.current.resize();
+  }, [cyId]);
 
   return (
     <Screen onAnimationComplete={handleAnimationComplete}>

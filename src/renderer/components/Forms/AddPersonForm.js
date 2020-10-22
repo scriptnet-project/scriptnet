@@ -22,11 +22,12 @@ const AddPersonForm = ({
   toggleHideDialog,
   hideDialog,
 }) => {
-  const [cy, cyActions] = useCytoscape();
+  const [cy,,, cyActions] = useCytoscape();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cy.add({
+    console.log({ cy });
+    cy.current.add({
       group: 'nodes',
       data: {
         type: 'person',

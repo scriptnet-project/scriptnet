@@ -13,16 +13,18 @@ const ViewDetailsPanel = ({
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
 
-  const details = cy.getElementById(selectedElement).data();
+  if (!cy.current) { return null; }
+
+  const details = cy.current.getElementById(selectedElement).data();
 
   const handleRemove = useCallback(() => {
     if (!selectedElement) { return; }
-    cy.getElementById(selectedElement).remove();
+    cy.current.getElementById(selectedElement).remove();
     dispatch(visualisationActions.clearSelected());
   }, [selectedElement]);
 
   const handleDismiss = useCallback(() => {
-    cy.getElementById(selectedElement).unselect();
+    cy.current.getElementById(selectedElement).unselect();
     dispatch(visualisationActions.clearSelected());
   }, [selectedElement]);
 

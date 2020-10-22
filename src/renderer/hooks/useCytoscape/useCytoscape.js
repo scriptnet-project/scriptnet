@@ -1,10 +1,7 @@
 import { useContext } from 'react';
 import CyContext from './CyContext';
 
-const useCytoscape = () => {
-  const cy = useContext(CyContext);
-
-  return cy;
-};
+const useCytoscape = () =>
+  useContext(CyContext);
 
 export default useCytoscape;

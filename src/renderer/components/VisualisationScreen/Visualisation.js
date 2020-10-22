@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { getTheme } from '@fluentui/react';
-import useCytoscape from '../../hooks/useCytoscape';
 import Cytoscape from '../Cytoscape';
 import './Visualisation.scss';
-
 
 const theme = getTheme();
 export const stylesheet = [
@@ -147,15 +145,6 @@ export const stylesheet = [
 const Visualisation = ({
   panelOpen
 }) => {
-  const [cy] = useCytoscape();
-
-
-
-  useEffect(() => {
-    // this only runs once, this might make more sense to live in useCytoscape
-    console.log('cy changed');
-
-  }, [cy]);
 
   return (
     <div className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>
