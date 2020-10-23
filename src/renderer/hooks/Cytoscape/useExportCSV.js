@@ -1,8 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import electron from 'electron';
 import path from 'path';
-import { pick, omit } from 'lodash';
 import fse from 'fs-extra';
 import Papa from 'papaparse';
 
