@@ -18,7 +18,7 @@ import './CommandBar.scss';
 
 const TopCommandBar = ({
 }) => {
-  const [cy] = useCytoscape();
+  const { cy } = useCytoscape();
   const { saveNetwork, openNetwork, runLayout } = useCytoscapeActions();
 
   const items = [

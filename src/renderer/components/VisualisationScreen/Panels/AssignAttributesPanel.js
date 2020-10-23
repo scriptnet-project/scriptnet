@@ -6,7 +6,7 @@ import { actionCreators as modeActions } from 'Store/mode';
 import { Panel } from './';
 
 const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
-  const [, id] = useCytoscape();
+  const { id } = useCytoscape();
   const options = useSelector(s => s.mode.options);
   const dispatch = useDispatch();
 

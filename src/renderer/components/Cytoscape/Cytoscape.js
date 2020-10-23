@@ -6,7 +6,7 @@ import { useCytoscape } from 'Hooks/Cytoscape';
  */
 const Cytoscape = (props) => {
   const cyContainer = useRef();
-  const [cy, id] = useCytoscape();
+  const { cy, id } = useCytoscape();
 
   useEffect(() => {
     if (!cyContainer.current || !cy.current) { return; }

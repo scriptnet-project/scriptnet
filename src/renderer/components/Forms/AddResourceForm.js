@@ -29,7 +29,7 @@ const AddResourceForm = ({
   toggleHideDialog,
   hideDialog,
 }) => {
-  const [cy] = useCytoscape();
+  const { cy } = useCytoscape();
   const { runLayout } = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {

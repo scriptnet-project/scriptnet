@@ -9,7 +9,7 @@ import { Panel } from './';
 const ViewDetailsPanel = ({
   isOpen,
 }) => {
-  const [cy, id] = useCytoscape();
+  const { cy, id } = useCytoscape();
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
 
