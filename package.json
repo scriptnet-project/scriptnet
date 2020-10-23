@@ -19,6 +19,7 @@
     "formik-office-ui-fabric-react": "^1.0.0",
     "framer-motion": "^2.7.7",
     "fs-extra": "^9.0.1",
+    "papaparse": "^5.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.8.6",
