@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
-import useCytoscape from 'Hooks/useCytoscape';
+import { useCytoscape } from 'Hooks/Cytoscape';
 import { Panel } from './';
 
 const ViewDetailsPanel = ({

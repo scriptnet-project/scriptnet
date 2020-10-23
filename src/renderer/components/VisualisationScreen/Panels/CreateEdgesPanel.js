@@ -1,23 +1,19 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChoiceGroup, Stack, Text } from '@fluentui/react';
-import useCytoscape from 'Hooks/useCytoscape';
+import { useCytoscape } from 'Hooks/Cytoscape';
+import { actionCreators as modeActions } from 'Store/mode';
 import { Panel } from './';
 
 const AddEdgePanel = ({ isOpen, onDismiss }) => {
-  const [cy, id,, cyActions] = useCytoscape();
+  const [, id] = useCytoscape();
   const options = useSelector(s => s.mode.options);
+  const dispatch = useDispatch();
 
   const onChange = useCallback((event, option) => {
     console.log('changed edge type:', option.key);
-    modeActions.setOption('createEdgeType', option.key);
+    dispatch(modeActions.setOption('createEdgeType', option.key));
   }, [id]);
-
-  useEffect(() => {
-    if (!isOpen) { return; }
-    cyActions.disableEdgeCreation();
-    cyActions.enableEdgeCreation(options.createEdgeType);
-  }, [isOpen, options.createEdgeType]);
 
   return (
     <Panel

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from 'Store/mode';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
-import { stylesheet } from 'Components/VisualisationScreen/Visualisation';
+import { stylesheet } from 'Components/Cytoscape';
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
@@ -61,7 +61,6 @@ const useCyModes = (cy, id) => {
 
   }, [id]);
 
-
   const runLayout = () =>
     {
       if (!cy.current) { return; }
@@ -79,7 +78,6 @@ const useCyModes = (cy, id) => {
         duration: 200
       });
     };
-
 
   const enableEdgeCreation = (type) => {
     console.log('enabling', type);
@@ -149,11 +147,15 @@ const useCyModes = (cy, id) => {
     switch (state.mode) {
       case modes.ASSIGN_ATTRIBUTES:
         enableNodeHighlighting(state.options.highlightScene);
+        break;
+      case modes.CREATE_EDGES:
+        enableEdgeCreation(state.options.createEdgeType);
+        break;
       default:
         runLayout();
         break;
     };
-  }, [id, state.mode]); // could even respond to state.options?
+  }, [id, state.mode, state.options.highlightScene, state.options.createEdgeType]); // could even respond to state.options?
 
   const actions = {
     runLayout,

@@ -3,9 +3,9 @@ import uuid from 'uuid';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import edgeHandles from 'cytoscape-edgehandles';
-import { CyContext } from 'Hooks/useCytoscape';
-import useCyLoader from './useCyLoader';
-import useCyModes from './useCyModes';
+import CytoScapeContext from './CytoscapeContext';
+import useLoader from './useLoader';
+import useModes from './useModes';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -28,8 +28,8 @@ const CyProvider = ({ children }) => {
     setState(() => ({ id: uuid() }));
   };
 
-  const [loadState, loadActions] = useCyLoader(cyRef, setCy);
-  const [modeState, modeActions] = useCyModes(cyRef, state.id);
+  const [loadState, loadActions] = useLoader(cyRef, setCy);
+  const [modeState, modeActions] = useModes(cyRef, state.id);
 
   const value = [
     cyRef,
@@ -39,9 +39,9 @@ const CyProvider = ({ children }) => {
   ];
 
   return (
-    <CyContext.Provider value={value}>
+    <CytoScapeContext.Provider value={value}>
       {children}
-    </CyContext.Provider>
+    </CytoScapeContext.Provider>
   );
 };
 
