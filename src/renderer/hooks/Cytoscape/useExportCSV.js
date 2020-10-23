@@ -23,14 +23,23 @@ const useExportCSV = (cy, state) => {
     dialog.showSaveDialog(browserWindow, options)
       .then(({ cancelled, filePath }) => {
         if (cancelled) { return; }
-        return filePath;
+        return path.parse(filePath);
       })
       .then((filePath) => {
         const nodes = cy.current.nodes().map((node) => ({
           ...node.data(),
           ...node.position(),
         }));
-        fse.writeFile(filePath, Papa.unparse(nodes), 'utf8');
+
+        const edges = cy.current.edges().map((edge) => ({
+          ...edge.data(),
+        }));
+
+        const nodesFilePath = path.join(filePath.dir, `${filePath.name}_nodes${filePath.ext}`);
+        const edgesFilePath = path.join(filePath.dir, `${filePath.name}_edges${filePath.ext}`);
+
+        fse.writeFile(nodesFilePath, Papa.unparse(nodes), 'utf8');
+        fse.writeFile(edgesFilePath, Papa.unparse(edges), 'utf8');
       });
   };
 
