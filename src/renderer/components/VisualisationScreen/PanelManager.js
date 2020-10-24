@@ -5,15 +5,12 @@ import { actionCreators as modeActions, modes } from 'Store/mode';
 import * as Panels from './Panels';
 
 const PanelManager = () => {
-  const mode = useSelector(state => state.mode);
+  const mode = useSelector(state => state.mode.mode);
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
-  const setMode = (mode) => dispatch(modeActions.setMode(mode));
 
   const handleDismiss = () =>
-    setMode(modes.DEFAULT);
-
-  console.log('pan man', mode);
+    dispatch(modeActions.resetMode());
 
   return (
     <React.Fragment>

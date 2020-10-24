@@ -13,12 +13,13 @@ import {
   CommandBar,
   CommandBarButton,
 } from '@fluentui/react';
-import useCytoscape from '../../hooks/useCytoscape';
+import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
 import './CommandBar.scss';
 
 const TopCommandBar = ({
 }) => {
-  const [cy, cyActions] = useCytoscape();
+  const { cy } = useCytoscape();
+  const { saveNetwork, openNetwork, runLayout } = useCytoscapeActions();
 
   const items = [
     {
@@ -31,13 +32,13 @@ const TopCommandBar = ({
       key: 'Save',
       text: 'Save Case',
       iconProps: { iconName: 'Save' },
-      onClick: cyActions.saveNetwork,
+      onClick: saveNetwork,
     },
     {
       key: 'Open',
       text: 'Open Case...',
       iconProps: { iconName: 'FolderOpen' },
-      onClick: cyActions.openNetwork,
+      onClick: openNetwork,
     }
   ];
 
@@ -46,15 +47,15 @@ const TopCommandBar = ({
       key: 'layout',
       text: 'Automatically Position',
       iconProps: { iconName: 'AutoEnhanceOn' },
-      onClick: () => cyActions.runLayout(),
+      onClick: () => runLayout(),
     },
     {
       key: 'zoomin',
       iconOnly: true,
       iconProps: { iconName: 'ZoomIn' },
       onClick: () => {
-        cy.animate({
-          'zoom': cy.zoom() + 0.5,
+        cy.current.animate({
+          'zoom': cy.current.zoom() + 0.5,
        });
       },
     },
@@ -63,8 +64,8 @@ const TopCommandBar = ({
       iconOnly: true,
       iconProps: { iconName: 'ZoomOut' },
       onClick: () => {
-        cy.animate({
-          'zoom': cy.zoom() - 0.5,
+        cy.current.animate({
+          'zoom': cy.current.zoom() - 0.5,
        });
       },
     },
@@ -72,7 +73,7 @@ const TopCommandBar = ({
       key: 'fit',
       iconOnly: true,
       iconProps: { iconName: 'ZoomToFit' },
-      onClick: () => cy.animate({
+      onClick: () => cy.current.animate({
         fit: {
           eles: 'node',
           padding: 100,

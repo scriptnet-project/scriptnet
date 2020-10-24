@@ -1,28 +1,19 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/react';
-import { Panel } from '.';
-import useCytoscape from '../../../hooks/useCytoscape';
+import { useCytoscape } from 'Hooks/Cytoscape';
+import { actionCreators as modeActions } from 'Store/mode';
+import { Panel } from './';
 
 const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
-  const [cy, cyActions] = useCytoscape();
-  const [highlightScene, setHighlightScene] = useState('preparation');
+  const { id } = useCytoscape();
+  const options = useSelector(s => s.mode.options);
+  const dispatch = useDispatch();
 
   const onChange = useCallback((event, option) => {
     console.log('changed highlight scene:', option.key);
-    setHighlightScene(option.key);
-    cyActions.disableNodeHighlighting();
-    cyActions.enableNodeHighlighting(option.key);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      cyActions.enableNodeHighlighting(highlightScene);
-
-    }
-    return () => {
-      cyActions.disableNodeHighlighting();
-    }
-  }, [isOpen])
+    dispatch(modeActions.setOption('highlightScene', option.key));
+  }, [id]);
 
   return (
     <Panel
@@ -36,7 +27,7 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
         <ChoiceGroup
             label="Select a scene"
             onChange={onChange}
-            selectedKey={highlightScene}
+            selectedKey={options.highlightScene}
             options={[
               { key: 'preparation', text: 'Preparation'},
               { key: 'pre-activity', text: 'Pre-Activity'},

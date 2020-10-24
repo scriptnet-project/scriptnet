@@ -1,31 +1,22 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ChoiceGroup, Stack, Text } from '@fluentui/react';
-import { Panel } from '.';
-import useCytoscape from '../../../hooks/useCytoscape';
+import { useCytoscape } from 'Hooks/Cytoscape';
+import { actionCreators as modeActions } from 'Store/mode';
+import { Panel } from './';
 
 const AddEdgePanel = ({ isOpen, onDismiss }) => {
-  const [, cyActions] = useCytoscape();
-  const [createEdgeType, setCreateEdgeType] = useState('social');
+  const { id } = useCytoscape();
+  const options = useSelector(s => s.mode.options);
+  const dispatch = useDispatch();
 
   const onChange = useCallback((event, option) => {
     console.log('changed edge type:', option.key);
-    setCreateEdgeType(option.key);
-    cyActions.disableEdgeCreation();
-    cyActions.enableEdgeCreation(option.key);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      cyActions.enableEdgeCreation(createEdgeType);
-    }
-    return () => {
-      cyActions.disableEdgeCreation();
-    }
-  }, [isOpen])
+    dispatch(modeActions.setOption('createEdgeType', option.key));
+  }, [id]);
 
   return (
     <Panel
-
       isOpen={isOpen}
       onDismiss={onDismiss}
       headerText="Add Relationship"
@@ -35,7 +26,7 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
         <ChoiceGroup
           label="Select relationship type to create"
           onChange={onChange}
-          selectedKey={createEdgeType}
+          selectedKey={options.createEdgeType}
           options={[
             { key: 'social', text: 'Social Relationship'},
             { key: 'financial', text: 'Financial Relationship'},

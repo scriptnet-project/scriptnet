@@ -8,35 +8,57 @@ export const modes = {
   CONFIGURE: 'CONFIGURE',
 };
 
-const initialState = modes.DEFAULT;
+const modeDefaultOptions = {
+  [modes.ASSIGN_ATTRIBUTES]: {
+    highlightScene: 'preparation',
+  },
+  [modes.CREATE_EDGES]: {
+    createEdgeType: 'social',
+  },
+};
 
+const actionCreators = createActions({
+  SET_MODE: (mode, options = {}) => {
+    const defaultOptions = modeDefaultOptions[mode] || {};
 
-/*
- * action types
- */
-const SET_MODE = 'SET_MODE'
+    return {
+      mode,
+      options: {
+        ...defaultOptions,
+        ...options,
+      },
+    };
+  },
+  SET_OPTION: (option, value) => ({ option, value }),
+  SET_OPTIONS: (options = {}) => options,
+  RESET_MODE: undefined, // noop
+});
 
-export function setMode(mode) {
-  return { type: SET_MODE, mode: modes[mode] }
-}
+const intialState = {
+  mode: modes.DEFAULT,
+  options: {},
+};
 
-const actionCreators = {
-  setMode,
-}
+const reducer = handleActions({
+  [actionCreators.setMode]: (state, action) => ({
+    ...action.payload,
+  }),
+  [actionCreators.setOptions]: (state, action) => ({
+    ...state,
+    options: action.payload,
+  }),
+  [actionCreators.setOption]: (state, action) => ({
+    ...state,
+    options: {
+      ...state.options,
+      [action.payload.option]: action.payload.value,
+    },
+  }),
+  [actionCreators.resetMode]: () => ({
+    ...intialState,
+  }),
+}, intialState);
 
-const actionTypes = {
-  SET_MODE,
-}
+export { actionCreators };
 
-export default function reducer(state = initialState, action) {
-  console.log('reducer', state, action);
-  switch (action.type) {
-    case 'SET_MODE':
-      console.log('yooo', state);
-      return action.mode;
-    default:
-      return state
-  }
-}
-
-export { actionCreators, actionTypes };
+export default reducer;

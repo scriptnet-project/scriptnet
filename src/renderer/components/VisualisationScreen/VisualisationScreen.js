@@ -5,14 +5,15 @@ import PanelManager from 'Components/VisualisationScreen/PanelManager';
 import TopCommandBar from 'Components/VisualisationScreen/CommandBar';
 import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import WelcomeNotice from 'Components/VisualisationScreen/WelcomeNotice';
-import useCytoscape from 'Hooks/useCytoscape';
+import { useCytoscape } from 'Hooks/Cytoscape';
 
 const VisualisationScreen = () => {
-  const [cy] = useCytoscape();
+  const { cy, id } = useCytoscape();
 
   const handleAnimationComplete = useCallback(() => {
-    cy.resize();
-  }, [cy]);
+    if (!cy.current) { return; }
+    cy.current.resize();
+  }, [id]);
 
   return (
     <Screen onAnimationComplete={handleAnimationComplete}>
