@@ -19,7 +19,7 @@ import './CommandBar.scss';
 const TopCommandBar = ({
 }) => {
   const { cy } = useCytoscape();
-  const { saveNetwork, openNetwork, runLayout } = useCytoscapeActions();
+  const { saveNetwork, openNetwork, runLayout, exportCSV } = useCytoscapeActions();
 
   const items = [
     {
@@ -39,6 +39,12 @@ const TopCommandBar = ({
       text: 'Open Case...',
       iconProps: { iconName: 'FolderOpen' },
       onClick: openNetwork,
+    },
+    {
+      key: 'ExportCSV',
+      text: 'Export CSV...',
+      iconProps: { iconName: 'Export' },
+      onClick: exportCSV,
     }
   ];
 

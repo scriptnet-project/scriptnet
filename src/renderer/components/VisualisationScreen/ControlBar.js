@@ -6,7 +6,7 @@ import {
   VerticalDivider
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as modeActions, modes } from '../../store/mode';
+import { actionCreators as modeActions, modes } from 'Store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
 import AddPersonForm from '../Forms/AddPersonForm';
