@@ -13,7 +13,7 @@ const modeDefaultOptions = {
     highlightScene: 'preparation',
   },
   [modes.CREATE_EDGES]: {
-    createEdgeType: 'social',
+    createEdgeType: 'personal',
   },
 };
 
