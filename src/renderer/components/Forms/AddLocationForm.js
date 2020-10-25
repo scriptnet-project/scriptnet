@@ -114,6 +114,7 @@ const AddLocationForm = ({
           <Field
             name="function"
             label="Function"
+            placeholder="Select a function"
             component={FormikDropdown}
             options={functionOptions}
           />

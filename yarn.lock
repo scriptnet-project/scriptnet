@@ -1085,6 +1085,11 @@
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
 
+"@types/cytoscape@^3.14.7":
+  version "3.14.8"
+  resolved "https://registry.yarnpkg.com/@types/cytoscape/-/cytoscape-3.14.8.tgz#edad330ed25464750bb77241ab163b840e0f3545"
+  integrity sha512-Om2mlbmtUrl4Cmm7YvbzhJCcHu6sRlTb+w75mcEOi8rXAebyL/AoFWrQiUl839zBrd85eOERx9gdAkJsVBzirQ==
+
 "@types/debug@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
@@ -2694,6 +2699,13 @@ cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
+
+cytoscape-bubblesets@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-bubblesets/-/cytoscape-bubblesets-2.0.0.tgz#2360b7bda9873a9d1c15209c7ca7686d078435cb"
+  integrity sha512-Um5QLz/dBW0I1ctta2PqbqLWVwR/T0I9DhiAiDVoYGU8/4+csNA5a/XtK3xZkWodg2/v1FH+emkm8lbx063oyg==
+  dependencies:
+    "@types/cytoscape" "^3.14.7"
 
 cytoscape-cola@^2.4.0:
   version "2.4.0"

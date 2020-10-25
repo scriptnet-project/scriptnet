@@ -79,9 +79,69 @@ const useCyModes = (cy, id) => {
       });
     };
 
+  const enableScenePreset = () => {
+    console.log('enabling stage preset');
+    if (!cy.current) { return; }
+
+    const bb = cy.current.bubbleSets();
+
+    const colors = [
+      '#ffb900',
+      '#e74856',
+      '#0078d7',
+      '#6b69d6',
+    ];
+
+
+    const scenes = [
+      'preparation',
+      'pre-activity',
+      'activity',
+      'post-activity',
+    ]
+
+    // Remove any existing paths
+    bb.getPaths().forEach(path => bb.removePath(path));
+
+    scenes.forEach((scene, index) => {
+      const selector = `node[${scene}="true"]`;
+      bb.addPath(cy.current.nodes(selector), null, null, {
+        virtualEdges: true,
+        style: {
+          fill: colors[index],
+          opacity: 0.5,
+          // stroke: 'red',
+          // strokeDasharray: '5, 5, 5'
+        }});
+    });
+  }
+
   const enableEdgeCreation = (type) => {
     console.log('enabling', type);
     if (!cy.current) { return; }
+
+    const bb = cy.current.bubbleSets();
+
+    const types = [
+      'person',
+      'location',
+      'resource',
+      'organisation'
+    ];
+
+    bb.getPaths().forEach(path => bb.removePath(path));
+
+    types.forEach(type => {
+      const selector = `node[type="${type}"]`;
+      bb.addPath(cy.current.nodes(selector), null, null, {
+        virtualEdges: true,
+        style: {
+          fill: 'rgba(255, 0, 0, 0)',
+          stroke: 'red',
+          strokeDasharray: '5, 5, 5'
+        }});
+    });
+
     cy.current.autounselectify(true);
     eh.current = cy.current.edgehandles({
       edgeParams: ( sourceNode, targetNode, i ) => {
@@ -150,6 +210,9 @@ const useCyModes = (cy, id) => {
         break;
       case modes.CREATE_EDGES:
         enableEdgeCreation(state.options.createEdgeType);
+        break;
+      case modes.CONFIGURE:
+        enableScenePreset();
         break;
       default:
         runLayout();

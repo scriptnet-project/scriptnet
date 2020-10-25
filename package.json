@@ -13,6 +13,7 @@
   "dependencies": {
     "@fluentui/react": "^7.144.0",
     "classnames": "^2.2.6",
+    "cytoscape-bubblesets": "^2.0.0",
     "cytoscape-cola": "^2.4.0",
     "cytoscape-edgehandles": "^3.6.0",
     "formik": "^2.2.0",
