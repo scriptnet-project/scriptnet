@@ -2,19 +2,24 @@ import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from 'Store/mode';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
-import { stylesheet } from 'Components/Cytoscape';
+import {
+  baseStylesheet,
+  labelledNodes,
+  defaultEntityColours,
+} from 'Components/Cytoscape/stylesheets';
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
   const dispatch = useDispatch();
   const eh = useRef(null);
+  const bb = useRef(null);
 
   useEffect(() => {
     console.log('ran cy mode', { cy, id });
 
     if (!cy.current) { return; }
 
-    cy.current.style(stylesheet);
+    resetStyles()
 
     cy.current.center();
 
@@ -83,7 +88,13 @@ const useCyModes = (cy, id) => {
     console.log('enabling stage preset');
     if (!cy.current) { return; }
 
-    const bb = cy.current.bubbleSets();
+    enableAttributeBoundingBox();
+
+    // Apply styles:
+    applyStylesheet([
+      ...baseStylesheet,
+      ...labelledNodes,
+    ]);
 
     const colors = [
       '#ffb900',
@@ -100,12 +111,9 @@ const useCyModes = (cy, id) => {
       'post-activity',
     ]
 
-    // Remove any existing paths
-    bb.getPaths().forEach(path => bb.removePath(path));
-
     scenes.forEach((scene, index) => {
       const selector = `node[${scene}="true"]`;
-      bb.addPath(cy.current.nodes(selector), null, null, {
+      bb.current.addPath(cy.current.nodes(selector), null, null, {
         virtualEdges: true,
         style: {
           fill: colors[index],
@@ -116,31 +124,35 @@ const useCyModes = (cy, id) => {
     });
   }
 
+  const applyStylesheet = (stylesheet) => {
+    if (!cy.current) { return; }
+    cy.current.style(stylesheet);
+  }
+
+  const resetStyles = () => {
+    applyStylesheet([
+      ...baseStylesheet,
+      ...defaultEntityColours,
+      ...labelledNodes,
+    ]);
+  }
+
+  const enableAttributeBoundingBox = () => {
+    if (!cy.current) { return; }
+
+    bb.current = cy.current.bubbleSets();
+  }
+
+  const disableAttributeBoundingBox = () => {
+    if (!cy.current || !bb.current) { return; }
+    // Remove any existing paths
+    bb.current.getPaths().forEach(path => bb.current.removePath(path));
+    bb.current.destroy();
+  };
+
   const enableEdgeCreation = (type) => {
     console.log('enabling', type);
     if (!cy.current) { return; }
-
-    const bb = cy.current.bubbleSets();
-
-    const types = [
-      'person',
-      'location',
-      'resource',
-      'organisation'
-    ];
-
-    bb.getPaths().forEach(path => bb.removePath(path));
-
-    types.forEach(type => {
-      const selector = `node[type="${type}"]`;
-      bb.addPath(cy.current.nodes(selector), null, null, {
-        virtualEdges: true,
-        style: {
-          fill: 'rgba(255, 0, 0, 0)',
-          stroke: 'red',
-          strokeDasharray: '5, 5, 5'
-        }});
-    });
 
     cy.current.autounselectify(true);
     eh.current = cy.current.edgehandles({
@@ -203,6 +215,8 @@ const useCyModes = (cy, id) => {
 
     disableNodeHighlighting();
     disableEdgeCreation();
+    disableAttributeBoundingBox();
+    resetStyles()
 
     switch (state.mode) {
       case modes.ASSIGN_ATTRIBUTES:
@@ -222,6 +236,8 @@ const useCyModes = (cy, id) => {
 
   const actions = {
     runLayout,
+    applyStylesheet,
+    enableScenePreset,
     enableEdgeCreation,
     disableEdgeCreation,
     enableNodeHighlighting,
