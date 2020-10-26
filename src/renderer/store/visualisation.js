@@ -4,10 +4,12 @@ import { actionCreators as modeActions } from './mode';
 const actionCreators = createActions({
   SET_SELECTED: (id, type = 'node') => ({ id, type }),
   CLEAR_SELECTED: undefined, // noop
+  TOGGLE_SHOW_LABELS: undefined,
 });
 
 const intialState = {
   selected: null,
+  showLabels: true,
 };
 
 const reducer = handleActions({
@@ -19,6 +21,10 @@ const reducer = handleActions({
   }),
   [actionCreators.clearSelected]: () => ({
     ...intialState,
+  }),
+  [actionCreators.toggleShowLabels]: (state) => ({
+    ...state,
+    showLabels: !state.showLabels,
   }),
   [modeActions.setMode]: () => ({
     ...intialState,

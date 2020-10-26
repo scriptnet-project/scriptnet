@@ -12,6 +12,10 @@ import {
   FontIcon,
   CommandBar,
   CommandBarButton,
+  Toggle,
+  DropdownMenuItemType,
+  VerticalDivider,
+  ContextualMenuItemType,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
 import './CommandBar.scss';
@@ -28,6 +32,7 @@ const TopCommandBar = ({
       iconProps: { iconName: 'Add' },
       onClick: () => console.log('Open'),
     },
+    // { key: "divider1", itemType: ContextualMenuItemType.Divider, onRender: () => <VerticalDivider /> },
     {
       key: 'Save',
       text: 'Save Case',
@@ -49,29 +54,29 @@ const TopCommandBar = ({
       iconProps: { iconName: 'AutoEnhanceOn' },
       onClick: () => runLayout(),
     },
-    {
-      key: 'zoomin',
-      iconOnly: true,
-      iconProps: { iconName: 'ZoomIn' },
-      onClick: () => {
-        cy.current.animate({
-          'zoom': cy.current.zoom() + 0.5,
-       });
-      },
-    },
-    {
-      key: 'zoomout',
-      iconOnly: true,
-      iconProps: { iconName: 'ZoomOut' },
-      onClick: () => {
-        cy.current.animate({
-          'zoom': cy.current.zoom() - 0.5,
-       });
-      },
-    },
+    // {
+    //   key: 'zoomin',
+    //   iconOnly: true,
+    //   iconProps: { iconName: 'ZoomIn' },
+    //   onClick: () => {
+    //     cy.current.animate({
+    //       'zoom': cy.current.zoom() + 0.5,
+    //    });
+    //   },
+    // },
+    // {
+    //   key: 'zoomout',
+    //   iconOnly: true,
+    //   iconProps: { iconName: 'ZoomOut' },
+    //   onClick: () => {
+    //     cy.current.animate({
+    //       'zoom': cy.current.zoom() - 0.5,
+    //    });
+    //   },
+    // },
     {
       key: 'fit',
-      iconOnly: true,
+      text: 'Center view',
       iconProps: { iconName: 'ZoomToFit' },
       onClick: () => cy.current.animate({
         fit: {

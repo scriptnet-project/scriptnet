@@ -10,6 +10,7 @@ import {
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
+  const showLabels = useSelector(s => s.visualisation.showLabels);
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
@@ -84,16 +85,16 @@ const useCyModes = (cy, id) => {
       });
     };
 
-  const enableScenePreset = () => {
+  const applyScenePreset = () => {
     console.log('enabling stage preset');
     if (!cy.current) { return; }
 
-    enableAttributeBoundingBox();
+    enableAttributeBoundingBoxes();
 
     // Apply styles:
     applyStylesheet([
       ...baseStylesheet,
-      ...labelledNodes,
+      ...(showLabels ? labelledNodes : []),
     ]);
 
     const colors = [
@@ -118,8 +119,6 @@ const useCyModes = (cy, id) => {
         style: {
           fill: colors[index],
           opacity: 0.5,
-          // stroke: 'red',
-          // strokeDasharray: '5, 5, 5'
         }});
     });
   }
@@ -133,17 +132,16 @@ const useCyModes = (cy, id) => {
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,
-      ...labelledNodes,
+      ...(showLabels ? labelledNodes : []),
     ]);
   }
 
-  const enableAttributeBoundingBox = () => {
+  const enableAttributeBoundingBoxes = () => {
     if (!cy.current) { return; }
-
     bb.current = cy.current.bubbleSets();
   }
 
-  const disableAttributeBoundingBox = () => {
+  const disableAttributeBoundingBoxes = () => {
     if (!cy.current || !bb.current) { return; }
     // Remove any existing paths
     bb.current.getPaths().forEach(path => bb.current.removePath(path));
@@ -210,12 +208,30 @@ const useCyModes = (cy, id) => {
     cy.current.removeListener('tap');
   };
 
+  const applyPreset = () => {
+    switch (state.options.preset) {
+      case 'scene':
+        applyScenePreset();
+        break;
+      case 'relationship-filter':
+        break;
+      case 'focal':
+        break;
+      case 'jurisdiction':
+        break;
+      case 'geography':
+        break;
+      default:
+        break;
+    };
+  }
+
   useEffect(() => {
     if (!cy.current) { return; }
 
     disableNodeHighlighting();
     disableEdgeCreation();
-    disableAttributeBoundingBox();
+    disableAttributeBoundingBoxes();
     resetStyles()
 
     switch (state.mode) {
@@ -226,18 +242,18 @@ const useCyModes = (cy, id) => {
         enableEdgeCreation(state.options.createEdgeType);
         break;
       case modes.CONFIGURE:
-        enableScenePreset();
+        applyPreset();
         break;
       default:
         runLayout();
         break;
     };
-  }, [id, state.mode, state.options.highlightScene, state.options.createEdgeType]); // could even respond to state.options?
+  }, [id, showLabels, state.mode, state.options.highlightScene, state.options.createEdgeType]); // could even respond to state.options?
 
   const actions = {
     runLayout,
     applyStylesheet,
-    enableScenePreset,
+    applyScenePreset,
     enableEdgeCreation,
     disableEdgeCreation,
     enableNodeHighlighting,

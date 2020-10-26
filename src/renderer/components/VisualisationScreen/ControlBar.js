@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   CompoundButton,
   Stack,
   SearchBox,
-  VerticalDivider
+  VerticalDivider,
+  Toggle
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useCytoscape } from 'Hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from '../../store/mode';
+import { actionCreators as visualisationActions } from '../../store/visualisation';
 import { useBoolean } from '@uifabric/react-hooks';
 import './ControlBar.scss';
 import AddPersonForm from '../Forms/AddPersonForm';
@@ -17,16 +20,24 @@ import AddResourceForm from '../Forms/AddResourceForm';
 const ControlBar = ({
 
 }) => {
+  const { id } = useCytoscape();
   const mode = useSelector(state => state.mode);
+  const showLabels = useSelector(state => state.visualisation.showLabels);
   const selectedNode = useSelector(state => state.selectedNode);
   const dispatch = useDispatch();
   const setMode = (mode) => dispatch(modeActions.setMode(mode));
-  const setSelectedNode = (node) => dispatch(selectedNodeActions.setSelectedNode(node));
+  const toggleShowLabels = () => dispatch(visualisationActions.toggleShowLabels());
 
   const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
   const [hideLocationDialog, { toggle: toggleHideLocationDialog }] = useBoolean(true);
   const [hideResourceDialog, { toggle: toggleHideResourceDialog }] = useBoolean(true);
   const [hideOrganisationDialog, { toggle: toggleHideOrganisationDialog }] = useBoolean(true);
+
+  const setVisualisation = useCallback((event, option) => {
+    console.log('changed preset to:', option.key);
+    setMode(modes.CONFIGURE);
+    dispatch(modeActions.setOption('preset', option.key));
+  }, [id]);
 
 
   return (
@@ -35,6 +46,14 @@ const ControlBar = ({
       <AddLocationForm hideDialog={hideLocationDialog} toggleHideDialog={toggleHideLocationDialog}/>
       <AddResourceForm hideDialog={hideResourceDialog} toggleHideDialog={toggleHideResourceDialog}/>
       <AddOrganisationForm hideDialog={hideOrganisationDialog} toggleHideDialog={toggleHideOrganisationDialog}/>
+      <Toggle
+        label="Show labels"
+        inlineLabel
+        onText="On"
+        offText="Off"
+        checked={showLabels}
+        onChange={toggleShowLabels}
+      />
       <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
@@ -108,11 +127,40 @@ const ControlBar = ({
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
             secondaryText="Change the way the network is displayed"
-            text="Change Visualisation"
+            text="Apply Visualisation"
             iconProps={{ iconName: "PictureFill"}}
             verticalFill
-            onClick={() => setMode(modes.CONFIGURE)}
             primary={mode === modes.CONFIGURE}
+            menuProps={{
+              items: [
+                {
+                  key: 'scene',
+                  text: 'Visualise Scenes',
+                  onClick: setVisualisation
+                },
+                {
+                  key: 'relationship-filter',
+                  text: 'Filter by relationships',
+                  onClick: setVisualisation
+                },
+                {
+                  key: 'focal',
+                  text: 'Focal Individual',
+                  onClick: setVisualisation
+                },
+                {
+                  key: 'jurisdiction',
+                  text: 'Visualise Jurisdictions',
+                  onClick: setVisualisation
+                },
+                {
+                  key: 'geography',
+                  value: 'Scenes',
+                  text: 'Visualise Geography',
+                  onClick: setVisualisation
+                },
+              ],
+            }}
           />
         </Stack.Item>
       </Stack>
