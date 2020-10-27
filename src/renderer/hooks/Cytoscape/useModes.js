@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from 'Store/mode';
+import { saveAs } from "file-saver";
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import {
   baseStylesheet,
   labelledNodes,
   defaultEntityColours,
 } from 'Components/Cytoscape/stylesheets';
+
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
@@ -208,6 +210,74 @@ const useCyModes = (cy, id) => {
     cy.current.removeListener('tap');
   };
 
+  function loadImageAsPNG(url, height, width) {
+    return new Promise((resolve, reject) => {
+        let sourceImage = new Image();
+
+        sourceImage.onload = () => {
+            let png = new Image();
+            let cnv = document.createElement('canvas'); // doesn't actually create an element until it's appended to a parent,
+                                                        // so will be discarded once this function has done it's job
+            cnv.height = height;
+            cnv.width = width;
+
+            let ctx = cnv.getContext('2d');
+
+            ctx.drawImage(sourceImage, 0, 0, height, width);
+            png.src = cnv.toDataURL(); // defaults to image/png
+            resolve(png);
+        }
+
+        sourceImage.onerror = reject;
+        sourceImage.src = url;
+    });
+  }
+
+
+  const exportPNG = () => {
+    if (!cy.current) { return; }
+
+    var svgElement = document.getElementsByTagName('svg')[0];
+    console.log('svgEl', svgElement);
+    let {width, height} = svgElement.getBoundingClientRect();
+    console.log('dimen', width, height);
+
+    let clonedSvgElement = svgElement.cloneNode(true);
+    console.log('cloned', clonedSvgElement);
+    let outerHTML = clonedSvgElement.outerHTML;
+    var svgURL = new XMLSerializer().serializeToString(svgElement);
+    let blob = new Blob([svgURL],{type:'image/svg+xml;charset=utf-8'});
+    console.log('blog', outerHTML, blob);
+    let URL = window.URL;
+    let blobURL = URL.createObjectURL(blob);
+
+    let image = new Image();
+
+    image.onload = () => {
+      let canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      let context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0, width, height );
+
+      let png = canvas.toDataURL();
+      console.log('png', png);
+      saveAs(png, 'Exported Visualisation.png');
+    };
+
+    image.onerror = ev => console.log(ev);
+
+    // image.src = "data:image/svg+xml;charset=utf-8," + outerHTML;
+    image.src = blobURL;
+    console.log('blob', blobURL, image);
+
+
+
+    // saveAs(cy.current.png({
+    //   scale: 2,
+    // }), 'Exported Visualisation.png');
+  }
+
   const applyPreset = () => {
     switch (state.options.preset) {
       case 'scene':
@@ -258,6 +328,7 @@ const useCyModes = (cy, id) => {
     disableEdgeCreation,
     enableNodeHighlighting,
     disableNodeHighlighting,
+    exportPNG,
   };
 
   return [state, actions];

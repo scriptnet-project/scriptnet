@@ -23,7 +23,7 @@ import './CommandBar.scss';
 const TopCommandBar = ({
 }) => {
   const { cy } = useCytoscape();
-  const { saveNetwork, openNetwork, runLayout } = useCytoscapeActions();
+  const { saveNetwork, openNetwork, runLayout, exportPNG } = useCytoscapeActions();
 
   const items = [
     {
@@ -97,7 +97,7 @@ const TopCommandBar = ({
       key: 'Export',
       text: 'Export Screenshot',
       iconProps: { iconName: 'Share' },
-      onClick: () => console.log('Export'),
+      onClick: () => exportPNG(),
     }
   ];
 
