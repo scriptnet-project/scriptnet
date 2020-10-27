@@ -26,11 +26,13 @@ const reducer = handleActions({
     ...state,
     showLabels: !state.showLabels,
   }),
-  [modeActions.setMode]: () => ({
-    ...intialState,
+  [modeActions.setMode]: (state) => ({
+    ...state,
+    selected: intialState.selected,
   }),
   [modeActions.resetMode]: () => ({
     ...intialState,
+    selected: intialState.selected,
   }),
 }, intialState);
 

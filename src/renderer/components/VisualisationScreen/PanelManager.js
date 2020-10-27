@@ -6,6 +6,7 @@ import * as Panels from './Panels';
 
 const PanelManager = () => {
   const mode = useSelector(state => state.mode.mode);
+  const options = useSelector(state => state.mode.options);
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
 
@@ -17,6 +18,7 @@ const PanelManager = () => {
       <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={ mode === modes.CREATE_EDGES } />
       <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={ mode === modes.ASSIGN_ATTRIBUTES } />
       <Panels.ViewDetailsPanel isOpen={selectedElement}/>
+      <Panels.ScenePresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'scene'} />
       {/* <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE } /> */}
     </React.Fragment>
   );

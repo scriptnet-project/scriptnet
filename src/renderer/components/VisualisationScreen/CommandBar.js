@@ -1,24 +1,29 @@
 import React from 'react';
 import {
-  DefaultButton,
-  PrimaryButton,
-  Dialog,
-  DialogType,
-  DialogFooter,
-  ChoiceGroup,
-  Stack,
-  SearchBox,
-  TextField,
-  FontIcon,
   CommandBar,
-  CommandBarButton,
   Toggle,
-  DropdownMenuItemType,
-  VerticalDivider,
-  ContextualMenuItemType,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
 import './CommandBar.scss';
+import { actionCreators as visualisationActions } from '../../store/visualisation';
+import { useDispatch, useSelector } from 'react-redux';
+
+const CommandBarToggle = () => {
+  const showLabels = useSelector(state => state.visualisation.showLabels);
+  const dispatch = useDispatch();
+  const toggleShowLabels = () => dispatch(visualisationActions.toggleShowLabels());
+
+  return (
+    <Toggle
+    label="Show labels"
+    inlineLabel
+    onText="On"
+    offText="Off"
+    checked={showLabels}
+    onChange={toggleShowLabels}
+  />
+  )
+}
 
 const TopCommandBar = ({
 }) => {
@@ -48,6 +53,10 @@ const TopCommandBar = ({
   ];
 
   const farItems = [
+    {
+      key: 'labels',
+      commandBarButtonAs: CommandBarToggle,
+    },
     {
       key: 'layout',
       text: 'Automatically Position',
@@ -87,12 +96,7 @@ const TopCommandBar = ({
         duration: 500
       }),
     },
-    // {
-    //   key: 'Search',
-    //   placeholder: 'Search...',
-    //   underlined: true,
-    //   commandBarButtonAs: SearchBox,
-    // },
+
     {
       key: 'Export',
       text: 'Export Screenshot',
@@ -107,7 +111,7 @@ const TopCommandBar = ({
         items={items}
         farItems={farItems}
         ariaLabel="Use left and right arrow keys to navigate between commands"
-      />
+      /> 
     </div>
   );
 };

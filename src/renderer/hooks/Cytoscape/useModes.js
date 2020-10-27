@@ -100,10 +100,10 @@ const useCyModes = (cy, id) => {
     ]);
 
     const colors = [
-      '#ffb900',
-      '#e74856',
-      '#0078d7',
-      '#6b69d6',
+      '#ffb90033',
+      '#e7485633',
+      '#0078d733',
+      '#6b69d633',
     ];
 
 
@@ -115,12 +115,17 @@ const useCyModes = (cy, id) => {
     ]
 
     scenes.forEach((scene, index) => {
+      if (state.options.hideScenes && state.options.hideScenes.includes(scene)) {
+        return;
+      }
+
       const selector = `node[${scene}="true"]`;
       bb.current.addPath(cy.current.nodes(selector), null, null, {
         virtualEdges: true,
         style: {
+          stroke: colors[index],
+          strokeWidth: 4,
           fill: colors[index],
-          opacity: 0.5,
         }});
     });
   }
@@ -210,72 +215,49 @@ const useCyModes = (cy, id) => {
     cy.current.removeListener('tap');
   };
 
-  function loadImageAsPNG(url, height, width) {
-    return new Promise((resolve, reject) => {
-        let sourceImage = new Image();
-
-        sourceImage.onload = () => {
-            let png = new Image();
-            let cnv = document.createElement('canvas'); // doesn't actually create an element until it's appended to a parent,
-                                                        // so will be discarded once this function has done it's job
-            cnv.height = height;
-            cnv.width = width;
-
-            let ctx = cnv.getContext('2d');
-
-            ctx.drawImage(sourceImage, 0, 0, height, width);
-            png.src = cnv.toDataURL(); // defaults to image/png
-            resolve(png);
-        }
-
-        sourceImage.onerror = reject;
-        sourceImage.src = url;
-    });
-  }
-
-
-  const exportPNG = () => {
+  const exportPNG = async () => {
     if (!cy.current) { return; }
 
-    var svgElement = document.getElementsByTagName('svg')[0];
-    console.log('svgEl', svgElement);
-    let {width, height} = svgElement.getBoundingClientRect();
-    console.log('dimen', width, height);
+    const getBoundingSVG = () => {
+      const svgElement = document.getElementsByTagName('svg')[0];
+      const svgURL = new XMLSerializer().serializeToString(svgElement);
+      const blob = new Blob([svgURL],{type:'image/svg+xml;charset=utf-8'});
+      return window.URL.createObjectURL(blob);
+    }
 
-    let clonedSvgElement = svgElement.cloneNode(true);
-    console.log('cloned', clonedSvgElement);
-    let outerHTML = clonedSvgElement.outerHTML;
-    var svgURL = new XMLSerializer().serializeToString(svgElement);
-    let blob = new Blob([svgURL],{type:'image/svg+xml;charset=utf-8'});
-    console.log('blog', outerHTML, blob);
-    let URL = window.URL;
-    let blobURL = URL.createObjectURL(blob);
+    const drawImageToVirtualCanvas = async (imageData) => {
+      return new Promise((resolve, reject) => {
+        const context = virtualCanvas.getContext('2d');
+        console.log(typeof imageData); 
+        const image = new Image();
+        image.onload = () => {
+          console.log('img', image);
+          context.drawImage(image, 0, 0, width, height);
+          resolve();
+        };
 
-    let image = new Image();
+        image.onerror = () => reject();
+    
+        image.src = imageData;
+      })
+    }
 
-    image.onload = () => {
-      let canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      let context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0, width, height );
+    const virtualCanvas = document.createElement('canvas');
+    var cytoElement = document.getElementsByClassName('Visualisation')[0];
+    let {width, height} = cytoElement.getBoundingClientRect();
+    virtualCanvas.width = width;
+    virtualCanvas.height = height;
 
-      let png = canvas.toDataURL();
-      console.log('png', png);
-      saveAs(png, 'Exported Visualisation.png');
-    };
+    if(state.mode == modes.CONFIGURE && state.options.preset === 'scene') {
+      const svgpng = getBoundingSVG();
+      await drawImageToVirtualCanvas(svgpng);
+    }
 
-    image.onerror = ev => console.log(ev);
+    const cytopng = cy.current.png({scale: 2});
+    await drawImageToVirtualCanvas(cytopng);
 
-    // image.src = "data:image/svg+xml;charset=utf-8," + outerHTML;
-    image.src = blobURL;
-    console.log('blob', blobURL, image);
-
-
-
-    // saveAs(cy.current.png({
-    //   scale: 2,
-    // }), 'Exported Visualisation.png');
+    let canvasBitmap = virtualCanvas.toDataURL();
+    saveAs(canvasBitmap, 'Scriptnet Export.png');
   }
 
   const applyPreset = () => {
@@ -318,7 +300,7 @@ const useCyModes = (cy, id) => {
         runLayout();
         break;
     };
-  }, [id, showLabels, state.mode, state.options.highlightScene, state.options.createEdgeType]); // could even respond to state.options?
+  }, [id, showLabels, state.mode, state.options.highlightScene, state.options.createEdgeType, state.options.hideScenes]); // could even respond to state.options?
 
   const actions = {
     runLayout,
