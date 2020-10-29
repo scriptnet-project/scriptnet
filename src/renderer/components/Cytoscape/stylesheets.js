@@ -1,4 +1,4 @@
-import { getTheme } from '@fluentui/react';
+import { getTheme, hiddenContentStyle } from '@fluentui/react';
 
 const theme = getTheme();
 
@@ -169,6 +169,13 @@ export const baseStylesheet = [
     style: {
       'border-width': 5,
       'border-color': theme.palette.yellowLight
+    }
+  },
+  {
+    selector: '.hidden',
+    style: {
+      visibility: 'hidden',
+      display: 'none',
     }
   }
 ];
