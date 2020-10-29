@@ -1,4 +1,4 @@
-import { getTheme, hiddenContentStyle } from '@fluentui/react';
+import { getTheme } from '@fluentui/react';
 
 const theme = getTheme();
 
