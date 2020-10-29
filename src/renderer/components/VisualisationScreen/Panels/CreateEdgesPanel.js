@@ -7,7 +7,7 @@ import { Panel } from './';
 
 const AddEdgePanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
-  const options = useSelector(s => s.mode.options);
+  const options = useSelector(state => state.mode.options);
   const dispatch = useDispatch();
 
   const onChange = useCallback((event, option) => {

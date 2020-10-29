@@ -1085,6 +1085,11 @@
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
 
+"@types/cytoscape@^3.14.7":
+  version "3.14.8"
+  resolved "https://registry.yarnpkg.com/@types/cytoscape/-/cytoscape-3.14.8.tgz#edad330ed25464750bb77241ab163b840e0f3545"
+  integrity sha512-Om2mlbmtUrl4Cmm7YvbzhJCcHu6sRlTb+w75mcEOi8rXAebyL/AoFWrQiUl839zBrd85eOERx9gdAkJsVBzirQ==
+
 "@types/debug@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
@@ -2695,6 +2700,13 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
+cytoscape-bubblesets@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-bubblesets/-/cytoscape-bubblesets-2.0.0.tgz#2360b7bda9873a9d1c15209c7ca7686d078435cb"
+  integrity sha512-Um5QLz/dBW0I1ctta2PqbqLWVwR/T0I9DhiAiDVoYGU8/4+csNA5a/XtK3xZkWodg2/v1FH+emkm8lbx063oyg==
+  dependencies:
+    "@types/cytoscape" "^3.14.7"
+
 cytoscape-cola@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/cytoscape-cola/-/cytoscape-cola-2.4.0.tgz#3e21491f99f0a776a894faf87a2fc7c7e6cf4534"
@@ -3191,10 +3203,10 @@ electron-webpack@^2.8.2:
     webpack-merge "^4.2.2"
     yargs "^15.3.1"
 
-electron@^10.1.3:
-  version "10.1.3"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-10.1.3.tgz#7e276e373bf30078bd4cb1184850a91268dc0e6c"
-  integrity sha512-CR8LrlG47MdAp317SQ3vGYa2o2cIMdMSMPYH46OVitFLk35dwE9fn3VqvhUIXhCHYcNWIAPzMhkVHpkoFdKWuw==
+electron@10:
+  version "10.1.5"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-10.1.5.tgz#f2b161310f627063e73fbac44efcb35dece83a90"
+  integrity sha512-fys/KnEfJq05TtMij+lFvLuKkuVH030CHYx03iZrW5DNNLwjE6cW3pysJ420lB0FRSfPjTHBMu2eVCf5TG71zQ==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -3560,6 +3572,11 @@ file-loader@^6.0.0:
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^2.6.5"
+
+file-saver@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-2.0.2.tgz#06d6e728a9ea2df2cce2f8d9e84dfcdc338ec17a"
+  integrity sha512-Wz3c3XQ5xroCxd1G8b7yL0Ehkf0TC9oYC6buPFkNnU9EnaPlifeAFCyCh+iewXTyFRcg0a6j3J7FmJsIhlhBdw==
 
 file-uri-to-path@1.0.0:
   version "1.0.0"

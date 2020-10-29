@@ -2,65 +2,7 @@ import { getTheme } from '@fluentui/react';
 
 const theme = getTheme();
 
-export const stylesheet = [
-  {
-    selector: '.eh-handle',
-    style: {
-      'background-color': theme.palette.yellow,
-      'width': 12,
-      'height': 12,
-      'shape': 'ellipse',
-      'overlay-opacity': 0,
-      'border-width': 5, // makes the handle easier to hit
-      'border-opacity': 0
-    }
-  },
-  {
-    selector: '.eh-hover',
-    style: {
-      'background-color': theme.palette.yellow
-    }
-  },
-
-  {
-    selector: '.eh-source',
-    style: {
-      'border-width': 2,
-      'border-color': theme.palette.yellow
-    }
-  },
-
-  {
-    selector: '.eh-target',
-    style: {
-      'border-width': 2,
-      'border-color': theme.palette.yellow
-    }
-  },
-
-  {
-    selector: '.eh-preview, .eh-ghost-edge',
-    style: {
-      'background-color': theme.palette.yellow,
-      'line-color': theme.palette.yellow,
-      'target-arrow-color': theme.palette.yellow,
-      'source-arrow-color': theme.palette.yellow
-    }
-  },
-
-  {
-    selector: '.eh-ghost-edge.eh-preview-active',
-    style: {
-      'opacity': 0
-    }
-  },
-  {
-    selector: 'edge',
-    style: {
-      'curve-style': 'bezier',
-      'lineColor': theme.palette.themeTertiary,
-    }
-  },
+export const defaultEntityColours = [
   {
     selector: 'edge[type = "personal"]',
     style: {
@@ -92,6 +34,120 @@ export const stylesheet = [
     },
   },
   {
+    selector: 'node[type = "person"]',
+    style: {
+      'background-color': theme.palette.blue,
+    },
+  },
+  {
+    selector: 'node[type = "location"]',
+    style: {
+      'background-color': theme.palette.purple,
+    },
+  },
+  {
+    selector: 'node[type = "resource"]',
+    style: {
+      'background-color': theme.palette.tealLight,
+    },
+  },
+  {
+    selector: 'node[type = "organisation"]',
+    style: {
+      'background-color': theme.palette.orange,
+    },
+  },
+]
+
+export const labelledNodes = [
+  {
+    selector: 'node',
+    style: {
+      'label': 'data(name)'
+    }
+  }
+];
+
+export const baseStylesheet = [
+  {
+    selector: 'node[type = "person"]',
+    style: {
+      shape: 'circle'
+    },
+  },
+  {
+    selector: 'node[type = "location"]',
+    style: {
+      shape: 'round-rectangle',
+    },
+  },
+  {
+    selector: 'node[type = "resource"]',
+    style: {
+      shape: 'round-triangle',
+    },
+  },
+  {
+    selector: 'node[type = "organisation"]',
+    style: {
+      shape: 'diamond',
+    },
+  },
+  {
+    selector: '.eh-handle',
+    style: {
+      'background-color': theme.palette.yellow,
+      'width': 12,
+      'height': 12,
+      'shape': 'ellipse',
+      'overlay-opacity': 0,
+      'border-width': 5, // makes the handle easier to hit
+      'border-opacity': 0
+    }
+  },
+  {
+    selector: '.eh-hover',
+    style: {
+      'background-color': theme.palette.yellow
+    }
+  },
+  {
+    selector: '.eh-source',
+    style: {
+      'border-width': 2,
+      'border-color': theme.palette.yellow
+    }
+  },
+  {
+    selector: '.eh-target',
+    style: {
+      'border-width': 2,
+      'border-color': theme.palette.yellow
+    }
+  },
+  {
+    selector: '.eh-preview, .eh-ghost-edge',
+    style: {
+      'background-color': theme.palette.yellow,
+      'line-color': theme.palette.yellow,
+      'target-arrow-color': theme.palette.yellow,
+      'source-arrow-color': theme.palette.yellow
+    }
+  },
+  {
+    selector: '.eh-ghost-edge.eh-preview-active',
+    style: {
+      'opacity': 0
+    }
+  },
+  {
+    selector: 'edge',
+    style: {
+      'curve-style': 'bezier',
+      'lineColor': theme.palette.themeTertiary,
+    }
+  },
+  {
     selector: 'node',
     style: {
       'font-size': 12,
@@ -114,39 +170,5 @@ export const stylesheet = [
       'border-width': 5,
       'border-color': theme.palette.yellowLight
     }
-  },
-  {
-    selector: 'node[type = "person"]',
-    style: {
-      label: "data(name)",
-      'background-color': theme.palette.blue,
-      shape: 'circle'
-    },
-  },
-  {
-    selector: 'node[type = "location"]',
-    style: {
-      label: "data(name)",
-      'background-color': theme.palette.purple,
-      shape: 'round-rectangle',
-    },
-  },
-  {
-    selector: 'node[type = "resource"]',
-    style: {
-      label: "data(name)",
-      'background-color': theme.palette.tealLight,
-      shape: 'round-triangle',
-    },
-  },
-  {
-    selector: 'node[type = "organisation"]',
-    style: {
-      label: "data(name)",
-      'background-color': theme.palette.orange,
-      shape: 'diamond',
-    },
-  },
+  }
 ];
-
-export default stylesheet;

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import uuid from 'uuid';
 import Cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
+import BubbleSets from 'cytoscape-bubblesets';
 import edgeHandles from 'cytoscape-edgehandles';
 import CytoScapeContext from './CytoscapeContext';
 import useLoader from './useLoader';
@@ -10,9 +11,12 @@ import useModes from './useModes';
 // Initialise extensions
 Cytoscape.use(cola);
 Cytoscape.use(edgeHandles);
+Cytoscape.use(BubbleSets);
+
+const cyOptions = { maxZoom: 1.5, headless: true, wheelSensitivity: 0.25, boxSelectionEnabled: false }
 
 const CyProvider = ({ children }) => {
-  const cyRef = useRef(new Cytoscape({ maxZoom: 1.5, headless: true }));
+  const cyRef = useRef(new Cytoscape(cyOptions));
 
   const [state, setState] = useState(() => ({
     id: uuid(),
@@ -22,7 +26,7 @@ const CyProvider = ({ children }) => {
     if (cyRef.current) {
       cyRef.current.destroy();
     }
-    const cy = new Cytoscape({ maxZoom: 1.5, headless: true });
+    const cy = new Cytoscape(cyOptions);
     cy.add(elements);
     cyRef.current = cy;
     setState(() => ({ id: uuid() }));

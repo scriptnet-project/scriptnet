@@ -1,25 +1,34 @@
 import React from 'react';
 import {
-  DefaultButton,
-  PrimaryButton,
-  Dialog,
-  DialogType,
-  DialogFooter,
-  ChoiceGroup,
-  Stack,
-  SearchBox,
-  TextField,
-  FontIcon,
   CommandBar,
-  CommandBarButton,
+  Toggle,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
 import './CommandBar.scss';
+import { actionCreators as visualisationActions } from '../../store/visualisation';
+import { useDispatch, useSelector } from 'react-redux';
+
+const CommandBarToggle = () => {
+  const showLabels = useSelector(state => state.visualisation.showLabels);
+  const dispatch = useDispatch();
+  const toggleShowLabels = () => dispatch(visualisationActions.toggleShowLabels());
+
+  return (
+    <Toggle
+    label="Show labels"
+    inlineLabel
+    onText="On"
+    offText="Off"
+    checked={showLabels}
+    onChange={toggleShowLabels}
+  />
+  )
+}
 
 const TopCommandBar = ({
 }) => {
   const { cy } = useCytoscape();
-  const { saveNetwork, openNetwork, runLayout } = useCytoscapeActions();
+  const { saveNetwork, openNetwork, runLayout, exportPNG } = useCytoscapeActions();
 
   const items = [
     {
@@ -28,6 +37,7 @@ const TopCommandBar = ({
       iconProps: { iconName: 'Add' },
       onClick: () => console.log('Open'),
     },
+    // { key: "divider1", itemType: ContextualMenuItemType.Divider, onRender: () => <VerticalDivider /> },
     {
       key: 'Save',
       text: 'Save Case',
@@ -44,34 +54,38 @@ const TopCommandBar = ({
 
   const farItems = [
     {
+      key: 'labels',
+      commandBarButtonAs: CommandBarToggle,
+    },
+    {
       key: 'layout',
       text: 'Automatically Position',
       iconProps: { iconName: 'AutoEnhanceOn' },
       onClick: () => runLayout(),
     },
-    {
-      key: 'zoomin',
-      iconOnly: true,
-      iconProps: { iconName: 'ZoomIn' },
-      onClick: () => {
-        cy.current.animate({
-          'zoom': cy.current.zoom() + 0.5,
-       });
-      },
-    },
-    {
-      key: 'zoomout',
-      iconOnly: true,
-      iconProps: { iconName: 'ZoomOut' },
-      onClick: () => {
-        cy.current.animate({
-          'zoom': cy.current.zoom() - 0.5,
-       });
-      },
-    },
+    // {
+    //   key: 'zoomin',
+    //   iconOnly: true,
+    //   iconProps: { iconName: 'ZoomIn' },
+    //   onClick: () => {
+    //     cy.current.animate({
+    //       'zoom': cy.current.zoom() + 0.5,
+    //    });
+    //   },
+    // },
+    // {
+    //   key: 'zoomout',
+    //   iconOnly: true,
+    //   iconProps: { iconName: 'ZoomOut' },
+    //   onClick: () => {
+    //     cy.current.animate({
+    //       'zoom': cy.current.zoom() - 0.5,
+    //    });
+    //   },
+    // },
     {
       key: 'fit',
-      iconOnly: true,
+      text: 'Center view',
       iconProps: { iconName: 'ZoomToFit' },
       onClick: () => cy.current.animate({
         fit: {
@@ -82,17 +96,12 @@ const TopCommandBar = ({
         duration: 500
       }),
     },
-    // {
-    //   key: 'Search',
-    //   placeholder: 'Search...',
-    //   underlined: true,
-    //   commandBarButtonAs: SearchBox,
-    // },
+
     {
       key: 'Export',
       text: 'Export Screenshot',
       iconProps: { iconName: 'Share' },
-      onClick: () => console.log('Export'),
+      onClick: () => exportPNG(),
     }
   ];
 
@@ -102,7 +111,7 @@ const TopCommandBar = ({
         items={items}
         farItems={farItems}
         ariaLabel="Use left and right arrow keys to navigate between commands"
-      />
+      /> 
     </div>
   );
 };
