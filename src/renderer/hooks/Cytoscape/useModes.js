@@ -145,7 +145,7 @@ const useCyModes = (cy, id) => {
   const resetStyles = () => {
     if (!cy.current) { return; }
 
-    cy.current.elements().removeClass('hidden');
+    cy.current.elements().removeClass('hidden half-opacity');
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,

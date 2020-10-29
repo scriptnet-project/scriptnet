@@ -174,7 +174,7 @@ export const baseStylesheet = [
   {
     selector: '.half-opacity',
     style: {
-      'opacity': 0.2,
+      'opacity': 0.15,
     }
   },
   {
