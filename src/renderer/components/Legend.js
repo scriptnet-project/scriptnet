@@ -4,6 +4,7 @@ import { groupBy } from 'lodash';
 import { motion } from 'framer-motion';
 import { getTheme, Text } from '@fluentui/react';
 import { modes } from 'Store/mode';
+import 'Components/Legend.scss';
 
 const theme = getTheme();
 
@@ -55,8 +56,8 @@ const Element = ({ type, label, ...options }) => {
     case 'edge':
     default:
       return (
-        <p style={{ textTransform: 'capitalize' }}>
-          <div style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '10px', backgroundColor: options.color, marginRight: '5px' }} />
+        <p className="Legend__element">
+          <div className="Legend__pip" style={{ backgroundColor: options.color }} />
           {label}
         </p>
       );
@@ -69,13 +70,13 @@ const Legend = () => {
 
   return (
       <motion.div
-        style={{ zIndex: 5, position: 'absolute', top: '100px', right: '20px', padding: '0 20px', backgroundColor: 'rgba(255, 255, 255, 0.5)', translateX: '0px' }}
+        className="Legend"
         whileHover={{ opacity: 0.1 }}
         id="legend"
         layout
       >
         {Object.keys(elements).map((group) => (
-          <div key={group}>
+          <div className="Legend__group" key={group}>
             <Text>
               <h4 style={{ textTransform: 'capitalize'}}>{group}</h4>
               {elements[group].map(elementProps => <Element {...elementProps} />)}
