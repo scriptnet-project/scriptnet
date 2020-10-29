@@ -20,7 +20,7 @@ const PanelManager = () => {
       <Panels.ViewDetailsPanel isOpen={selectedElement}/>
       <Panels.FocalPresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'focal'} />
       <Panels.ScenePresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'scene'} />
-      {/* <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE } /> */}
+      <Panels.RelationshipsPresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'relationship-filter'} />
     </React.Fragment>
   );
 };

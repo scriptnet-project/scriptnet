@@ -74,7 +74,7 @@ const useCyModes = (cy, id) => {
       if (!cy.current) { return; }
       // See: https://github.com/cytoscape/cytoscape.js-cola#api
       const layoutOptions = { name: 'cola' };
-      cy.current.layout(layoutOptions).run();
+      cy.current.elements(':visible').layout(layoutOptions).run();
 
       // TODO: If there's a selected node, center on it instead
       cy.current.animate({
@@ -86,6 +86,13 @@ const useCyModes = (cy, id) => {
         duration: 200
       });
     };
+
+  const applyRelationshipPreset = () => {
+    console.log('enabling relationship preset');
+    if (!cy.current || !state.options.hideEdges) { return; }
+
+    cy.current.edges((ele) => state.options.hideEdges.includes(ele.data('type'))).addClass('hidden');
+  }
 
   const applyScenePreset = () => {
     console.log('enabling stage preset');
@@ -136,6 +143,9 @@ const useCyModes = (cy, id) => {
   }
 
   const resetStyles = () => {
+    if (!cy.current) { return; }
+
+    cy.current.elements().removeClass('hidden');
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,
@@ -280,6 +290,7 @@ const useCyModes = (cy, id) => {
         applyScenePreset();
         break;
       case 'relationship-filter':
+        applyRelationshipPreset();
         break;
       case 'focal':
         applyFocalIndividualPreset();
@@ -315,7 +326,15 @@ const useCyModes = (cy, id) => {
         runLayout();
         break;
     };
-  }, [id, showLabels, state.mode, state.options.highlightScene, state.options.createEdgeType, state.options.hideScenes]); // could even respond to state.options?
+  }, [
+    id,
+    showLabels,
+    state.mode,
+    state.options.highlightScene,
+    state.options.createEdgeType,
+    state.options.hideScenes,
+    state.options.hideEdges,
+  ]); // could even respond to state.options?
 
   const actions = {
     runLayout,
