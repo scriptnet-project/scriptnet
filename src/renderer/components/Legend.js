@@ -22,35 +22,38 @@ const nodes = [
   { type: 'node', label: 'organisation', color: theme.palette.orange },
 ];
 
+const scenes = [
+  { type: 'scene', label: 'preparation', color: theme.palette.blue },
+  { type: 'scene', label: 'pre-activity', color: theme.palette.purple },
+  { type: 'scene', label: 'activity', color: theme.palette.tealLight },
+  { type: 'scene', label: 'post-activity', color: theme.palette.orange },
+];
 
-const getElements = (mode) => {
-  switch(mode) {
-    // add nodes
-    case modes.VIEW_DETAILS:
-      return [];
-    // add edges
-    case modes.CREATE_EDGES:
-      return [
-        ...edges,
-      ];
-    // Assign scenes
-    case modes.ASSIGN_ATTRIBUTES:
-      return [];
-    // View presets
-    case modes.CONFIGURE:
-      return [];
-    default:
-      return [
-        ...nodes,
-        ...edges,
-      ];
+const getElements = (mode, options) => {
+  if (mode === modes.CONFIGURE) {
+    if (options.preset === 'scene') {
+      return scenes;
+    }
+
+    if (options.preset === 'relationship-filter') {
+      return edges;
+    }
+
+    return [...nodes, ...edges];
   }
+
+  if (mode === modes.CREATE_EDGES) {
+    return edges;
+  }
+
+  return nodes;
 };
 
 const Element = ({ type, label, ...options }) => {
   switch (type) {
     case 'node':
     case 'edge':
+    default:
       return (
         <p style={{ textTransform: 'capitalize' }}>
           <div style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '10px', backgroundColor: options.color, marginRight: '5px' }} />
@@ -61,8 +64,8 @@ const Element = ({ type, label, ...options }) => {
 };
 
 const Legend = () => {
-  const mode = useSelector(state => state.mode.mode);
-  const elements = groupBy(getElements(mode), 'type');
+  const { mode, options } = useSelector(state => state.mode);
+  const elements = groupBy(getElements(mode, options), 'type');
 
   return (
       <motion.div
