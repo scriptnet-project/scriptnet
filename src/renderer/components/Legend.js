@@ -23,10 +23,10 @@ const nodes = [
 ];
 
 const scenes = [
-  { type: 'scene', label: 'preparation', color: theme.palette.blue },
-  { type: 'scene', label: 'pre-activity', color: theme.palette.purple },
-  { type: 'scene', label: 'activity', color: theme.palette.tealLight },
-  { type: 'scene', label: 'post-activity', color: theme.palette.orange },
+  { type: 'scene', label: 'preparation', color: '#ffb90033' },
+  { type: 'scene', label: 'pre-activity', color: '#e7485633' },
+  { type: 'scene', label: 'activity', color: '#0078d733' },
+  { type: 'scene', label: 'post-activity', color: '#6b69d633' },
 ];
 
 const getElements = (mode, options) => {
