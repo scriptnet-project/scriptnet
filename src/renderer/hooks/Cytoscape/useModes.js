@@ -330,10 +330,7 @@ const useCyModes = (cy, id) => {
     id,
     showLabels,
     state.mode,
-    state.options.highlightScene,
-    state.options.createEdgeType,
-    state.options.hideScenes,
-    state.options.hideEdges,
+    state.options,
   ]); // could even respond to state.options?
 
   const actions = {
