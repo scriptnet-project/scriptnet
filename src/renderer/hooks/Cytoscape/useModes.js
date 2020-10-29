@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from 'Store/mode';
-import { saveAs } from "file-saver";
+import { saveAs } from 'file-saver';
+import html2canvas from 'html2canvas';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import {
   baseStylesheet,
@@ -9,6 +10,19 @@ import {
   defaultEntityColours,
 } from 'Components/Cytoscape/stylesheets';
 
+const getLegendImage = () => {
+  const legend = document.getElementById('legend');
+
+  return html2canvas(legend, { scale: 1 })
+    .then((canvas) => {
+      console.log(canvas);
+      const width = canvas.getAttribute('width');
+      const height = canvas.getAttribute('height');
+      const ctx = canvas.getContext('2d');
+      const data = ctx.getImageData(0, 0, width, height);
+      return data;
+    });
+};
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
@@ -265,6 +279,13 @@ const useCyModes = (cy, id) => {
 
     const cytopng = cy.current.png({scale: 2});
     await drawImageToVirtualCanvas(cytopng);
+
+    const legendImage = await getLegendImage();
+    const context = virtualCanvas.getContext('2d');
+    // bottom right
+    const legendX = width - legendImage.width;
+    const legendY = height - legendImage.height;
+    context.putImageData(legendImage, legendX, legendY);
 
     let canvasBitmap = virtualCanvas.toDataURL();
     saveAs(canvasBitmap, 'Scriptnet Export.png');
