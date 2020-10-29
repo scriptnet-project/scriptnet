@@ -1,16 +1,15 @@
 import React from 'react';
 import Cytoscape from 'Components/Cytoscape';
+import Legend from 'Components/Legend';
 import './Visualisation.scss';
 
 const Visualisation = ({
   panelOpen
-}) => {
-
-  return (
-    <div className={(`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`)}>
-      <Cytoscape />
-    </div>
-  );
-}
+}) => (
+  <div className={`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`}>
+    <Legend />
+    <Cytoscape />
+  </div>
+);
 
 export default Visualisation;
