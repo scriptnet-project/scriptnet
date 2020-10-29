@@ -228,7 +228,7 @@ const useCyModes = (cy, id) => {
     const drawImageToVirtualCanvas = async (imageData) => {
       return new Promise((resolve, reject) => {
         const context = virtualCanvas.getContext('2d');
-        console.log(typeof imageData); 
+        console.log(typeof imageData);
         const image = new Image();
         image.onload = () => {
           console.log('img', image);
@@ -237,7 +237,7 @@ const useCyModes = (cy, id) => {
         };
 
         image.onerror = () => reject();
-    
+
         image.src = imageData;
       })
     }
@@ -260,6 +260,20 @@ const useCyModes = (cy, id) => {
     saveAs(canvasBitmap, 'Scriptnet Export.png');
   }
 
+  const applyFocalIndividualPreset = () => {
+    if (!cy.current) { return; }
+    cy.current.autounselectify(true);
+
+    cy.current.on('tap', 'node', (event) => {
+      // Set the whole graph to 50% opacity
+      cy.current.elements().addClass('half-opacity');
+
+      // Set the neighborhood to full opacity
+      event.target.removeClass('half-opacity');
+      event.target.neighborhood().removeClass('half-opacity');
+    });
+  }
+
   const applyPreset = () => {
     switch (state.options.preset) {
       case 'scene':
@@ -268,6 +282,7 @@ const useCyModes = (cy, id) => {
       case 'relationship-filter':
         break;
       case 'focal':
+        applyFocalIndividualPreset();
         break;
       case 'jurisdiction':
         break;

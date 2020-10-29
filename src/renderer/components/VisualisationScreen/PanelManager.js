@@ -18,6 +18,7 @@ const PanelManager = () => {
       <Panels.CreateEdgesPanel onDismiss={handleDismiss} isOpen={ mode === modes.CREATE_EDGES } />
       <Panels.AssignAttributesPanel onDismiss={handleDismiss} isOpen={ mode === modes.ASSIGN_ATTRIBUTES } />
       <Panels.ViewDetailsPanel isOpen={selectedElement}/>
+      <Panels.FocalPresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'focal'} />
       <Panels.ScenePresetPanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE && options.preset === 'scene'} />
       {/* <Panels.ConfigurePanel onDismiss={handleDismiss} isOpen={ mode === modes.CONFIGURE } /> */}
     </React.Fragment>

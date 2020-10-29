@@ -170,5 +170,11 @@ export const baseStylesheet = [
       'border-width': 5,
       'border-color': theme.palette.yellowLight
     }
+  },
+  {
+    selector: '.half-opacity',
+    style: {
+      'opacity': 0.2,
+    }
   }
 ];
