@@ -172,6 +172,12 @@ export const baseStylesheet = [
     }
   },
   {
+    selector: '.half-opacity',
+    style: {
+      'opacity': 0.15,
+    }
+  },
+  {
     selector: '.hidden',
     style: {
       visibility: 'hidden',

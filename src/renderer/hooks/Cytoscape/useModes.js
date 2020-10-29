@@ -145,7 +145,7 @@ const useCyModes = (cy, id) => {
   const resetStyles = () => {
     if (!cy.current) { return; }
 
-    cy.current.elements().removeClass('hidden');
+    cy.current.elements().removeClass('hidden half-opacity');
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,
@@ -270,6 +270,20 @@ const useCyModes = (cy, id) => {
     saveAs(canvasBitmap, 'Scriptnet Export.png');
   }
 
+  const applyFocalIndividualPreset = () => {
+    if (!cy.current) { return; }
+    cy.current.autounselectify(true);
+
+    cy.current.on('tap', 'node', (event) => {
+      // Set the whole graph to 50% opacity
+      cy.current.elements().addClass('half-opacity');
+
+      // Set the neighborhood to full opacity
+      event.target.removeClass('half-opacity');
+      event.target.neighborhood().removeClass('half-opacity');
+    });
+  }
+
   const applyPreset = () => {
     switch (state.options.preset) {
       case 'scene':
@@ -279,6 +293,7 @@ const useCyModes = (cy, id) => {
         applyRelationshipPreset();
         break;
       case 'focal':
+        applyFocalIndividualPreset();
         break;
       case 'jurisdiction':
         break;
@@ -315,10 +330,7 @@ const useCyModes = (cy, id) => {
     id,
     showLabels,
     state.mode,
-    state.options.highlightScene,
-    state.options.createEdgeType,
-    state.options.hideScenes,
-    state.options.hideEdges,
+    state.options,
   ]); // could even respond to state.options?
 
   const actions = {
