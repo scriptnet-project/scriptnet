@@ -145,8 +145,7 @@ const useCyModes = (cy, id) => {
   const resetStyles = () => {
     if (!cy.current) { return; }
 
-    cy.current.edges().removeClass('hidden');
-    // cy.current.nodes().show();
+    cy.current.elements().removeClass('hidden');
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,
