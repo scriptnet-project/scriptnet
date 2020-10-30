@@ -21,6 +21,7 @@ const nodes = [
   { type: 'node', label: 'location', color: theme.palette.purple },
   { type: 'node', label: 'resource', color: theme.palette.tealLight },
   { type: 'node', label: 'organisation', color: theme.palette.orange },
+  ...edges,
 ];
 
 const scenes = [

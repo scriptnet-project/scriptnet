@@ -13,9 +13,22 @@ import {
 const getLegendImage = () => {
   const legend = document.getElementById('legend');
 
-  return html2canvas(legend, { scale: 1 })
+  return html2canvas(legend, { scale: 4 })
     .then((canvas) => {
       console.log(canvas);
+      const width = canvas.getAttribute('width');
+      const height = canvas.getAttribute('height');
+      const ctx = canvas.getContext('2d');
+      const data = ctx.getImageData(0, 0, width, height);
+      return data;
+    });
+};
+
+const getSVGImage = () => {
+  const svg = document.getElementsByTagName('svg')[0];
+
+  return html2canvas(svg, { scale: 4 })
+    .then((canvas) => {
       const width = canvas.getAttribute('width');
       const height = canvas.getAttribute('height');
       const ctx = canvas.getContext('2d');
@@ -266,7 +279,7 @@ const useCyModes = (cy, id) => {
         const image = new Image();
         image.onload = () => {
           console.log('img', image);
-          context.drawImage(image, 0, 0, width, height);
+          context.drawImage(image, 0, 0, virtualCanvas.width, virtualCanvas.height);
           resolve();
         };
 
@@ -277,24 +290,32 @@ const useCyModes = (cy, id) => {
     }
 
     const virtualCanvas = document.createElement('canvas');
-    var cytoElement = document.getElementsByClassName('Visualisation')[0];
-    let {width, height} = cytoElement.getBoundingClientRect();
-    virtualCanvas.width = width;
-    virtualCanvas.height = height;
+    const cytoElement = document.getElementsByClassName('Visualisation')[0];
+    const {width, height} = cytoElement.getBoundingClientRect();
+    virtualCanvas.width = width * 4;
+    virtualCanvas.height = height * 4;
+    const context = virtualCanvas.getContext('2d');
 
     if(state.mode == modes.CONFIGURE && state.options.preset === 'scene') {
-      const svgpng = getBoundingSVG();
-      await drawImageToVirtualCanvas(svgpng);
+      // const svgpng = getBoundingSVG();
+      // await drawImageToVirtualCanvas(svgpng);
+
+      const svgImage = await getSVGImage();
+      // // bottom right
+      // const legendX = virtualCanvas.width - legendImage.width;
+      // const legendY = virtualCanvas.height - legendImage.height;
+      context.putImageData(svgImage, 0, 0);
     }
 
-    const cytopng = cy.current.png({scale: 2});
+    const cytopng = cy.current.png({scale: 4});
+    console.log('cytopng', cytopng, cytopng.clientHeight, cytopng.clientWidth);
     await drawImageToVirtualCanvas(cytopng);
 
     const legendImage = await getLegendImage();
-    const context = virtualCanvas.getContext('2d');
+
     // bottom right
-    const legendX = width - legendImage.width;
-    const legendY = height - legendImage.height;
+    const legendX = virtualCanvas.width - legendImage.width;
+    const legendY = virtualCanvas.height - legendImage.height;
     context.putImageData(legendImage, legendX, legendY);
 
     let canvasBitmap = virtualCanvas.toDataURL();

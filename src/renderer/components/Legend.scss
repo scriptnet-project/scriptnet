@@ -1,18 +1,21 @@
 .Legend {
   position: absolute;
-  top: 100px;
+  bottom: 130px;
   right: 20px;
   padding: 0 20px;
   background-color: rgba(255, 255, 255, 0.65);
 
   &__element {
     text-transform: capitalize;
+    // display: flex;
+    // align-items: center;
   }
 
   &__pip {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    vertical-align: bottom;
+    width: 20px;
+    height: 20px;
     border-radius: 10px;
     margin-right: 10px;
   }
