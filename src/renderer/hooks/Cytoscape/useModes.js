@@ -89,9 +89,20 @@ const useCyModes = (cy, id) => {
 
   const applyRelationshipPreset = () => {
     console.log('enabling relationship preset');
-    if (!cy.current || !state.options.hideEdges) { return; }
+    if (!cy.current) { return; }
 
-    cy.current.edges((ele) => state.options.hideEdges.includes(ele.data('type'))).addClass('hidden');
+    const localHideEdges = state.options.hideEdges || [];
+
+    cy.current.elements((ele) => {
+      if (ele.isEdge() && localHideEdges.includes(ele.data('type'))) { ele.addClass('hidden') }
+      if (ele.isNode()) {
+        const edges = ele.connectedEdges().filter((edge) => !localHideEdges.includes(edge.data('type')));
+
+        if (edges.length === 0 ) {
+          ele.addClass('half-opacity');
+        }
+      }
+    });
   }
 
   const applyScenePreset = () => {
@@ -112,7 +123,6 @@ const useCyModes = (cy, id) => {
       '#0078d733',
       '#6b69d633',
     ];
-
 
     const scenes = [
       'preparation',
