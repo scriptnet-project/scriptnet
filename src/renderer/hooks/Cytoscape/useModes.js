@@ -375,8 +375,6 @@ const useCyModes = (cy, id) => {
         applyPreset();
         break;
       default:
-        runLayout();
-        break;
     };
   }, [
     id,

@@ -30,7 +30,6 @@ const AddLocationForm = ({
   hideDialog,
 }) => {
   const { cy } = useCytoscape();
-  const { runLayout } = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
@@ -42,7 +41,6 @@ const AddLocationForm = ({
       },
     });
 
-    runLayout();
     toggleHideDialog();
     return true;
   }

@@ -23,8 +23,6 @@ const baseOptions = {
 const useCyLoader = (cy, setCy) => {
   const [state, setState] = useState(initialState);
 
-  console.log({ state });
-
   const openNetwork = () => {
     const options = state.filePath ? { ...baseOptions, defaultPath: path.dirname(state.filePath) } : baseOptions;
     dialog.showOpenDialog(browserWindow, options)
