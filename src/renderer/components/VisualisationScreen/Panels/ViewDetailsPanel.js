@@ -45,7 +45,7 @@ const ViewDetailsPanel = ({
       name="view-details-panel"
       isOpen={isOpen}
       onDismiss={handleDismiss}
-      headerText="Actor Details"
+      headerText="Details"
     >
       {/* <Stack tokens={{ childrenGap: 10 }}>
         <Text variant={'large'}>Name: {name}</Text>
