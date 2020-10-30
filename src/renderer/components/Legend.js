@@ -9,26 +9,25 @@ import 'Components/Legend.scss';
 const theme = getTheme();
 
 const edges = [
-  { type: 'edge', label: 'personal', color: theme.palette.yellow },
-  { type: 'edge', label: 'communication', color: theme.palette.purpleLight },
-  { type: 'edge', label: 'financial', color: theme.palette.greenLight },
-  { type: 'edge', label: 'business', color: theme.palette.tealLight },
-  { type: 'edge', label: 'ownership', color: theme.palette.magentaLight },
+  { glyph: 'line', type: 'edge', label: 'personal', color: theme.palette.yellow },
+  { glyph: 'line', type: 'edge', label: 'communication', color: theme.palette.purpleLight },
+  { glyph: 'line', type: 'edge', label: 'financial', color: theme.palette.greenLight },
+  { glyph: 'line', type: 'edge', label: 'business', color: theme.palette.tealLight },
+  { glyph: 'line', type: 'edge', label: 'ownership', color: theme.palette.magentaLight },
 ];
 
 const nodes = [
-  { type: 'node', label: 'person', color: theme.palette.blue },
-  { type: 'node', label: 'location', color: theme.palette.purple },
-  { type: 'node', label: 'resource', color: theme.palette.tealLight },
-  { type: 'node', label: 'organisation', color: theme.palette.orange },
-  ...edges,
+  { glyph: 'circle', type: 'node', label: 'person', color: theme.palette.blue },
+  { glyph: 'square', type: 'node', label: 'location', color: theme.palette.purple },
+  { glyph: 'triangle', type: 'node', label: 'resource', color: theme.palette.tealLight },
+  { glyph: 'diamond', type: 'node', label: 'organisation', color: theme.palette.orange },
 ];
 
 const scenes = [
-  { type: 'scene', label: 'preparation', color: '#ffb90033' },
-  { type: 'scene', label: 'pre-activity', color: '#e7485633' },
-  { type: 'scene', label: 'activity', color: '#0078d733' },
-  { type: 'scene', label: 'post-activity', color: '#6b69d633' },
+  { glyph: 'group', type: 'scene', label: 'preparation', color: '#ffb90033' },
+  { glyph: 'group', type: 'scene', label: 'pre-activity', color: '#e7485633' },
+  { glyph: 'group', type: 'scene', label: 'activity', color: '#0078d733' },
+  { glyph: 'group', type: 'scene', label: 'post-activity', color: '#6b69d633' },
 ];
 
 const getElements = (mode, options) => {
@@ -41,14 +40,14 @@ const getElements = (mode, options) => {
       return edges;
     }
 
-    return [...nodes, ...edges];
+    return [...edges, ...nodes];
   }
 
   if (mode === modes.CREATE_EDGES) {
     return edges;
   }
 
-  return nodes;
+  return [...edges, ...nodes];
 };
 
 const Element = ({ type, label, ...options }) => {
@@ -57,10 +56,10 @@ const Element = ({ type, label, ...options }) => {
     case 'edge':
     default:
       return (
-        <p className="Legend__element">
-          <div className="Legend__pip" style={{ backgroundColor: options.color }} />
+        <motion.p layout className="Legend__element" key="label">
+          <div className={`glyph glyph--${options.glyph}`} style={{ '--color': options.color }}/>
           {label}
-        </p>
+        </motion.p>
       );
   }
 };

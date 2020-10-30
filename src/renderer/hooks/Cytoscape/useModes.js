@@ -265,13 +265,6 @@ const useCyModes = (cy, id) => {
   const exportPNG = async () => {
     if (!cy.current) { return; }
 
-    const getBoundingSVG = () => {
-      const svgElement = document.getElementsByTagName('svg')[0];
-      const svgURL = new XMLSerializer().serializeToString(svgElement);
-      const blob = new Blob([svgURL],{type:'image/svg+xml;charset=utf-8'});
-      return window.URL.createObjectURL(blob);
-    }
-
     const drawImageToVirtualCanvas = async (imageData) => {
       return new Promise((resolve, reject) => {
         const context = virtualCanvas.getContext('2d');
@@ -297,13 +290,7 @@ const useCyModes = (cy, id) => {
     const context = virtualCanvas.getContext('2d');
 
     if(state.mode == modes.CONFIGURE && state.options.preset === 'scene') {
-      // const svgpng = getBoundingSVG();
-      // await drawImageToVirtualCanvas(svgpng);
-
       const svgImage = await getSVGImage();
-      // // bottom right
-      // const legendX = virtualCanvas.width - legendImage.width;
-      // const legendY = virtualCanvas.height - legendImage.height;
       context.putImageData(svgImage, 0, 0);
     }
 
@@ -375,6 +362,8 @@ const useCyModes = (cy, id) => {
         applyPreset();
         break;
       default:
+        runLayout();
+        break;
     };
   }, [
     id,
