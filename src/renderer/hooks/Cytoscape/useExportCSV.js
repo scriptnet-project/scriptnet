@@ -17,12 +17,12 @@ const csvOptions = {
 
 const useExportCSV = (cy, state) => {
   const exportCSV = () => {
-    const defaultPath = state.filePath ? path.basename(state.filePath, 'csv') : null;
+    const defaultPath = state.filePath ? path.dirname(state.filePath) : null;
     const options = defaultPath ? { defaultPath, ...csvOptions } : { ...csvOptions };
 
     dialog.showSaveDialog(browserWindow, options)
-      .then(({ cancelled, filePath }) => {
-        if (cancelled) { return; }
+      .then(({ canceled, filePath }) => {
+        if (canceled) { return; }
         return path.parse(filePath);
       })
       .then((filePath) => {
@@ -35,8 +35,8 @@ const useExportCSV = (cy, state) => {
           ...edge.data(),
         }));
 
-        const nodesFilePath = path.join(filePath.dir, `${filePath.name}_nodes${filePath.ext}`);
-        const edgesFilePath = path.join(filePath.dir, `${filePath.name}_edges${filePath.ext}`);
+        const nodesFilePath = path.join(filePath.dir, `${filePath.name}_nodes.csv`);
+        const edgesFilePath = path.join(filePath.dir, `${filePath.name}_edges.csv`);
 
         fse.writeFile(nodesFilePath, Papa.unparse(nodes), 'utf8');
         fse.writeFile(edgesFilePath, Papa.unparse(edges), 'utf8');
