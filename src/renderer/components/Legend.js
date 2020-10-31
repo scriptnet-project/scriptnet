@@ -79,7 +79,7 @@ const Legend = () => {
           <div className="Legend__group" key={group}>
             <Text>
               <h4 style={{ textTransform: 'capitalize'}}>{group}</h4>
-              {elements[group].map(elementProps => <Element {...elementProps} />)}
+              {elements[group].map(elementProps => <Element {...elementProps} key={elementProps.label} />)}
             </Text>
           </div>
         ))}
