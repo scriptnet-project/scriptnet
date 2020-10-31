@@ -18,32 +18,35 @@ const sexOptions = [
   {key: 'Unknown', text: 'Unknown' },
 ];
 
+const defaultValues = {
+  name: '',
+  location: 'Ireland',
+  jurisdiction: 'local',
+  role: '',
+  sex: 'Male',
+}
+
 const AddPersonForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  onSubmit,
+  initialValues = {},
 }) => {
-  const cyActions = useCytoscapeActions();
+  // const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
+    onSubmit({
       group: 'nodes',
       data: {
         type: 'person',
         ...formData
       },
     });
+    // cyActions.add();
 
-    toggleHideDialog();
+    onClose();
     return true;
-  }
-
-  const initialValues = {
-    name: '',
-    location: 'Ireland',
-    jurisdiction: 'local',
-    role: '',
-    sex: 'Male',
   }
 
   const validate = (values) => {
@@ -63,8 +66,8 @@ const AddPersonForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: 'Add a Person',
@@ -76,7 +79,7 @@ const AddPersonForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -117,7 +120,7 @@ const AddPersonForm = ({
             options={sexOptions}
           />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+            <DefaultButton onClick={onClose} text="Cancel" />
             <PrimaryButton type="submit" text="Add to Network" />
           </DialogFooter>
         </Form>

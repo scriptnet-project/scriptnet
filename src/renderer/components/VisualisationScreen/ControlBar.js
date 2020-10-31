@@ -5,19 +5,22 @@ import {
   VerticalDivider,
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useCytoscape } from 'Hooks/Cytoscape';
+import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from 'Store/mode';
 import { useBoolean } from '@uifabric/react-hooks';
+import Forms from 'Components/Forms/Forms';
+import AddPersonForm from 'Components/Forms/AddPersonForm';
+import AddLocationForm from 'Components/Forms/AddLocationForm';
+import AddOrganisationForm from 'Components/Forms/AddOrganisationForm';
+import AddResourceForm from 'Components/Forms/AddResourceForm';
+
 import './ControlBar.scss';
-import AddPersonForm from '../Forms/AddPersonForm';
-import AddLocationForm from '../Forms/AddLocationForm';
-import AddOrganisationForm from '../Forms/AddOrganisationForm';
-import AddResourceForm from '../Forms/AddResourceForm';
 
 const ControlBar = ({
 
 }) => {
   const { id } = useCytoscape();
+  const cytoscapeActions = useCytoscapeActions();
   const mode = useSelector(state => state.mode);
   const selectedNode = useSelector(state => state.selectedNode);
   const dispatch = useDispatch();
@@ -36,7 +39,12 @@ const ControlBar = ({
 
   return (
     <div className="ControlBar">
-      <AddPersonForm hideDialog={hidePersonDialog} toggleHideDialog={toggleHidePersonDialog}/>
+      <Forms
+        form={hidePersonDialog ? null : 'person'}
+        onClose={toggleHidePersonDialog}
+        onSubmit={data => { cytoscapeActions.add(data); }}
+      />
+      {/* <AddPersonForm hideDialog={hidePersonDialog} toggleHideDialog={toggleHidePersonDialog}/> */}
       <AddLocationForm hideDialog={hideLocationDialog} toggleHideDialog={toggleHideLocationDialog}/>
       <AddResourceForm hideDialog={hideResourceDialog} toggleHideDialog={toggleHideResourceDialog}/>
       <AddOrganisationForm hideDialog={hideOrganisationDialog} toggleHideDialog={toggleHideOrganisationDialog}/>
