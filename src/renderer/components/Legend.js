@@ -50,18 +50,13 @@ const getElements = (mode, options) => {
   return [...edges, ...nodes];
 };
 
-const Element = ({ type, label, ...options }) => {
-  switch (type) {
-    case 'node':
-    case 'edge':
-    default:
-      return (
-        <motion.p layout className="Legend__element" key="label">
-          <div className={`glyph glyph--${options.glyph}`} style={{ '--color': options.color }}/>
-          {label}
-        </motion.p>
-      );
-  }
+const LegendItem = ({ type, label, ...options }) => {
+  return (
+    <motion.p layout className="Legend__element">
+      <span className={`glyph glyph--${options.glyph}`} style={{ '--color': options.color }}/>
+      {label}
+    </motion.p>
+  );
 };
 
 const Legend = () => {
@@ -79,7 +74,7 @@ const Legend = () => {
           <div className="Legend__group" key={group}>
             <Text>
               <h4 style={{ textTransform: 'capitalize'}}>{group}</h4>
-              {elements[group].map(elementProps => <Element {...elementProps} key={elementProps.label} />)}
+              {elements[group].map(elementProps => (<LegendItem {...elementProps} key={elementProps.label} />))}
             </Text>
           </div>
         ))}
