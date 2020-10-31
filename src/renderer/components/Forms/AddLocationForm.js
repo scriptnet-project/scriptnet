@@ -25,9 +25,17 @@ const functionOptions = [
   {key: 'Unknown', text: 'Unknown' },
 ];
 
+const defaultValues = {
+  name: '',
+  location: 'N/A',
+  jurisdiction: 'local',
+  function: ''
+};
+
 const AddLocationForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
@@ -41,16 +49,9 @@ const AddLocationForm = ({
       },
     });
 
-    toggleHideDialog();
+    onClose();
     return true;
   }
-
-  const initialValues = {
-    name: '',
-    location: 'N/A',
-    jurisdiction: 'local',
-    function: ''
-  };
 
   const validate = (values) => {
     console.log('validate', values);
@@ -69,8 +70,8 @@ const AddLocationForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: 'Add a Location',
@@ -82,7 +83,7 @@ const AddLocationForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -117,7 +118,7 @@ const AddLocationForm = ({
             options={functionOptions}
           />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+            <DefaultButton onClick={onClose} text="Cancel" />
             <PrimaryButton type="submit" text="Add to Network" />
           </DialogFooter>
         </Form>

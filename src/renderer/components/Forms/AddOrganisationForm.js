@@ -28,9 +28,19 @@ const typeOptions = [
   {key: 'Other', text: 'Other' },
 ];
 
+const defaultValues = {
+  name: '',
+  location: 'N/A',
+  jurisdiction: 'local',
+  organisationType: 'Private',
+  function: '',
+  role: '',
+};
+
 const AddOrganisationForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
@@ -44,19 +54,9 @@ const AddOrganisationForm = ({
       },
     });
 
-    toggleHideDialog();
+    onClose();
     return true;
   }
-
-
-  const initialValues = {
-    name: '',
-    location: 'N/A',
-    jurisdiction: 'local',
-    organisationType: 'Private',
-    function: '',
-    role: '',
-  };
 
   const validate = (values) => {
     console.log('validate', values);
@@ -79,8 +79,8 @@ const AddOrganisationForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: 'Add an Organisation',
@@ -92,7 +92,7 @@ const AddOrganisationForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -141,7 +141,7 @@ const AddOrganisationForm = ({
             options={baseRoleOptions}
           />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+            <DefaultButton onClick={onClose} text="Cancel" />
             <PrimaryButton type="submit" text="Add to Network" />
           </DialogFooter>
         </Form>

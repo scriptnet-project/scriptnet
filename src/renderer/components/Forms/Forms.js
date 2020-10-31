@@ -9,9 +9,9 @@ import AddResourceForm from 'Components/Forms/AddResourceForm';
 
 const forms = {
   person: AddPersonForm,
-  // location: AddLocationForm,
-  // resource: AddResourceForm,
-  // organisation: AddOrganisationForm,
+  location: AddLocationForm,
+  resource: AddResourceForm,
+  organisation: AddOrganisationForm,
 };
 
 const Forms = ({
@@ -19,7 +19,6 @@ const Forms = ({
   onClose,
   isNew,
   isUpdate,
-  onSubmit,
 }) => {
   const mode = useSelector(state => state.mode);
   const selectedNode = useSelector(state => state.selectedNode);
@@ -29,14 +28,15 @@ const Forms = ({
 
   return Object.keys(forms)
     .map((formName) => {
-      const show = formName === form;
       const Form = forms[formName];
+      const show = formName === form;
 
       const props = {
         key: formName,
         initialValues,
-        onSubmit,
         show,
+        isUpdate,
+        isNew,
         onClose,
       };
 
@@ -47,7 +47,6 @@ const Forms = ({
 Forms.defaultProps = {
   form: null,
   onClose: noop,
-  onSubmit: noop,
   isNew: true,
   isUpdate: false,
 };

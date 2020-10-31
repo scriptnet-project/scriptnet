@@ -29,21 +29,19 @@ const defaultValues = {
 const AddPersonForm = ({
   show,
   onClose,
-  onSubmit,
   initialValues = {},
 }) => {
-  // const cyActions = useCytoscapeActions();
+  const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    onSubmit({
+    cyActions.add({
       group: 'nodes',
       data: {
         type: 'person',
         ...formData
       },
     });
-    // cyActions.add();
 
     onClose();
     return true;
