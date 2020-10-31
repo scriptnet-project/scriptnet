@@ -7,7 +7,7 @@ import {
   DialogFooter,
   ComboBox,
 } from '@fluentui/react';
-import { useCytoscape, useCytoscapeActions } from 'Hooks/Cytoscape';
+import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik } from 'formik';
 import { FormikTextField, FormikChoiceGroup, FormikDropdown } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
@@ -22,12 +22,11 @@ const AddPersonForm = ({
   toggleHideDialog,
   hideDialog,
 }) => {
-  const { cy } = useCytoscape();
+  const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    console.log({ cy });
-    cy.current.add({
+    cyActions.add({
       group: 'nodes',
       data: {
         type: 'person',

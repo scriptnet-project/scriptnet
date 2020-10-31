@@ -7,6 +7,7 @@ import edgeHandles from 'cytoscape-edgehandles';
 import CytoScapeContext from './CytoscapeContext';
 import useLoader from './useLoader';
 import useModes from './useModes';
+import useHelpers from './useHelpers';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -34,12 +35,13 @@ const CyProvider = ({ children }) => {
 
   const [loadState, loadActions] = useLoader(cyRef, setCy);
   const [modeState, modeActions] = useModes(cyRef, state.id);
+  const [helperActions] = useHelpers(cyRef, state.id);
 
   const value = [
     cyRef,
     state.id,
     { ...loadState, ...modeState },
-    { ...loadActions, ...modeActions },
+    { ...loadActions, ...modeActions, ...helperActions },
   ];
 
   return (

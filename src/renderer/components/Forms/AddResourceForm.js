@@ -29,11 +29,11 @@ const AddResourceForm = ({
   toggleHideDialog,
   hideDialog,
 }) => {
-  const { cy } = useCytoscape();
+  const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cy.current.add({
+    cyActions.add({
       group: 'nodes',
       data: {
         type: 'resource',
