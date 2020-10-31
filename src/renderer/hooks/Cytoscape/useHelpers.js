@@ -59,7 +59,8 @@ const useHelpers = (cy, id) => {
     // cy.current.on('resize', () => setCount(0));
 
     return () => {
-      cy.current.off(resetCount);
+      if (!cy.current);
+      cy.current.off('viewport', resetCount);
     };
   }, [id, setCount]);
 
