@@ -48,11 +48,15 @@ const useCyLoader = (cy, setCy) => {
     dialog.showSaveDialog(browserWindow, options)
       .then(({ canceled, filePath }) => {
         if (canceled) { return; }
+        return path.parse(filePath);
+      })
+      .then((filePath) => {
         setState({ isLoading: true, filePath: null });
         const elements = cy.current.elements().jsons()
         const data = JSON.stringify({ network: { elements } });
-        return fse.writeFile(filePath, data, 'utf8')
-          .then(() => { setState(s => ({ ...s, filePath })); })
+        const jsonFilePath = path.join(filePath.dir, `${filePath.name}.json`);
+        return fse.writeFile(jsonFilePath, data, 'utf8')
+          .then(() => { setState(s => ({ ...s, filePath: jsonFilePath })); })
           .finally(() => { setState(s => ({ ...s, isLoading: false })); });
       });
 
