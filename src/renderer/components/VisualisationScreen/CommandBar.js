@@ -28,7 +28,14 @@ const CommandBarToggle = () => {
 const TopCommandBar = ({
 }) => {
   const { cy } = useCytoscape();
-  const { saveNetwork, openNetwork, runLayout, exportPNG } = useCytoscapeActions();
+
+  const {
+    saveNetwork,
+    openNetwork,
+    runLayout,
+    exportPNG,
+    exportCSV,
+  } = useCytoscapeActions();
 
   const items = [
     {
@@ -49,6 +56,12 @@ const TopCommandBar = ({
       text: 'Open Case...',
       iconProps: { iconName: 'FolderOpen' },
       onClick: openNetwork,
+    },
+    {
+      key: 'ExportCSV',
+      text: 'Export CSV...',
+      iconProps: { iconName: 'Export' },
+      onClick: exportCSV,
     }
   ];
 
@@ -111,7 +124,7 @@ const TopCommandBar = ({
         items={items}
         farItems={farItems}
         ariaLabel="Use left and right arrow keys to navigate between commands"
-      /> 
+      />
     </div>
   );
 };
