@@ -17,10 +17,23 @@ const CommandBarToggle = () => {
     <Toggle
     label="Show labels"
     inlineLabel
-    onText="On"
-    offText="Off"
     checked={showLabels}
     onChange={toggleShowLabels}
+  />
+  )
+};
+
+const AutomaticLayoutToggle = () => {
+  const automaticLayout = useSelector(state => state.visualisation.automaticLayout);
+  const dispatch = useDispatch();
+  const toggleAutomaticLayout = () => dispatch(visualisationActions.toggleAutomaticLayout());
+
+  return (
+    <Toggle
+    label="Automatically Position"
+    inlineLabel
+    checked={automaticLayout}
+    onChange={toggleAutomaticLayout}
   />
   )
 }
@@ -73,10 +86,14 @@ const TopCommandBar = ({
     },
     {
       key: 'layout',
-      text: 'Automatically Position',
-      iconProps: { iconName: 'AutoEnhanceOn' },
-      onClick: () => runLayout(),
+      commandBarButtonAs: AutomaticLayoutToggle,
     },
+    // {
+    //   key: 'layout',
+    //   text: 'Automatically Position',
+    //   iconProps: { iconName: 'AutoEnhanceOn' },
+    //   onClick: () => runLayout(),
+    // },
     // {
     //   key: 'zoomin',
     //   iconOnly: true,
