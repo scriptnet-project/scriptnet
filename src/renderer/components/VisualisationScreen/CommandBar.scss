@@ -7,6 +7,14 @@
 
     label {
       font-weight: normal;
+      margin-left: 10px;
     }
   }
+}
+
+.ToggleContainer {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
 }

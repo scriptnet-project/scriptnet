@@ -14,12 +14,14 @@ const CommandBarToggle = () => {
   const toggleShowLabels = () => dispatch(visualisationActions.toggleShowLabels());
 
   return (
-    <Toggle
-    label="Show labels"
-    inlineLabel
-    checked={showLabels}
-    onChange={toggleShowLabels}
-  />
+    <span className="ToggleContainer">
+      <Toggle
+        label="Show labels"
+        inlineLabel
+        checked={showLabels}
+        onChange={toggleShowLabels}
+      />
+    </span>
   )
 };
 
@@ -29,12 +31,14 @@ const AutomaticLayoutToggle = () => {
   const toggleAutomaticLayout = () => dispatch(visualisationActions.toggleAutomaticLayout());
 
   return (
-    <Toggle
-    label="Automatically Position"
-    inlineLabel
-    checked={automaticLayout}
-    onChange={toggleAutomaticLayout}
-  />
+    <span className="ToggleContainer">
+      <Toggle
+        label="Automatically Position"
+        inlineLabel
+        checked={automaticLayout}
+        onChange={toggleAutomaticLayout}
+      />
+    </span>
   )
 }
 
