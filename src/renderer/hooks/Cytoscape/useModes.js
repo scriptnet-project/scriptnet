@@ -40,7 +40,9 @@ const getSVGImage = () => {
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
   const showLabels = useSelector(s => s.visualisation.showLabels);
+  const automaticLayout = useSelector(s => s.visualisation.automaticLayout);
   const dispatch = useDispatch();
+  const automaticLayoutOff = () => dispatch(visualisationActions.automaticLayoutOff());
   const eh = useRef(null);
   const bb = useRef(null);
 
@@ -219,6 +221,10 @@ const useCyModes = (cy, id) => {
           }
         };
       },
+      complete: () => {
+        if (!automaticLayout) { return; }
+        runLayout();
+      },
     });
     eh.current.enableDrawMode();
   }
@@ -346,10 +352,34 @@ const useCyModes = (cy, id) => {
   useEffect(() => {
     if (!cy.current) { return; }
 
+    const unbind = () => {
+      if (!cy.current) { return; }
+      cy.current.off('add remove', 'node', runLayout);
+      cy.current.off('dragfree', automaticLayoutOff);
+    };
+
+    if (automaticLayout) {
+      cy.current.on('add remove', 'node', runLayout);
+      cy.current.on('dragfree', automaticLayoutOff);
+    } else {
+      unbind();
+    }
+
+    return () => {
+      unbind();
+    };
+  }, [
+    id,
+    automaticLayout,
+  ]);
+
+  useEffect(() => {
+    if (!cy.current) { return; }
+
     disableNodeHighlighting();
     disableEdgeCreation();
     disableAttributeBoundingBoxes();
-    resetStyles()
+    resetStyles();
 
     switch (state.mode) {
       case modes.ASSIGN_ATTRIBUTES:

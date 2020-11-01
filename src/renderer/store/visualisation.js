@@ -6,6 +6,7 @@ const actionCreators = createActions({
   CLEAR_SELECTED: undefined, // noop
   TOGGLE_SHOW_LABELS: undefined,
   TOGGLE_AUTOMATIC_LAYOUT: undefined,
+  AUTOMATIC_LAYOUT_OFF: undefined,
 });
 
 const intialState = {
@@ -31,6 +32,10 @@ const reducer = handleActions({
   [actionCreators.toggleAutomaticLayout]: (state) => ({
     ...state,
     automaticLayout: !state.automaticLayout,
+  }),
+  [actionCreators.automaticLayoutOff]: (state) => ({
+    ...state,
+    automaticLayout: false,
   }),
   [modeActions.setMode]: (state) => ({
     ...state,

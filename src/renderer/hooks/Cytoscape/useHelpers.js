@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { throttle } from 'lodash';
 
 const gridSize = 100;
@@ -51,6 +52,8 @@ const getNextPosition = (cy, count) => {
 const useHelpers = (cy, id) => {
   const [count, setCount] = useState(0);
 
+  const automaticLayout = useSelector(s => s.visualisation.automaticLayout);
+
   useEffect(() => {
     if(!cy.current) { return; }
     const resetCount = throttle(() => setCount(0), 50);
@@ -66,6 +69,11 @@ const useHelpers = (cy, id) => {
 
   const add = (element) => {
     if (!cy.current) { return; }
+
+    if (automaticLayout) {
+      cy.current.add(element);
+      return;
+    }
 
     const { next, ...position } = getNextPosition(cy, count);
 
