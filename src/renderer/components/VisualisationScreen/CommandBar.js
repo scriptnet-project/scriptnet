@@ -29,12 +29,12 @@ const AutomaticLayoutToggle = () => {
   const toggleAutomaticLayout = () => dispatch(visualisationActions.toggleAutomaticLayout());
 
   return (
-    <Toggle
-    label="Automatically Position"
-    inlineLabel
-    checked={automaticLayout}
-    onChange={toggleAutomaticLayout}
-  />
+      <Toggle
+        label="Automatically Position"
+        inlineLabel
+        checked={automaticLayout}
+        onChange={toggleAutomaticLayout}
+      />
   )
 }
 
@@ -53,30 +53,38 @@ const TopCommandBar = ({
 
   const items = [
     {
-      key: 'New',
-      text: 'New Case',
-      iconProps: { iconName: 'Add' },
-      onClick: newNetwork,
+      key: 'Cases',
+      text: 'Cases',
+      iconProps: { iconName: 'Album' },
+      subMenuProps: {
+        items: [
+          {
+            key: 'New',
+            text: 'New Case',
+            iconProps: { iconName: 'Add' },
+            onClick: newNetwork,
+          },
+          {
+            key: 'Save',
+            text: 'Save Case',
+            iconProps: { iconName: 'Save' },
+            onClick: saveNetwork,
+          },
+          {
+            key: 'Open',
+            text: 'Open Case...',
+            iconProps: { iconName: 'FolderOpen' },
+            onClick: openNetwork,
+          },
+          {
+            key: 'ExportCSV',
+            text: 'Export CSV...',
+            iconProps: { iconName: 'Export' },
+            onClick: exportCSV,
+          }
+        ],
+      },
     },
-    // { key: "divider1", itemType: ContextualMenuItemType.Divider, onRender: () => <VerticalDivider /> },
-    {
-      key: 'Save',
-      text: 'Save Case',
-      iconProps: { iconName: 'Save' },
-      onClick: saveNetwork,
-    },
-    {
-      key: 'Open',
-      text: 'Open Case...',
-      iconProps: { iconName: 'FolderOpen' },
-      onClick: openNetwork,
-    },
-    {
-      key: 'ExportCSV',
-      text: 'Export CSV...',
-      iconProps: { iconName: 'Export' },
-      onClick: exportCSV,
-    }
   ];
 
   const farItems = [
@@ -88,12 +96,12 @@ const TopCommandBar = ({
       key: 'layout',
       commandBarButtonAs: AutomaticLayoutToggle,
     },
-    // {
-    //   key: 'layout',
-    //   text: 'Automatically Position',
-    //   iconProps: { iconName: 'AutoEnhanceOn' },
-    //   onClick: () => runLayout(),
-    // },
+    {
+      key: 'run layout',
+      text: 'Run Automatic Layout',
+      iconProps: { iconName: 'AutoEnhanceOn' },
+      onClick: () => runLayout(),
+    },
     // {
     //   key: 'zoomin',
     //   iconOnly: true,
@@ -127,7 +135,6 @@ const TopCommandBar = ({
         duration: 500
       }),
     },
-
     {
       key: 'Export',
       text: 'Export Screenshot',
