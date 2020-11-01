@@ -25,32 +25,40 @@ const functionOptions = [
   {key: 'Unknown', text: 'Unknown' },
 ];
 
+const defaultValues = {
+  name: '',
+  location: 'N/A',
+  jurisdiction: 'local',
+  function: ''
+};
+
 const AddLocationForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  isUpdate,
+  initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'location',
-        ...formData
-      },
-    });
 
-    toggleHideDialog();
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'location',
+          ...formData
+        },
+      });
+    }
+
+    onClose();
     return true;
   }
-
-  const initialValues = {
-    name: '',
-    location: 'N/A',
-    jurisdiction: 'local',
-    function: ''
-  };
 
   const validate = (values) => {
     console.log('validate', values);
@@ -69,11 +77,11 @@ const AddLocationForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Location',
+        title: isUpdate ? 'Update Location' : 'Add a Location',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -82,7 +90,7 @@ const AddLocationForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -117,8 +125,8 @@ const AddLocationForm = ({
             options={functionOptions}
           />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <DefaultButton onClick={onClose} text="Cancel" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}

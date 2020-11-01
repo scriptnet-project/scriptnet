@@ -77,8 +77,15 @@ const useHelpers = (cy, id) => {
     setCount(next);
   };
 
+  const update = (id, data) => {
+    if (!cy.current) { return; }
+
+    cy.current.elements(`#${id}`).data(data);
+  };
+
   const actions = {
     add,
+    update,
   };
 
   return [actions];

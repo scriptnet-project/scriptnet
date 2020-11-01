@@ -33,6 +33,8 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
             { key: 'financial', text: 'Financial Relationship'},
             { key: 'business', text: 'Business Relationship'},
             { key: 'ownership', text: 'Ownership Relationship'},
+            { key: 'working', text: 'Working Relationship'},
+            { key: 'geographical', text: 'Geographical Relationship'},
           ]}
         />
       </Stack>

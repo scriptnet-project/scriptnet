@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   CompoundButton,
   Stack,
@@ -7,12 +7,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from 'Store/mode';
-import { useBoolean } from '@uifabric/react-hooks';
+import Forms from 'Components/Forms/Forms';
+
 import './ControlBar.scss';
-import AddPersonForm from '../Forms/AddPersonForm';
-import AddLocationForm from '../Forms/AddLocationForm';
-import AddOrganisationForm from '../Forms/AddOrganisationForm';
-import AddResourceForm from '../Forms/AddResourceForm';
 
 const ControlBar = ({
 
@@ -23,10 +20,7 @@ const ControlBar = ({
   const dispatch = useDispatch();
   const setMode = (mode) => dispatch(modeActions.setMode(mode));
 
-  const [hidePersonDialog, { toggle: toggleHidePersonDialog }] = useBoolean(true);
-  const [hideLocationDialog, { toggle: toggleHideLocationDialog }] = useBoolean(true);
-  const [hideResourceDialog, { toggle: toggleHideResourceDialog }] = useBoolean(true);
-  const [hideOrganisationDialog, { toggle: toggleHideOrganisationDialog }] = useBoolean(true);
+  const [form, setForm] = useState(null);
 
   const setVisualisation = useCallback((event, option) => {
     console.log('changed preset to:', option.key);
@@ -36,10 +30,10 @@ const ControlBar = ({
 
   return (
     <div className="ControlBar">
-      <AddPersonForm hideDialog={hidePersonDialog} toggleHideDialog={toggleHidePersonDialog}/>
-      <AddLocationForm hideDialog={hideLocationDialog} toggleHideDialog={toggleHideLocationDialog}/>
-      <AddResourceForm hideDialog={hideResourceDialog} toggleHideDialog={toggleHideResourceDialog}/>
-      <AddOrganisationForm hideDialog={hideOrganisationDialog} toggleHideDialog={toggleHideOrganisationDialog}/>
+      <Forms
+        form={form}
+        onClose={() => setForm(null)}
+      />
       <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
         <Stack.Item grow verticalFill className="primary-action-button">
           <CompoundButton className="primary-action-button__button"
@@ -55,28 +49,28 @@ const ControlBar = ({
                   value: 'person',
                   text: 'Person',
                   iconProps: { iconName: 'AddFriend' },
-                  onClick: toggleHidePersonDialog
+                  onClick: () => setForm('person'),
                 },
                 {
                   key: 'location',
                   value: 'location',
                   text: 'Location',
                   iconProps: { iconName: 'MapPin' },
-                  onClick: toggleHideLocationDialog
+                  onClick: () => setForm('location'),
                 },
                 {
                   key: 'resource',
                   value: 'resource',
                   text: 'Resource',
                   iconProps: { iconName: 'SharepointAppIcon16' },
-                  onClick: toggleHideResourceDialog
+                  onClick: () => setForm('resource'),
                 },
                 {
                   key: 'organisation',
                   value: 'organisation',
                   text: 'Organisation',
                   iconProps: { iconName: 'Work' },
-                  onClick: toggleHideOrganisationDialog
+                  onClick: () => setForm('organisation'),
                 },
               ],
             }}

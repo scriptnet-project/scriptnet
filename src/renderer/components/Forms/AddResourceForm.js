@@ -25,35 +25,42 @@ const functionOptions = [
   {key: 'Finances', text: 'Finances' },
 ];
 
+const defaultValues = {
+  name: '',
+  location: 'N/A',
+  jurisdiction: 'local',
+  organisationType: 'Private',
+  function: '',
+  role: '',
+};
+
 const AddResourceForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  isUpdate,
+  initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'resource',
-        ...formData
-      },
-    });
 
-    toggleHideDialog();
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'resource',
+          ...formData
+        },
+      });
+    }
+
+    onClose();
     return true;
   }
-
-
-  const initialValues = {
-    name: '',
-    location: 'N/A',
-    jurisdiction: 'local',
-    organisationType: 'Private',
-    function: '',
-    role: '',
-  };
 
   const validate = (values) => {
     console.log('validate', values);
@@ -72,11 +79,11 @@ const AddResourceForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Resource',
+        title: isUpdate ? 'Update Resource' : 'Add a Resource',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -85,7 +92,7 @@ const AddResourceForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -120,8 +127,8 @@ const AddResourceForm = ({
             options={functionOptions}
           />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <DefaultButton onClick={onClose} text="Cancel" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}

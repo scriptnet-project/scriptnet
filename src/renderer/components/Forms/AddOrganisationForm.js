@@ -19,7 +19,10 @@ const locationOptions = [
 const functionOptions = [
   {key: 'Production', text: 'Production' },
   {key: 'Distribution', text: 'Distribution' },
-  {key: 'Trading', text: 'Trading' },
+  {key: 'Trading and Wholesale', text: 'Trading and Wholesale' },
+  {key: 'Transportation', text: 'Transportation' },
+  {key: 'Retail', text: 'Retail' },
+  {key: 'Disposal', text: 'Disposal' },
 ];
 
 const typeOptions = [
@@ -28,35 +31,60 @@ const typeOptions = [
   {key: 'Other', text: 'Other' },
 ];
 
+const sectorOptions = [
+  {key: 'Construction', text: 'Construction'},
+  {key: 'Real Estate', text: 'Real Estate'},
+  {key: 'Power', text: 'Power'},
+  {key: 'Oil and Gas / Energy', text: 'Oil and Gas / Energy'},
+  {key: 'Financial Services - Banking', text: 'Financial Services - Banking'},
+  {key: 'Financial Services - Other', text: 'Financial Services - Other'},
+  {key: 'Pharmaceuticals', text: 'Pharmaceuticals'},
+  {key: 'Healthcare', text: 'Healthcare'},
+  {key: 'Technology', text: 'Technology'},
+  {key: 'Manufacturing', text: 'Manufacturing'},
+  {key: 'Defense', text: 'Defence'},
+  {key: 'Logistics', text: 'Logistics'},
+  {key: 'Food and Beverage', text: 'Food and Beverage'},
+  {key: 'Other', text: 'Other'},
+];
+
+const defaultValues = {
+  name: '',
+  location: 'N/A',
+  jurisdiction: 'local',
+  organisationType: 'Private',
+  function: '',
+  sector: '',
+  role: '',
+};
+
 const AddOrganisationForm = ({
-  toggleHideDialog,
-  hideDialog,
+  show,
+  onClose,
+  isUpdate,
+  initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'organisation',
-        ...formData
-      },
-    });
 
-    toggleHideDialog();
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'organisation',
+          ...formData
+        },
+      });
+    }
+
+    onClose();
     return true;
   }
-
-
-  const initialValues = {
-    name: '',
-    location: 'N/A',
-    jurisdiction: 'local',
-    organisationType: 'Private',
-    function: '',
-    role: '',
-  };
 
   const validate = (values) => {
     console.log('validate', values);
@@ -79,11 +107,11 @@ const AddOrganisationForm = ({
 
   return (
     <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
+      hidden={!show}
+      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add an Organisation',
+        title: isUpdate ? 'Update Organisation' : 'Add an Organisation',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -92,7 +120,7 @@ const AddOrganisationForm = ({
       minWidth="500px"
     >
       <Formik
-        initialValues={initialValues}
+        initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validate={validate}
         validateOnBlur={false}
@@ -140,9 +168,16 @@ const AddOrganisationForm = ({
             component={FormikDropdown}
             options={baseRoleOptions}
           />
+          <Field
+            name="sector"
+            label="Sector"
+            placeholder="Select a sector"
+            component={FormikDropdown}
+            options={sectorOptions}
+          />
           <DialogFooter>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <DefaultButton onClick={onClose} text="Cancel" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}
