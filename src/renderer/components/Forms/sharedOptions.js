@@ -257,4 +257,5 @@ export const baseRoleOptions = [
   {key: 'Suspected Facilitator', text: 'Suspected Facilitator' },
   {key: 'Suspected Victim', text: 'Suspected Victim' },
   {key: 'Regulator', text: 'Regulator' },
+  {key: 'Other', text: 'Other' },
 ];

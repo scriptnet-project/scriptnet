@@ -19,7 +19,10 @@ const locationOptions = [
 const functionOptions = [
   {key: 'Production', text: 'Production' },
   {key: 'Distribution', text: 'Distribution' },
-  {key: 'Trading', text: 'Trading' },
+  {key: 'TradingAndWholesale', text: 'Trading and Wholesale' },
+  {key: 'Transportation', text: 'Transportation' },
+  {key: 'Retail', text: 'Retail' },
+  {key: 'Disposal', text: 'Disposal' },
 ];
 
 const typeOptions = [
