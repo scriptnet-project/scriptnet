@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   DefaultButton,
   PrimaryButton,
@@ -29,6 +30,7 @@ const defaultValues = {
 const AddPersonForm = ({
   show,
   onClose,
+  isUpdate,
   initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();

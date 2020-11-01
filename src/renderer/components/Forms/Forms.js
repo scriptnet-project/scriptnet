@@ -7,7 +7,7 @@ import AddLocationForm from 'Components/Forms/AddLocationForm';
 import AddOrganisationForm from 'Components/Forms/AddOrganisationForm';
 import AddResourceForm from 'Components/Forms/AddResourceForm';
 
-const forms = {
+export const formsByType = {
   person: AddPersonForm,
   location: AddLocationForm,
   resource: AddResourceForm,
@@ -19,36 +19,34 @@ const Forms = ({
   onClose,
   isNew,
   isUpdate,
+  initialValues,
 }) => {
   const mode = useSelector(state => state.mode);
   const selectedNode = useSelector(state => state.selectedNode);
   const dispatch = useDispatch();
 
-  const initialValues = {};
-
-  return Object.keys(forms)
+  return Object.keys(formsByType)
     .map((formName) => {
-      const Form = forms[formName];
+      const Form = formsByType[formName];
       const show = formName === form;
 
-      const props = {
-        key: formName,
-        initialValues,
-        show,
-        isUpdate,
-        isNew,
-        onClose,
-      };
-
-      return <Form {...props} />
+      return <Form
+        key={formName}
+        show={show}
+        isUpdate={isUpdate}
+        isNew={isNew}
+        onClose={onClose}
+        initialValues={initialValues}
+      />
     });
 };
 
 Forms.defaultProps = {
   form: null,
   onClose: noop,
-  isNew: true,
+  isNew: false,
   isUpdate: false,
+  initialValues: {},
 };
 
 export default Forms;
