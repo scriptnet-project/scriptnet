@@ -5,11 +5,13 @@ const actionCreators = createActions({
   SET_SELECTED: (id, type = 'node') => ({ id, type }),
   CLEAR_SELECTED: undefined, // noop
   TOGGLE_SHOW_LABELS: undefined,
+  TOGGLE_AUTOMATIC_LAYOUT: undefined,
 });
 
 const intialState = {
   selected: null,
   showLabels: true,
+  automaticLayout: true,
 };
 
 const reducer = handleActions({
@@ -25,6 +27,10 @@ const reducer = handleActions({
   [actionCreators.toggleShowLabels]: (state) => ({
     ...state,
     showLabels: !state.showLabels,
+  }),
+  [actionCreators.toggleAutomaticLayout]: (state) => ({
+    ...state,
+    automaticLayout: !state.automaticLayout,
   }),
   [modeActions.setMode]: (state) => ({
     ...state,
