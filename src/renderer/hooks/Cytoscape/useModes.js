@@ -9,13 +9,14 @@ import {
   labelledNodes,
   defaultEntityColours,
 } from 'Components/Cytoscape/stylesheets';
+import { baseJurisdictionOptions, baseLocationOptions } from '../../components/Forms/sharedOptions';
+import { findIndex } from 'lodash';
 
 const getLegendImage = () => {
   const legend = document.getElementById('legend');
 
   return html2canvas(legend, { scale: 4 })
     .then((canvas) => {
-      console.log(canvas);
       const width = canvas.getAttribute('width');
       const height = canvas.getAttribute('height');
       const ctx = canvas.getContext('2d');
@@ -174,6 +175,87 @@ const useCyModes = (cy, id) => {
     });
   }
 
+  const applyJurisdictionPreset = () => {
+    console.log('enabling jurisdiction preset');
+    if (!cy.current) { return; }
+
+    enableAttributeBoundingBoxes();
+
+    // Apply styles:
+    applyStylesheet([
+      ...baseStylesheet,
+      ...(showLabels ? labelledNodes : []),
+    ]);
+
+    const colors = [
+      '#ffb90033',
+      '#e7485633',
+      '#0078d733',
+      '#6b69d633',
+    ];
+
+    baseJurisdictionOptions.forEach((jurisdiction, index) => {
+      if (state.options.hideJurisdiction && state.options.hideJurisdiction.includes(jurisdiction.key)) {
+        return;
+      }
+
+      const selector = `node[jurisdiction="${jurisdiction.key}"]`;
+      bb.current.addPath(cy.current.nodes(selector), null, cy.current.nodes().difference(cy.current.nodes(selector)), {
+        virtualEdges: true,
+        style: {
+          stroke: colors[index],
+          strokeWidth: 4,
+          fill: colors[index],
+        }});
+    });
+  }
+
+  const applyGeographyPreset = () => {
+    console.log('enabling geography preset');
+    if (!cy.current) { return; }
+
+    enableAttributeBoundingBoxes();
+
+    // Apply styles:
+    applyStylesheet([
+      ...baseStylesheet,
+      ...(showLabels ? labelledNodes : []),
+    ]);
+
+    const colors = [
+      '#1f77b4',
+      '#ff7f0e',
+      '#2ca02c',
+      '#d62728',
+      '#9467bd',
+      '#8c564b',
+      '#e377c2',
+      '#7f7f7f',
+      '#bcbd22',
+      '#17becf',
+    ];
+
+    const countriesInUse = new Set();
+    cy.current.nodes().forEach(node => {
+      countriesInUse.add(node.data('location'));
+    });
+
+    [...countriesInUse].sort().forEach((country, index) => {
+      if (!state.options.showCountry || !state.options.showCountry.includes(country)) {
+        return;
+      }
+
+      const selector = `node[location="${country}"]`;
+      const colorIndex = findIndex(baseLocationOptions, ['text', country]);
+      bb.current.addPath(cy.current.nodes(selector), null, cy.current.nodes().difference(cy.current.nodes(selector)), {
+        virtualEdges: true,
+        style: {
+          opacity: 0.5,
+          fill: colors[colorIndex % 10],
+        }});
+    });
+  }
+
   const applyStylesheet = (stylesheet) => {
     if (!cy.current) { return; }
     cy.current.style(stylesheet);
@@ -268,10 +350,8 @@ const useCyModes = (cy, id) => {
     const drawImageToVirtualCanvas = async (imageData) => {
       return new Promise((resolve, reject) => {
         const context = virtualCanvas.getContext('2d');
-        console.log(typeof imageData);
         const image = new Image();
         image.onload = () => {
-          console.log('img', image);
           context.drawImage(image, 0, 0, virtualCanvas.width, virtualCanvas.height);
           resolve();
         };
@@ -295,7 +375,6 @@ const useCyModes = (cy, id) => {
     }
 
     const cytopng = cy.current.png({scale: 4});
-    console.log('cytopng', cytopng, cytopng.clientHeight, cytopng.clientWidth);
     await drawImageToVirtualCanvas(cytopng);
 
     const legendImage = await getLegendImage();
@@ -335,8 +414,10 @@ const useCyModes = (cy, id) => {
         applyFocalIndividualPreset();
         break;
       case 'jurisdiction':
+        applyJurisdictionPreset();
         break;
       case 'geography':
+        applyGeographyPreset();
         break;
       default:
         break;

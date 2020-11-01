@@ -55,7 +55,6 @@ const AddPersonForm = ({
   }
 
   const validate = (values) => {
-    console.log('validate', values);
     const errors = {};
 
     if (!values.name) {
