@@ -34,6 +34,18 @@ export const defaultEntityColours = [
     },
   },
   {
+    selector: 'edge[type = "working"]',
+    style: {
+      'lineColor': theme.palette.red,
+    },
+  },
+  {
+    selector: 'edge[type = "geographical"]',
+    style: {
+      'lineColor': theme.palette.neutralSecondaryAlt,
+    },
+  },
+  {
     selector: 'node[type = "person"]',
     style: {
       'background-color': theme.palette.blue,
