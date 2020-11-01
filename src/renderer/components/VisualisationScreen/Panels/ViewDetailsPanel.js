@@ -29,12 +29,14 @@ const ViewDetailsPanel = ({
 
   const handleEdit = useCallback(() => {
     const currentValue = cy.current.elements(`#${selectedElement}`).data();
+    console.log({ currentValue });
     setInitialValues(currentValue);
     setForm(currentValue.type);
   }, [selectedElement, id]);
 
   if (!cy.current) { return null; }
 
+  const isNode = cy.current.getElementById(selectedElement).isNode();
   const details = cy.current.getElementById(selectedElement).data();
 
   if (!isOpen || !details) { return false; }
@@ -78,7 +80,7 @@ const ViewDetailsPanel = ({
           />
         </Stack>
         <Stack>
-          <DefaultButton text="Edit" onClick={handleEdit} />
+          { isNode && <DefaultButton text="Edit" onClick={handleEdit} /> }
           <DefaultButton text="Delete" onClick={handleRemove}/>
         </Stack>
       </Panel>
