@@ -45,6 +45,8 @@ const RelationshipsPresetPanel = ({ isOpen, onDismiss }) => {
         <Checkbox name="financial" label="Financial" checked={isChecked('financial')} onChange={onChange} />
         <Checkbox name="business" label="Business" checked={isChecked('business')} onChange={onChange} />
         <Checkbox name="ownership" label="Ownership" checked={isChecked('ownership')} onChange={onChange} />
+        <Checkbox name="working" label="Working" checked={isChecked('working')} onChange={onChange} />
+        <Checkbox name="geographical" label="Geographical" checked={isChecked('geographical')} onChange={onChange} />
       </Stack>
     </Panel>
   );
