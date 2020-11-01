@@ -12,6 +12,8 @@ import {
 import { baseJurisdictionOptions, baseLocationOptions } from '../../components/Forms/sharedOptions';
 import { findIndex } from 'lodash';
 
+let layout;
+
 const getLegendImage = () => {
   const legend = document.getElementById('legend');
 
@@ -41,6 +43,7 @@ const getSVGImage = () => {
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
   const showLabels = useSelector(s => s.visualisation.showLabels);
+  const automaticLayout = useSelector(s => s.visualisation.automaticLayout);
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
@@ -52,10 +55,9 @@ const useCyModes = (cy, id) => {
 
     resetStyles()
 
-    cy.current.center();
-
     cy.current.on('add', (event) => {
-      console.log('something added to graph', event.target.data());
+      console.log('something added to graph', event.target.classes(), event.target.data('type'));
+      if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
     });
 
     cy.current.on('select', 'node', (event) => {
@@ -95,25 +97,52 @@ const useCyModes = (cy, id) => {
       dispatch(visualisationActions.clearSelected());
     });
 
-  }, [id]);
+    cy.current.on('ehstart', (event) => {
+      console.log('start');
+      stopLayout();
+    });
+
+    cy.current.on('ehcomplete', (event) => {
+      console.log('complete');
+      runLayout();
+    });
+
+    if (automaticLayout) {
+      runLayout();
+    } else {
+      stopLayout();
+    }
+
+
+    return () => {
+      if (cy.current) {
+        cy.current.removeAllListeners();
+      }
+    }
+
+  }, [id, automaticLayout]);
 
   const runLayout = () =>
     {
       if (!cy.current) { return; }
-      // See: https://github.com/cytoscape/cytoscape.js-cola#api
-      const layoutOptions = { name: 'cola' };
-      cy.current.elements(':visible').layout(layoutOptions).run();
+      if (layout) { stopLayout() }
 
-      // TODO: If there's a selected node, center on it instead
-      cy.current.animate({
-        fit: {
-          eles: 'node',
-          padding: 100,
-        }
-      }, {
-        duration: 200
-      });
+      if (automaticLayout) {
+      // See: https://github.com/cytoscape/cytoscape.js-cola#api
+      const layoutOptions = { name: 'cola', infinite: true, fit: false };
+      layout = cy.current.layout(layoutOptions);
+      console.log('layout created', layout);
+
+      layout.run();
+      }
     };
+
+  const stopLayout = () => {
+    if (!layout) return;
+
+    layout.stop();
+    layout = null;
+  }
 
   const applyRelationshipPreset = () => {
     console.log('enabling relationship preset');
@@ -449,6 +478,7 @@ const useCyModes = (cy, id) => {
     showLabels,
     state.mode,
     state.options,
+    automaticLayout,
   ]); // could even respond to state.options?
 
   const actions = {

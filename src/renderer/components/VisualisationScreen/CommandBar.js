@@ -76,9 +76,24 @@ const TopCommandBar = ({
             iconProps: { iconName: 'FolderOpen' },
             onClick: openNetwork,
           },
+        ],
+      },
+    },
+    {
+      key: 'Export',
+      text: 'Export',
+      iconProps: { iconName: 'ShareiOS' },
+      subMenuProps: {
+        items: [
+          {
+            key: 'Export',
+            text: 'Export Screenshot',
+            iconProps: { iconName: 'Share' },
+            onClick: () => exportPNG(),
+          },
           {
             key: 'ExportCSV',
-            text: 'Export CSV...',
+            text: 'Export CSV',
             iconProps: { iconName: 'Export' },
             onClick: exportCSV,
           }
@@ -96,12 +111,12 @@ const TopCommandBar = ({
       key: 'layout',
       commandBarButtonAs: AutomaticLayoutToggle,
     },
-    {
-      key: 'run layout',
-      text: 'Run Automatic Layout',
-      iconProps: { iconName: 'AutoEnhanceOn' },
-      onClick: () => runLayout(),
-    },
+    // {
+    //   key: 'run layout',
+    //   text: 'Run Automatic Layout',
+    //   iconProps: { iconName: 'AutoEnhanceOn' },
+    //   onClick: () => runLayout(),
+    // },
     // {
     //   key: 'zoomin',
     //   iconOnly: true,
@@ -134,12 +149,6 @@ const TopCommandBar = ({
       }, {
         duration: 500
       }),
-    },
-    {
-      key: 'Export',
-      text: 'Export Screenshot',
-      iconProps: { iconName: 'Share' },
-      onClick: () => exportPNG(),
     }
   ];
 

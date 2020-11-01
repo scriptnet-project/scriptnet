@@ -6,7 +6,7 @@ export const baseLocationOptions = [
   {key: 'Albania', text: 'Albania'},
   {key: 'Algeria', text: 'Algeria'},
   {key: 'American Samoa', text: 'American Samoa'},
-  {key: 'AndorrA', text: 'AndorrA'},
+  {key: 'Andorra', text: 'Andorra'},
   {key: 'Angola', text: 'Angola'},
   {key: 'Anguilla', text: 'Anguilla'},
   {key: 'Antarctica', text: 'Antarctica'},
