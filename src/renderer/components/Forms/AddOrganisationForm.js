@@ -40,19 +40,26 @@ const defaultValues = {
 const AddOrganisationForm = ({
   show,
   onClose,
+  isUpdate,
   initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'organisation',
-        ...formData
-      },
-    });
+
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'organisation',
+          ...formData
+        },
+      });
+    }
 
     onClose();
     return true;
@@ -83,7 +90,7 @@ const AddOrganisationForm = ({
       onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add an Organisation',
+        title: isUpdate ? 'Update Organisation' : 'Add an Organisation',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -142,7 +149,7 @@ const AddOrganisationForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}

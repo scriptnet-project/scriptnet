@@ -37,19 +37,26 @@ const defaultValues = {
 const AddResourceForm = ({
   show,
   onClose,
+  isUpdate,
   initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'resource',
-        ...formData
-      },
-    });
+
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'resource',
+          ...formData
+        },
+      });
+    }
 
     onClose();
     return true;
@@ -76,7 +83,7 @@ const AddResourceForm = ({
       onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Resource',
+        title: isUpdate ? 'Update Resource' : 'Add a Resource',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -121,7 +128,7 @@ const AddResourceForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}

@@ -35,19 +35,26 @@ const defaultValues = {
 const AddLocationForm = ({
   show,
   onClose,
+  isUpdate,
   initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'location',
-        ...formData
-      },
-    });
+
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'location',
+          ...formData
+        },
+      });
+    }
 
     onClose();
     return true;
@@ -74,7 +81,7 @@ const AddLocationForm = ({
       onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Location',
+        title: isUpdate ? 'Update Location' : 'Add a Location',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -119,7 +126,7 @@ const AddLocationForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}

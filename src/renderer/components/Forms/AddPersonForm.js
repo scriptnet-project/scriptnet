@@ -37,13 +37,18 @@ const AddPersonForm = ({
 
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
-    cyActions.add({
-      group: 'nodes',
-      data: {
-        type: 'person',
-        ...formData
-      },
-    });
+    if (isUpdate) {
+      const { id, ...data } = formData;
+      cyActions.update(id, data);
+    } else {
+      cyActions.add({
+        group: 'nodes',
+        data: {
+          type: 'person',
+          ...formData
+        },
+      });
+    }
 
     onClose();
     return true;
@@ -70,7 +75,7 @@ const AddPersonForm = ({
       onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: 'Add a Person',
+        title: isUpdate ? 'Update Person' : 'Add a Person',
       }}
       modalProps={{
         isBlocking: true, // Makes background click close dialog
@@ -121,7 +126,7 @@ const AddPersonForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text="Add to Network" />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
           </DialogFooter>
         </Form>
         )}
