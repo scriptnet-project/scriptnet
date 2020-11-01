@@ -120,7 +120,7 @@ const ControlBar = ({
                 },
                 {
                   key: 'relationship-filter',
-                  text: 'Filter by relationships',
+                  text: 'Filter by Relationships',
                   onClick: setVisualisation
                 },
                 {
