@@ -19,7 +19,10 @@ const locationOptions = [
 const functionOptions = [
   {key: 'Production', text: 'Production' },
   {key: 'Distribution', text: 'Distribution' },
-  {key: 'Trading', text: 'Trading' },
+  {key: 'Trading and Wholesale', text: 'Trading and Wholesale' },
+  {key: 'Transportation', text: 'Transportation' },
+  {key: 'Retail', text: 'Retail' },
+  {key: 'Disposal', text: 'Disposal' },
 ];
 
 const typeOptions = [
@@ -28,12 +31,30 @@ const typeOptions = [
   {key: 'Other', text: 'Other' },
 ];
 
+const sectorOptions = [
+  {key: 'Construction', text: 'Construction'},
+  {key: 'Real Estate', text: 'Real Estate'},
+  {key: 'Power', text: 'Power'},
+  {key: 'Oil and Gas / Energy', text: 'Oil and Gas / Energy'},
+  {key: 'Financial Services - Banking', text: 'Financial Services - Banking'},
+  {key: 'Financial Services - Other', text: 'Financial Services - Other'},
+  {key: 'Pharmaceuticals', text: 'Pharmaceuticals'},
+  {key: 'Healthcare', text: 'Healthcare'},
+  {key: 'Technology', text: 'Technology'},
+  {key: 'Manufacturing', text: 'Manufacturing'},
+  {key: 'Defense', text: 'Defence'},
+  {key: 'Logistics', text: 'Logistics'},
+  {key: 'Food and Beverage', text: 'Food and Beverage'},
+  {key: 'Other', text: 'Other'},
+];
+
 const defaultValues = {
   name: '',
   location: 'N/A',
   jurisdiction: 'local',
   organisationType: 'Private',
   function: '',
+  sector: '',
   role: '',
 };
 
@@ -146,6 +167,13 @@ const AddOrganisationForm = ({
             placeholder="Select a role"
             component={FormikDropdown}
             options={baseRoleOptions}
+          />
+          <Field
+            name="sector"
+            label="Sector"
+            placeholder="Select a sector"
+            component={FormikDropdown}
+            options={sectorOptions}
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
