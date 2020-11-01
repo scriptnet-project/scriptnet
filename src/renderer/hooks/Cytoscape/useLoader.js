@@ -20,8 +20,13 @@ const baseOptions = {
   defaultPath,
 };
 
-const useCyLoader = (cy, setCy) => {
+const useCyLoader = (cy, initializeCy) => {
   const [state, setState] = useState(initialState);
+
+  const newNetwork = () => {
+    initializeCy();
+    setState(initialState);
+  };
 
   const openNetwork = () => {
     const options = state.filePath ? { ...baseOptions, defaultPath: path.dirname(state.filePath) } : baseOptions;
@@ -34,7 +39,7 @@ const useCyLoader = (cy, setCy) => {
           .then((data) => {
             const parsedData = JSON.parse(data);
             const { elements } = parsedData.network;
-            setCy(elements);
+            initializeCy(elements);
             setState(s => ({ ...s, filePath }));
           })
           .finally(() => { setState(s => ({ ...s, isLoading: false })); });
@@ -65,6 +70,7 @@ const useCyLoader = (cy, setCy) => {
   const actions = {
     openNetwork,
     saveNetwork,
+    newNetwork,
   };
 
   return [state, actions];

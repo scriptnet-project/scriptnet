@@ -30,6 +30,7 @@ const TopCommandBar = ({
   const { cy } = useCytoscape();
 
   const {
+    newNetwork,
     saveNetwork,
     openNetwork,
     runLayout,
@@ -42,7 +43,7 @@ const TopCommandBar = ({
       key: 'New',
       text: 'New Case',
       iconProps: { iconName: 'Add' },
-      onClick: () => console.log('Open'),
+      onClick: newNetwork,
     },
     // { key: "divider1", itemType: ContextualMenuItemType.Divider, onRender: () => <VerticalDivider /> },
     {

@@ -24,7 +24,7 @@ const CyProvider = ({ children }) => {
     id: uuid(),
   }));
 
-  const setCy = (elements) => {
+  const initializeCy = (elements = []) => {
     if (cyRef.current) {
       cyRef.current.destroy();
     }
@@ -34,7 +34,7 @@ const CyProvider = ({ children }) => {
     setState(() => ({ id: uuid() }));
   };
 
-  const [loadState, loadActions] = useLoader(cyRef, setCy);
+  const [loadState, loadActions] = useLoader(cyRef, initializeCy);
   const [exportState, exportActions] = useExportCSV(cyRef, { filePath: loadState.filePath });
   const [modeState, modeActions] = useModes(cyRef, state.id);
   const [helperActions] = useHelpers(cyRef, state.id);
