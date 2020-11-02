@@ -398,7 +398,10 @@ const useCyModes = (cy, id) => {
     virtualCanvas.height = height * 4;
     const context = virtualCanvas.getContext('2d');
 
-    if(state.mode == modes.CONFIGURE && state.options.preset === 'scene') {
+    if(
+      state.mode == modes.CONFIGURE &&
+      (state.options.preset === 'scene' || state.options.preset === 'geography' || state.options.preset === 'jurisdiction')
+    ) {
       const svgImage = await getSVGImage();
       context.putImageData(svgImage, 0, 0);
     }
