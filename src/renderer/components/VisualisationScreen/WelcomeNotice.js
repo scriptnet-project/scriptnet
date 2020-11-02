@@ -8,7 +8,7 @@ import {
   PrimaryButton,
 } from '@fluentui/react';
 
-const initialOpenState = false; // TODO: true;
+const initialOpenState = true;
 
 const theme = getTheme();
 const cancelIcon = { iconName: 'Cancel' };
