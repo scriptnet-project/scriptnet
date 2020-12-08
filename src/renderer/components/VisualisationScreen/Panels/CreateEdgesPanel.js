@@ -22,7 +22,7 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
       headerText="Add Relationship"
     >
       <Stack tokens={{ childrenGap: 10 }}>
-        <Text>Select a relationship type below, and create links between actors by dragging a line between them.</Text>
+        <Text>Select a relationship type below, and create links between nodes by dragging a line between them.</Text>
         <ChoiceGroup
           label="Select relationship type to create"
           onChange={onChange}
