@@ -1,9 +1,23 @@
 # Scriptnet
+Welcome to ScriptNet, a software package for analysing the interfaces of the crime commission process and networks of association. The software is a collaboration between the University of Manchester (Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo), Joshua Melville, and Steve McKellar (Team Garlic). More specifically:
 
-Main point of interest is probably `src/components/VisualisationScreen`
+*   Content developed by Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo
+*   Software developed by Joshua Melville and Steve McKellar
 
-## This is built on top of electron-webpack-quick-start
-> A bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
+The project, entitled 'In Pursuit of Food System Integrity: Scoping and Development of the SCRIPTNET Tool-Kit', was funded by the Economic and Social Research Council Impact Acceleration Account.
+
+Cite as follows:
+
+*   Lord, N., Bellotti, E., Flores-Elizondo, C., Melville, J. and McKellar, S. (2020) ScriptNet: An Integrated Criminological-Network Analysis Tool, University of Manchester.
+
+## License and Copyright
+Copyright 2020, Nick Lord, Elisa Bellotti, Cecilia Flores-Elizondo, Joshua Melville, and Steve McKellar.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. See the LICENSE file for further details.
+
+## Developer Information
+
+This is built on top of electron-webpack-quick-start, which is a bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
 
 Thanks to the power of `electron-webpack` this template comes packed with...
 
