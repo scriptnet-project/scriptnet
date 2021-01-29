@@ -10,6 +10,16 @@ Cite as follows:
 
 *   Lord, N., Bellotti, E., Flores-Elizondo, C., Melville, J. and McKellar, S. (2020) ScriptNet: An Integrated Criminological-Network Analysis Tool, University of Manchester.
 
+## Documentation and Downloads
+
+You can download the software for Windows and macOS from the following links:
+  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/0.0.6/ScriptNet.Setup.0.0.6.exe)
+  - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/0.0.6/ScriptNet-0.0.6.dmg)
+  
+To view all available versions of the software, visit the [releases page](https://github.com/scriptnet-project/scriptnet/releases/).
+
+A user manual for the software is available as a Microsoft Word formatted document from [this link](Manual.docx).
+
 ## License and Copyright
 Copyright 2020, Nick Lord, Elisa Bellotti, Cecilia Flores-Elizondo, Joshua Melville, and Steve McKellar.
 
