@@ -64,6 +64,7 @@ const WelcomeNotice = () => {
       isOpen={isOpen}
       onDismiss={handleDismiss}
       isBlocking={false}
+      containerClassName="launch-modal"
     >
       <div className={contentStyles.header}>
         <span>ScriptNet</span>
@@ -78,7 +79,7 @@ const WelcomeNotice = () => {
         <p>Welcome to ScriptNet, a software package for analysing the interfaces of the crime
         commission process and networks of association. The software is a collaboration between
         the University of Manchester (Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo), Joshua
-        Melville and Steve McKellar (Team Garlic). More specifically:</p>
+        Melville, and Steve McKellar (Team Garlic). More specifically:</p>
 
         <ul>
           <li>Content developed by Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo</li>
