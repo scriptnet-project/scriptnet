@@ -18,7 +18,7 @@ You can download the software for Windows and macOS from the following links:
   
 To view all available versions of the software, visit the [releases page](https://github.com/scriptnet-project/scriptnet/releases/).
 
-A user manual for the software is available as a Microsoft Word formatted document from [this link](Manual.docx).
+A user manual for the software is available as a Microsoft Word formatted document from [this link](https://github.com/scriptnet-project/scriptnet/raw/master/Scriptnet%20investigator%20manual_FINAL.docx).
 
 ## License and Copyright
 Copyright 2020, Nick Lord, Elisa Bellotti, Cecilia Flores-Elizondo, Joshua Melville, and Steve McKellar.
