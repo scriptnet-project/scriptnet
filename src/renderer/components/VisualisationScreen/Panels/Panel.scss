@@ -1,18 +1,17 @@
 @import '../../../theme.scss';
 
-.panel {
+// .panel {
+//   background: $palette_themeLighter;
+//   position: absolute;
+//   top: 44px;
+//   bottom: 112px;
+//   width: 350px;
+//   padding: 2rem;
+//   overflow-y: scroll;
+// }
+
+.ms-Panel-main {
   background: $palette_themeLighter;
-  padding: 2rem;
-  // padding-bottom: 8rem;
-  // padding-top: 4rem;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 350px;
-  position: absolute;
-  top: 2rem;
-  bottom: 7rem;
-  left: 0;
-  // z-index: 1;
+  margin-top: 44px;
+  margin-bottom: 112px;
 }

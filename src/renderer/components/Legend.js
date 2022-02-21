@@ -10,14 +10,14 @@ import { baseLocationOptions } from './Forms/sharedOptions';
 
 const theme = getTheme();
 
-const edges = [
-  { glyph: 'line', type: 'edge', label: 'personal', color: theme.palette.yellow },
-  { glyph: 'line', type: 'edge', label: 'communication', color: theme.palette.purpleLight },
-  { glyph: 'line', type: 'edge', label: 'financial', color: theme.palette.greenLight },
-  { glyph: 'line', type: 'edge', label: 'business', color: theme.palette.tealLight },
-  { glyph: 'line', type: 'edge', label: 'ownership', color: theme.palette.magentaLight },
-  { glyph: 'line', type: 'edge', label: 'working', color: theme.palette.red },
-  { glyph: 'line', type: 'edge', label: 'geographical', color: theme.palette.neutralSecondaryAlt },
+const relationships = [
+  { glyph: 'line', type: 'relationship', label: 'personal', color: theme.palette.yellow },
+  { glyph: 'line', type: 'relationship', label: 'communication', color: theme.palette.purpleLight },
+  { glyph: 'line', type: 'relationship', label: 'financial', color: theme.palette.greenLight },
+  { glyph: 'line', type: 'relationship', label: 'business', color: theme.palette.tealLight },
+  { glyph: 'line', type: 'relationship', label: 'ownership', color: theme.palette.magentaLight },
+  { glyph: 'line', type: 'relationship', label: 'working', color: theme.palette.red },
+  { glyph: 'line', type: 'relationship', label: 'geographical', color: theme.palette.neutralSecondaryAlt },
 ];
 
 const nodes = [
@@ -71,7 +71,7 @@ const getElements = (mode, options) => {
     }
 
     if (options.preset === 'relationship-filter') {
-      return edges;
+      return relationships;
     }
 
     if (options.preset === 'jurisdiction') {
@@ -82,14 +82,14 @@ const getElements = (mode, options) => {
       return getGeographyLegend(options.showCountry);
     }
 
-    return [...edges, ...nodes];
+    return [...relationships, ...nodes];
   }
 
   if (mode === modes.CREATE_EDGES) {
-    return edges;
+    return relationships;
   }
 
-  return [...edges, ...nodes];
+  return [...relationships, ...nodes];
 };
 
 const LegendItem = ({ type, label, ...options }) => {

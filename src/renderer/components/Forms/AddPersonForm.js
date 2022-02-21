@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik } from 'formik';
-import { FormikTextField, FormikChoiceGroup, FormikDropdown } from 'formik-office-ui-fabric-react'
+import { FormikTextField, FormikChoiceGroup, FormikDropdown, FormikDatePicker } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
 
 const sexOptions = [
@@ -25,14 +25,18 @@ const defaultValues = {
   jurisdiction: 'local',
   role: '',
   sex: 'Male',
+  notes: '',
+  firstInvolvement: '',
+  lastInvolvement: '',
 }
 
-const AddPersonForm = ({
-  show,
+export const AddPersonForm = ({
+  initialValues,
   onClose,
   isUpdate,
-  initialValues = {},
+  formRef,
 }) => {
+
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = (formData) => {
@@ -69,6 +73,81 @@ const AddPersonForm = ({
   }
 
   return (
+    <Formik
+        initialValues={{ ...defaultValues, ...initialValues }}
+        onSubmit={handleFormSubmit}
+        validate={validate}
+        validateOnBlur={false}
+        innerRef={formRef}
+      >
+        {({ isSubmitting, handleSubmit }) => {
+          return (
+            <Form>
+              <Field
+                name="name"
+                label="Name"
+                placeholder="Enter the person's name"
+                component={FormikTextField}
+              />
+              <Field
+                name="role"
+                label="Role"
+                placeholder="Select a role"
+                component={FormikDropdown}
+                options={baseRoleOptions}
+              />
+              <Field
+                name="location"
+                label="Geographical location"
+                placeholder="Select a location"
+                component={FormikDropdown}
+                options={baseLocationOptions}
+              />
+              <Field
+                name="jurisdiction"
+                label="Jurisdiction"
+                placeholder="Select a jurisdiction"
+                component={FormikDropdown}
+                options={baseJurisdictionOptions}
+              />
+              <Field
+                name="sex"
+                label="Sex"
+                component={FormikDropdown}
+                options={sexOptions}
+              />
+              <Field
+                name="firstInvolvement"
+                label="First Involvement"
+                component={FormikDatePicker}
+              />
+              <Field
+                name="lastInvolvement"
+                label="Last Involvement"
+                component={FormikDatePicker}
+              />
+              <Field
+                name="notes"
+                label="Notes"
+                component={FormikTextField}
+                multiline
+                rows={10}
+              />
+            </Form>
+            )
+        } }
+      </Formik>
+  )
+}
+
+const AddPersonDialog = ({
+  show,
+  onClose,
+  isUpdate,
+  initialValues = {},
+}) => {
+
+  return (
     <Dialog
       hidden={!show}
       onDismiss={onClose}
@@ -82,59 +161,18 @@ const AddPersonForm = ({
       maxWidth="500px" // Default is too narrow - could use grid size?
       minWidth="500px"
     >
-      <Formik
-        initialValues={{ ...defaultValues, ...initialValues }}
-        onSubmit={handleFormSubmit}
-        validate={validate}
-        validateOnBlur={false}
-      >
-        {({ isSubmitting }) => (
-        <Form>
-          <Field
-            name="name"
-            label="Name"
-            placeholder="Enter the person's name"
-            component={FormikTextField}
-          />
-          <Field
-            name="role"
-            label="Role"
-            placeholder="Select a role"
-            component={FormikDropdown}
-            options={baseRoleOptions}
-          />
-          <Field
-            name="location"
-            label="Geographical location"
-            placeholder="Select a location"
-            component={FormikDropdown}
-            options={baseLocationOptions}
-          />
-          <Field
-            name="jurisdiction"
-            label="Jurisdiction"
-            placeholder="Select a jurisdiction"
-            component={FormikDropdown}
-            options={baseJurisdictionOptions}
-          />
-          <Field
-            name="sex"
-            label="Sex"
-            component={FormikChoiceGroup}
-            options={sexOptions}
-          />
-          <DialogFooter>
-            <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
-          </DialogFooter>
-        </Form>
-        )}
-      </Formik>
+      <AddPersonForm initialValues={initialValues} isUpdate={isUpdate} onClose={onClose} />
+      { !isUpdate && (
+        <DialogFooter>
+          <DefaultButton onClick={onClose} text="Cancel" />
+          <PrimaryButton type="submit" text="Add to Network" />
+        </DialogFooter>
+      )}
     </Dialog>
   );
 }
 
-export default AddPersonForm;
+export default AddPersonDialog;
 
 
 // Attempt at wrapping <ComboBox>.

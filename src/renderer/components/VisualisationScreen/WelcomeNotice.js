@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FontWeights,
   getTheme,
@@ -8,7 +8,7 @@ import {
   PrimaryButton,
 } from '@fluentui/react';
 
-const initialOpenState = true;
+const initialOpenState = false;
 
 const theme = getTheme();
 const cancelIcon = { iconName: 'Cancel' };
@@ -57,6 +57,16 @@ const contentStyles = mergeStyleSets({
 const WelcomeNotice = () => {
   const [isOpen, setIsOpen] = useState(initialOpenState);
 
+  useEffect(() => {
+    clearTimeout(window.welcomeNoticeTimeout);
+    window.welcomeNoticeTimeout = setTimeout(() => {
+      setIsOpen(true);
+    }, 1000);
+    return () => {
+      clearTimeout(window.welcomeNoticeTimeout);
+    };
+  }, []);
+
   const handleDismiss = () => setIsOpen(false);
 
   return (
@@ -102,34 +112,6 @@ const WelcomeNotice = () => {
       </div>
     </Modal>
   );
-  // return (
-  // <AnimatePresence>
-  //   { openState &&
-  //     <motion.div
-  //       initial={{ opacity: 1 }}
-  //       animate={{ opacity: 1 }}
-  //       exit={{ opacity: 0 }}
-  //       onClick={handleClose}
-  //     >
-  //       Welcome to ScriptNet, a software package for analysing the interfaces of the crime
-  //       commission process and networks of association. The software is a collaboration between
-  //       the University of Manchester (Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo), Joshua
-  //       Melville and Steve McKellar (Team Garlic). More specifically:
-
-  //       - Content developed by Nick Lord, Elisa Bellotti and Cecilia Flores-Elizondo
-  //       - Software developed by Joshua Melville and Steve McKellar
-
-  //       The project, entitled ‘In Pursuit of Food System Integrity: Scoping and Development of the
-  //       SCRIPTNET Tool-Kit’, was funded by the Economic and Social Research Council Impact
-  //       Acceleration Account.
-
-  //       Cite as follows:
-  //       - Lord, N., Bellotti, E., Flores-Elizondo, C., Melville, J. and McKellar, S. (2020) ScriptNet: An
-  //       Integrated Criminological-Network Analysis Tool, University of Manchester.
-  //     </motion.div>
-  //   }
-  // </AnimatePresence>
-  // );
 };
 
 export default WelcomeNotice;

@@ -45,7 +45,7 @@ const GeographyPresetPanel = ({ isOpen, onDismiss }) => {
         <Text>You are now in geographic visualisation mode. When in this mode, a container can be drawn around the nodes you have named, based on the country you said they were located in.</Text>
         <Text>Select one or more countries below to visualise nodes that are located within it.</Text>
         { [...countriesInUse].sort().map(country => (
-          <Checkbox key={country} name={country} label={country} checked={isChecked(country)} onChange={onChange} />
+          <Checkbox key={`${country}`} name={country} label={country} checked={isChecked(country)} onChange={onChange} />
         ))}
       </Stack>
     </Panel>

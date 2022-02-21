@@ -1,11 +1,10 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DefaultButton, DetailsList, DetailsListLayoutMode, SelectionMode, Stack, Text } from '@fluentui/react';
+import { DefaultButton, PrimaryButton, Panel, PanelType } from '@fluentui/react';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
 import { useCytoscape } from 'Hooks/Cytoscape';
-import Forms from 'Components/Forms/Forms';
-import { Panel } from './';
+import { AddPersonForm } from '../../Forms/AddPersonForm';
 
 const ViewDetailsPanel = ({
   isOpen,
@@ -13,7 +12,7 @@ const ViewDetailsPanel = ({
   const { cy, id } = useCytoscape();
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
-  const [form, setForm] = useState(null);
+  const form = useRef(null);
   const [initialValues, setInitialValues] = useState({});
 
   const handleRemove = useCallback(() => {
@@ -49,40 +48,40 @@ const ViewDetailsPanel = ({
     }
   });
 
+  const submitHandler = () => {
+    if (form.current) {
+      form.current.handleSubmit()
+    }
+  }
+
   return (
     <Fragment>
-      <Forms
-        form={form}
-        onClose={() => setForm(null)}
-        isUpdate
-        initialValues={initialValues}
-      />
       <Panel
         name="view-details-panel"
         isOpen={isOpen}
+        isLightDismiss
+        type={PanelType.customNear}
+        customWidth={350}
+        isBlocking={false}
         onDismiss={handleDismiss}
         headerText="Details"
+        onRenderFooterContent={() => (
+          <>
+            <DefaultButton text="Delete" onClick={handleRemove} style={{ color: props.theme.primaryColor }}/>
+            <DefaultButton text="Cancel" onClick={handleRemove}/>
+            <PrimaryButton type="submit" text="Update" onClick={submitHandler} />
+          </>
+        )}
+        // Stretch panel content to fill the available height so the footer is positioned
+        // at the bottom of the page
+        isFooterAtBottom={true}
       >
-        {/* <Stack tokens={{ childrenGap: 10 }}>
-          <Text variant={'large'}>Name: {name}</Text>
-        </Stack> */}
-        <Stack tokens={{ childrenGap: 10 }}>
-          <DetailsList
-            items={formattedAttributes}
-            columns={[
-              { key: 'column1', name: 'Name', fieldName: 'name', minWidth: 0, maxWidth: 30, },
-              { key: 'column2', name: 'Value', fieldName: 'value' },
-            ]}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.none}
-            compact
-          />
-        </Stack>
-        <Stack>
-          { isNode && <DefaultButton text="Edit" onClick={handleEdit} /> }
-          <DefaultButton text="Delete" onClick={handleRemove}/>
-        </Stack>
+        <AddPersonForm
+          initialValues={details}
+          isUpdate
+          onClose={() => setForm(null)}
+          formRef={form}
+        />
       </Panel>
     </Fragment>
   );
