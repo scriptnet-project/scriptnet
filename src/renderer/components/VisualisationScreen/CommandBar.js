@@ -46,7 +46,6 @@ const TopCommandBar = ({
     newNetwork,
     saveNetwork,
     openNetwork,
-    runLayout,
     exportPNG,
     exportCSV,
   } = useCytoscapeActions();

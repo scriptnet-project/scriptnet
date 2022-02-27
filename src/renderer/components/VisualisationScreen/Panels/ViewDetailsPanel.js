@@ -1,10 +1,12 @@
 import React, { Fragment, useCallback, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DefaultButton, PrimaryButton, Panel, PanelType } from '@fluentui/react';
+import { DefaultButton, PrimaryButton, Panel, PanelType, getTheme } from '@fluentui/react';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { AddPersonForm } from '../../Forms/AddPersonForm';
+
+const theme = getTheme();
 
 const ViewDetailsPanel = ({
   isOpen,
@@ -13,7 +15,6 @@ const ViewDetailsPanel = ({
   const selectedElement = useSelector(getSelectedId);
   const dispatch = useDispatch();
   const form = useRef(null);
-  const [initialValues, setInitialValues] = useState({});
 
   const handleRemove = useCallback(() => {
     if (!selectedElement) { return; }
@@ -26,27 +27,11 @@ const ViewDetailsPanel = ({
     dispatch(visualisationActions.clearSelected());
   }, [selectedElement, id]);
 
-  const handleEdit = useCallback(() => {
-    const currentValue = cy.current.elements(`#${selectedElement}`).data();
-    console.log({ currentValue });
-    setInitialValues(currentValue);
-    setForm(currentValue.type);
-  }, [selectedElement, id]);
-
   if (!cy.current) { return null; }
 
-  const isNode = cy.current.getElementById(selectedElement).isNode();
   const details = cy.current.getElementById(selectedElement).data();
 
   if (!isOpen || !details) { return false; }
-
-  const formattedAttributes = Object.keys(details).map((value, index) => {
-    return {
-      key: index,
-      name: value,
-      value: details[value]
-    }
-  });
 
   const submitHandler = () => {
     if (form.current) {
@@ -67,8 +52,8 @@ const ViewDetailsPanel = ({
         headerText="Details"
         onRenderFooterContent={() => (
           <>
-            <DefaultButton text="Delete" onClick={handleRemove} style={{ color: props.theme.primaryColor }}/>
-            <DefaultButton text="Cancel" onClick={handleRemove}/>
+            <DefaultButton text="Delete" onClick={handleRemove} style={{ background: theme.themeTertiary }}/>
+            <DefaultButton text="Cancel"/>
             <PrimaryButton type="submit" text="Update" onClick={submitHandler} />
           </>
         )}
@@ -79,7 +64,6 @@ const ViewDetailsPanel = ({
         <AddPersonForm
           initialValues={details}
           isUpdate
-          onClose={() => setForm(null)}
           formRef={form}
         />
       </Panel>

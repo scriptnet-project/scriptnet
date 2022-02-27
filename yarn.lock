@@ -3715,6 +3715,12 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+"formik-fluent-ui-react@https://github.com/joaojmendes/formik-fluent-ui-react.git":
+  version "1.2.0"
+  resolved "https://github.com/joaojmendes/formik-fluent-ui-react.git#b34ef479095e40af5f7e44fa09be3c6a075f6801"
+  dependencies:
+    yarn "^1.22.4"
+
 formik-office-ui-fabric-react@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/formik-office-ui-fabric-react/-/formik-office-ui-fabric-react-1.0.0.tgz#44965009787e8e89fa22ffd08ef7f0568b366391"
@@ -8290,6 +8296,11 @@ yargs@^15.3.1:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
+
+yarn@^1.22.4:
+  version "1.22.17"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.17.tgz#bf910747d22497b573131f7341c0e1d15c74036c"
+  integrity sha512-H0p241BXaH0UN9IeH//RT82tl5PfNraVpSpEoW+ET7lmopNC61eZ+A+IDvU8FM6Go5vx162SncDL8J1ZjRBriQ==
 
 yauzl@^2.10.0:
   version "2.10.0"

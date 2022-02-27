@@ -35,6 +35,18 @@ const useCyLoader = (cy, initializeCy) => {
     setState(initialState);
   };
 
+  const handleFileOpen = (filePath) =>
+    fse.readFile(filePath, 'utf8')
+      .then((data) => {
+        const parsedData = JSON.parse(data);
+        const elements = get(parsedData, 'network.elements', []);
+        const options = get(parsedData, 'options', {});
+        initializeVisualisationOptions(options.visualisation);
+        initializeCy(elements);
+        setState(s => ({ ...s, filePath }));
+      })
+      .finally(() => { setState(s => ({ ...s, isLoading: false })); });
+
   const openNetwork = () => {
     const dialogOptions = state.filePath ? { ...baseOptions, defaultPath: path.dirname(state.filePath) } : baseOptions;
     dialog.showOpenDialog(browserWindow, dialogOptions)
@@ -42,16 +54,8 @@ const useCyLoader = (cy, initializeCy) => {
         if (canceled) { return; }
         setState({ isLoading: true, filePath: null }); // could set filePath here?
         const filePath = filePaths[0];
-        fse.readFile(filePath, 'utf8')
-          .then((data) => {
-            const parsedData = JSON.parse(data);
-            const elements = get(parsedData, 'network.elements', []);
-            const options = get(parsedData, 'options', {});
-            initializeVisualisationOptions(options.visualisation);
-            initializeCy(elements);
-            setState(s => ({ ...s, filePath }));
-          })
-          .finally(() => { setState(s => ({ ...s, isLoading: false })); });
+        console.log(filePath);
+        return handleFileOpen(filePath);
       });
 
   };
@@ -78,6 +82,7 @@ const useCyLoader = (cy, initializeCy) => {
 
   const actions = {
     openNetwork,
+    handleFileOpen,
     saveNetwork,
     newNetwork,
   };

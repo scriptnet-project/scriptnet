@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
   DefaultButton,
@@ -7,9 +7,10 @@ import {
   DialogType,
   DialogFooter,
   ComboBox,
+  DatePicker
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useField } from 'formik';
 import { FormikTextField, FormikChoiceGroup, FormikDropdown, FormikDatePicker } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
 
@@ -30,9 +31,38 @@ const defaultValues = {
   lastInvolvement: '',
 }
 
+const CustomFormikDatePicker = ({ name, label }) => {
+  const [field, meta, helpers] = useField(name);
+  console.log({field, meta, helpers});
+  const { value } = meta;
+  const { setValue } = helpers;
+
+  const normalizedValue = useMemo(() => {
+    if (value && typeof value === 'string') {
+      return new Date(value);
+    }
+    return value;
+  }, [value]);
+
+  return (
+    <>
+      <DatePicker
+        label={label}
+        value={normalizedValue}
+        onSelectDate={(date) => {
+          console.log('yooo', date);
+          setValue(date.toISOString());
+        }}
+        placeholder="Select a date..."
+        ariaLabel="Select a date"
+      />
+      {meta.error && meta.touched && <div>{meta.error}</div>}
+    </>
+  )
+}
+
 export const AddPersonForm = ({
   initialValues,
-  onClose,
   isUpdate,
   formRef,
 }) => {
@@ -53,8 +83,6 @@ export const AddPersonForm = ({
         },
       });
     }
-
-    onClose();
     return true;
   }
 
@@ -116,16 +144,8 @@ export const AddPersonForm = ({
                 component={FormikDropdown}
                 options={sexOptions}
               />
-              <Field
-                name="firstInvolvement"
-                label="First Involvement"
-                component={FormikDatePicker}
-              />
-              <Field
-                name="lastInvolvement"
-                label="Last Involvement"
-                component={FormikDatePicker}
-              />
+              <CustomFormikDatePicker name="firstInvolvement" label="First Involvement" />
+              <CustomFormikDatePicker name="lastInvolvement" label="Last Involvement" />
               <Field
                 name="notes"
                 label="Notes"
@@ -142,7 +162,6 @@ export const AddPersonForm = ({
 
 const AddPersonDialog = ({
   show,
-  onClose,
   isUpdate,
   initialValues = {},
 }) => {
@@ -150,7 +169,6 @@ const AddPersonDialog = ({
   return (
     <Dialog
       hidden={!show}
-      onDismiss={onClose}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: isUpdate ? 'Update Person' : 'Add a Person',
@@ -161,10 +179,10 @@ const AddPersonDialog = ({
       maxWidth="500px" // Default is too narrow - could use grid size?
       minWidth="500px"
     >
-      <AddPersonForm initialValues={initialValues} isUpdate={isUpdate} onClose={onClose} />
+      <AddPersonForm initialValues={initialValues} isUpdate={isUpdate} />
       { !isUpdate && (
         <DialogFooter>
-          <DefaultButton onClick={onClose} text="Cancel" />
+          <DefaultButton text="Cancel" />
           <PrimaryButton type="submit" text="Add to Network" />
         </DialogFooter>
       )}
