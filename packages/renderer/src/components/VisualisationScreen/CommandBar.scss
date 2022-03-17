@@ -1,0 +1,13 @@
+.CommandBar {
+  z-index: 999999;
+  background: white;
+
+  .ms-Toggle {
+    margin-bottom: 0;
+    padding: 0px 8px;
+
+    label {
+      font-weight: normal;
+    }
+  }
+}

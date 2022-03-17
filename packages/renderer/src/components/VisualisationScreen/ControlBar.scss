@@ -1,0 +1,32 @@
+@import '../../theme';
+
+.ControlBar {
+  position: absolute;
+  bottom: 0;
+  height: 5rem;
+  width: 100%;
+  padding: 1rem;
+  background: $palette_white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 999999;
+
+  .primary-stack {
+    .primary-action-button {
+      flex: 1;
+      height: 100%;
+
+      &__button {
+        height: 100%;
+        width: 100%;
+        border: 0;
+
+        &:not(.ms-Button--compoundPrimary) {
+          color: #0078d4;
+        }
+      }
+    }
+  }
+}
