@@ -7,7 +7,10 @@ import { initializeIcons } from '@fluentui/react/lib/Icons';
 import getStore from 'Renderer/store';
 import theme from './theme';
 import './index.scss';
+import "leaflet/dist/leaflet.css";
 import App from 'Components/App';
+
+
 
 const { store, persistor } = getStore();
 loadTheme(theme);

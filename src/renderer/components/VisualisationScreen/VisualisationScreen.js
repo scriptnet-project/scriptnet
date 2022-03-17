@@ -8,6 +8,7 @@ import Visualisation from 'Components/VisualisationScreen/Visualisation';
 import WelcomeNotice from 'Components/VisualisationScreen/WelcomeNotice';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
+import MapModal from '../MapModal';
 
 export const DEV_MODE = process.env.NODE_ENV === 'development';
 
@@ -33,6 +34,7 @@ const VisualisationScreen = () => {
     <Screen onAnimationComplete={handleAnimationComplete}>
       <TopCommandBar />
       <div style={{ flex: '1 auto', display: 'flex' }}>
+        <MapModal />
         <Visualisation/>
         <PanelManager/>
       </div>
