@@ -10,6 +10,7 @@ import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik } from 'formik';
 import { FormikTextField, FormikDropdown, FormikChoiceGroup } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
+import LocationSelector from '../Fields/LocationSelector';
 
 const locationOptions = [
   {key: 'N/A', text: 'N/A'},
@@ -137,8 +138,7 @@ const AddOrganisationForm = ({
             name="location"
             label="Geographical location"
             placeholder="Select a location"
-            component={FormikDropdown}
-            options={locationOptions}
+            component={LocationSelector}
           />
           <Field
             name="jurisdiction"

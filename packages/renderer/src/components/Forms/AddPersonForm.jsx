@@ -13,6 +13,7 @@ import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik, useField } from 'formik';
 import { FormikTextField, FormikChoiceGroup, FormikDropdown, FormikDatePicker } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
+import LocationSelector from '../Fields/LocationSelector';
 
 const sexOptions = [
   {key: 'Male', text: 'Male' },
@@ -128,8 +129,7 @@ export const AddPersonForm = ({
                 name="location"
                 label="Geographical location"
                 placeholder="Select a location"
-                component={FormikDropdown}
-                options={baseLocationOptions}
+                component={LocationSelector}
               />
               <Field
                 name="jurisdiction"
