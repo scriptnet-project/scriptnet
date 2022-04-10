@@ -17,7 +17,6 @@ const relationships = [
   { glyph: 'line', type: 'relationship', label: 'business', color: theme.palette.tealLight },
   { glyph: 'line', type: 'relationship', label: 'ownership', color: theme.palette.magentaLight },
   { glyph: 'line', type: 'relationship', label: 'working', color: theme.palette.red },
-  { glyph: 'line', type: 'relationship', label: 'geographical', color: theme.palette.neutralSecondaryAlt },
 ];
 
 const nodes = [
