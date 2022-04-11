@@ -46,7 +46,7 @@ const ViewDetailsPanel = ({
         isOpen={isOpen}
         isLightDismiss
         type={PanelType.customNear}
-        customWidth={350}
+        customWidth={400}
         isBlocking={false}
         onDismiss={handleDismiss}
         headerText="Details"

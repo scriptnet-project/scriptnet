@@ -14,6 +14,7 @@ import { Field, Form, Formik, useField } from 'formik';
 import { FormikTextField, FormikChoiceGroup, FormikDropdown, FormikDatePicker } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
+import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
 
 const sexOptions = [
   {key: 'Male', text: 'Male' },
@@ -144,8 +145,11 @@ export const AddPersonForm = ({
                 component={FormikDropdown}
                 options={sexOptions}
               />
-              <CustomFormikDatePicker name="firstInvolvement" label="First Involvement" />
-              <CustomFormikDatePicker name="lastInvolvement" label="Last Involvement" />
+              <Field
+                name="involvements"
+                label="Period(s) of involvement"
+                component={ActivePeriodSelector}
+              />
               <Field
                 name="notes"
                 label="Notes"
