@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useField, Form, FormikProps, Formik } from 'formik';
-import { DialogType, ActionButton, BaseButton, DefaultButton, DetailsList, Dialog, DialogFooter, getTheme, Label, Modal, PrimaryButton, TextField, DatePicker, Selection, SelectionMode } from '@fluentui/react';
+import { DialogType, ActionButton, BaseButton, DefaultButton, DetailsList, Dialog, DialogFooter, getTheme, Label, Modal, PrimaryButton, TextField, DatePicker, Selection, SelectionMode, IColumn, Stack } from '@fluentui/react';
 
 function formatDate(date) {
     var d = new Date(date),
@@ -16,56 +16,19 @@ function formatDate(date) {
     return [year, month, day].join('-');
 }
 
-const ActivePeriodPicker = ({ show, onClose, onSubmit }) => {
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  if (!show) { return null; }
-
-  const dialogContentProps = {
-    type: DialogType.largeHeader,
-    title: 'Add Period of Involvement',
-    subText: 'Enter the start and end dates of this actor\'s involvement in the crime.',
-  };
-
-  console.log({ startDate, endDate });
-
-  return (
-    <Dialog
-      hidden={!show}
-      onDismiss={onClose}
-      dialogContentProps={dialogContentProps}
-    >
-      <DatePicker
-        isRequired
-        label="Start of Involvement"
-        value={new Date(startDate)}
-        onSelectDate={(date) => setStartDate(formatDate(date))}
-      />
-      <DatePicker
-        isRequired
-        label="End of Involvement"
-        value={new Date(endDate)}
-        onSelectDate={(date) => setEndDate(formatDate(date))}
-      />
-      <DialogFooter>
-        <PrimaryButton onClick={() => onSubmit(startDate, endDate)}>Save</PrimaryButton>
-        <DefaultButton onClick={onClose}>Cancel</DefaultButton>
-      </DialogFooter>
-    </Dialog>
-  )
-}
+const onFormatDate = (date?: Date): string => {
+  return !date ? '' : date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear() % 100);
+};
 
 const ActivePeriodSelector = (props) => {
   const theme = getTheme();
   const [items, setItems] = useState([
     {
       key: 1,
-      start: '2020-01-01',
-      end: '2020-01-02',
+      start: new Date('2020-01-01'),
+      end: new Date('2020-01-02'),
     },
 ]);
-  const [showPicker, setShowPicker] = useState(false);
   const [field, meta, helpers] = useField(props.name);
   const [selectedItem, setSelectedItem] = useState(undefined);
 
@@ -77,75 +40,85 @@ const ActivePeriodSelector = (props) => {
 
   useEffect(() => {
       // Do something with the selected item
-      console.log(selectedItem)
+      console.log('Selected: ', selectedItem)
   }, [selectedItem])
 
   const { value } = meta;
 
   const { setValue } = helpers;
 
-  const columns = [
-      {
-        key: 'startDate',
-        name: 'Start Date',
-        fieldName: 'start',
-        isRowHeader: true,
-        isResizable: false,
-        isSorted: false,
-        data: 'date',
-        isPadded: false,
-        minWidth: 100,
-        maxWidth: 100,
-      },
-      {
-        key: 'endDate',
-        name: 'End Date',
-        fieldName: 'end',
-        isRowHeader: true,
-        isResizable: false,
-        isSorted: false,
-        data: 'string',
-        isPadded: false,
-        minWidth: 100,
-        maxWidth: 100,
-      },
-    ];
+  const COL_WIDTH = 145;
 
-  const handleAddNew = (startDate, endDate) => {
+  const columns: IColumn[] = [
+    {
+      key: 'startDate',
+      name: 'Start Date',
+      fieldName: 'start',
+      minWidth: COL_WIDTH,
+      isResizable: false,
+      isCollapsible: false,
+      isPadded: false,
+    },
+    {
+      key: 'endDate',
+      name: 'End Date',
+      fieldName: 'end',
+      minWidth: COL_WIDTH,
+      isResizable: false,
+      isCollapsible: false,
+      isPadded: false,
+    },
+  ];
+
+  const handleAddNew = () => {
     setItems([
       ...items,
       {
         key: items.length + 1,
-        start: startDate,
-        end: endDate,
+        start: new Date(),
+        end: new Date(),
       },
     ]);
-
-    setShowPicker(false);
   }
 
-  console.log({ meta, helpers, field })
+  console.log({ meta, helpers, field });
 
   return (
-    <div>
+    <Stack
+    >
       <Label>{props.label}</Label>
-      <ActivePeriodPicker
-        show={showPicker}
-        onClose={() => setShowPicker(false)}
-        onSubmit={handleAddNew}
-      />
       <DetailsList
-        compact
         items={items}
         columns={columns}
         selection={selection}
         selectionMode={SelectionMode.single}
-        onActiveItemChanged={(thing) => { console.log('onActiveItemChanged', thing)} }
+        checkboxVisibility={2}
+        onRenderItemColumn={(item, index, column) => {
+          console.log(item, index, column);
+          const data = item[column.fieldName];
+          return (
+            <DatePicker value={data} />
+          )
+        }}
       />
-      <PrimaryButton iconProps={{ iconName: 'add'}} onClick={() => setShowPicker(true)}>Add</PrimaryButton>
-      <ActionButton iconProps={{ iconName: 'edit'}}>Edit</ActionButton>
-      <ActionButton iconProps={{ iconName: 'delete'}} color={theme.palette.red}>Delete</ActionButton>
-    </div>
+      <Stack
+        horizontal
+        tokens={{
+          padding: '10px 0px 0px 0px',
+          childrenGap: '10px',
+        }}
+      >
+        <PrimaryButton iconProps={{ iconName: 'add'}} onClick={handleAddNew}>Add</PrimaryButton>
+        { selectedItem && (
+          <PrimaryButton
+            iconProps={{ iconName: 'delete', children: theme.palette.red}}
+            style={{backgroundColor:theme.palette.red, color:'white'}}
+            >
+              Delete
+            </PrimaryButton>
+        )}
+      </Stack>
+    </Stack>
   )
 }
 

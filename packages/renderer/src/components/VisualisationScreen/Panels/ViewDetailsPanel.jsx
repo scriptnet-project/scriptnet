@@ -1,10 +1,11 @@
-import React, { Fragment, useCallback, useState, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DefaultButton, PrimaryButton, Panel, PanelType, getTheme } from '@fluentui/react';
+import { ThemeProvider, Panel, PanelType, getTheme } from '@fluentui/react';
 import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { AddPersonForm } from '../../Forms/AddPersonForm';
+import panelTheme from '../../../themes/panel';
 
 const theme = getTheme();
 
@@ -40,7 +41,7 @@ const ViewDetailsPanel = ({
   }
 
   return (
-    <Fragment>
+    <ThemeProvider>
       <Panel
         name="view-details-panel"
         isOpen={isOpen}
@@ -50,16 +51,6 @@ const ViewDetailsPanel = ({
         isBlocking={false}
         onDismiss={handleDismiss}
         headerText="Details"
-        onRenderFooterContent={() => (
-          <>
-            <DefaultButton text="Delete" onClick={handleRemove} style={{ background: theme.themeTertiary }}/>
-            <DefaultButton text="Cancel"/>
-            <PrimaryButton type="submit" text="Update" onClick={submitHandler} />
-          </>
-        )}
-        // Stretch panel content to fill the available height so the footer is positioned
-        // at the bottom of the page
-        isFooterAtBottom={true}
       >
         <AddPersonForm
           initialValues={details}
@@ -67,7 +58,7 @@ const ViewDetailsPanel = ({
           formRef={form}
         />
       </Panel>
-    </Fragment>
+    </ThemeProvider>
   );
 }
 

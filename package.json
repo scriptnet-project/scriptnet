@@ -20,7 +20,7 @@
     "electron-store": "^8.0.1"
   },
   "devDependencies": {
-    "@fluentui/react": "^7.144.0",
+    "@fluentui/react": "^8.64.3",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "@vitejs/plugin-react": "^1.2.0",
@@ -35,8 +35,7 @@
     "execa": "^6.1.0",
     "file-saver": "^2.0.2",
     "formik": "^2.2.0",
-    "formik-office-ui-fabric-react": "^1.0.0",
-    "framer-motion": "^2.7.7",
+    "framer-motion": "^6.2.9",
     "fs-extra": "^9.0.1",
     "html2canvas": "1.0.0-rc.6",
     "leaflet": "^1.7.1",

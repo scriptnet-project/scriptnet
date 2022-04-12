@@ -9,7 +9,6 @@ import {
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik } from 'formik';
-import { FormikTextField, FormikDropdown } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 

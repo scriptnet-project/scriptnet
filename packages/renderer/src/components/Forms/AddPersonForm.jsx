@@ -7,11 +7,12 @@ import {
   DialogType,
   DialogFooter,
   ComboBox,
-  DatePicker
+  DatePicker,
+  TextField,
+  Dropdown
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik, useField } from 'formik';
-import { FormikTextField, FormikChoiceGroup, FormikDropdown, FormikDatePicker } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
@@ -117,13 +118,13 @@ export const AddPersonForm = ({
                 name="name"
                 label="Name"
                 placeholder="Enter the person's name"
-                component={FormikTextField}
+                component={TextField}
               />
               <Field
                 name="role"
                 label="Role"
                 placeholder="Select a role"
-                component={FormikDropdown}
+                component={Dropdown}
                 options={baseRoleOptions}
               />
               <Field
@@ -136,13 +137,13 @@ export const AddPersonForm = ({
                 name="jurisdiction"
                 label="Jurisdiction"
                 placeholder="Select a jurisdiction"
-                component={FormikDropdown}
+                component={Dropdown}
                 options={baseJurisdictionOptions}
               />
               <Field
                 name="sex"
                 label="Sex"
-                component={FormikDropdown}
+                component={Dropdown}
                 options={sexOptions}
               />
               <Field
@@ -153,7 +154,7 @@ export const AddPersonForm = ({
               <Field
                 name="notes"
                 label="Notes"
-                component={FormikTextField}
+                component={TextField}
                 multiline
                 rows={10}
               />

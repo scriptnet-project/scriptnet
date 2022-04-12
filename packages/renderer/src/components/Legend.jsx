@@ -104,12 +104,23 @@ const Legend = () => {
   const { mode, options } = useSelector(state => state.mode);
   const elements = groupBy(getElements(mode, options), 'type');
 
+  const theme = getTheme();
+
+  console.log(theme);
+
   return (
       <motion.div
         className="Legend"
-        whileHover={{ opacity: 0.1 }}
         id="legend"
+        drag
+        dragSnapToOrigin
         layout
+        style={{
+          boxShadow: theme.effects.elevation16,
+          background: theme.semanticColors.bodyBackground,
+          zIndex: 9999,
+          cursor: 'move',
+        }}
       >
         {Object.keys(elements).map((group) => (
           <div className="Legend__group" key={group}>

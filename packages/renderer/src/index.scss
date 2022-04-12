@@ -1,5 +1,3 @@
-@import 'theme';
-
 .leaflet-container {
 	width: 100%;
 	height: 100vh;
@@ -9,7 +7,6 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: $palette_themeLighterAlt;
 }
 
 code {

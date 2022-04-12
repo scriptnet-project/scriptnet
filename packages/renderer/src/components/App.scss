@@ -1,5 +1,3 @@
-@import '../theme.scss';
-
 .layout {
   display: relative;
   width: 100%;
@@ -8,7 +6,6 @@
   left: 0;
 
   &__main {
-    background: $palette_white;
     display: relative;
     width: 100%;
     height: 80vh;

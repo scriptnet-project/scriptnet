@@ -1,12 +1,15 @@
 import React from 'react';
 import {
   CommandBar,
+  getTheme,
+  ThemeProvider,
   Toggle,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from '../../hooks/Cytoscape';
 import './CommandBar.scss';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import { useDispatch, useSelector } from 'react-redux';
+import panelTheme from '../../themes/panel';
 
 const CommandBarToggle = () => {
   const showLabels = useSelector(state => state.visualisation.showLabels);
@@ -151,14 +154,24 @@ const TopCommandBar = ({
     }
   ];
 
+  const theme = getTheme();
+
   return (
-    <div className="CommandBar">
-      <CommandBar
-        items={items}
-        farItems={farItems}
-        ariaLabel="Use left and right arrow keys to navigate between commands"
-      />
-    </div>
+    <ThemeProvider theme={panelTheme}>
+      <div className="CommandBar">
+        <CommandBar
+          items={items}
+          farItems={farItems}
+          ariaLabel="Use left and right arrow keys to navigate between commands"
+          styles={{
+            root: {
+              boxShadow: theme.effects.elevation16,
+              zIndex: 9999,
+            }
+          }}
+        />
+      </div>
+    </ThemeProvider>
   );
 };
 
