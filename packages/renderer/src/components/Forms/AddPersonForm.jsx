@@ -1,21 +1,18 @@
-import React, { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
   DefaultButton,
   PrimaryButton,
   Dialog,
   DialogType,
   DialogFooter,
-  ComboBox,
-  DatePicker,
-  TextField,
-  Dropdown
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
-import { Field, Form, Formik, useField } from 'formik';
-import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
+import { Form, Formik } from 'formik';
+import { baseJurisdictionOptions, baseRoleOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
+import TextField from '../Fields/TextField';
+import Dropdown from '../Fields/Dropdown';
+import Field from '../Fields/Field';
 
 const sexOptions = [
   {key: 'Male', text: 'Male' },
@@ -29,39 +26,8 @@ const defaultValues = {
   jurisdiction: 'local',
   role: '',
   sex: 'Male',
+  involvements: [],
   notes: '',
-  firstInvolvement: '',
-  lastInvolvement: '',
-}
-
-const CustomFormikDatePicker = ({ name, label }) => {
-  const [field, meta, helpers] = useField(name);
-  console.log({field, meta, helpers});
-  const { value } = meta;
-  const { setValue } = helpers;
-
-  const normalizedValue = useMemo(() => {
-    if (value && typeof value === 'string') {
-      return new Date(value);
-    }
-    return value;
-  }, [value]);
-
-  return (
-    <>
-      <DatePicker
-        label={label}
-        value={normalizedValue}
-        onSelectDate={(date) => {
-          console.log('yooo', date);
-          setValue(date.toISOString());
-        }}
-        placeholder="Select a date..."
-        ariaLabel="Select a date"
-      />
-      {meta.error && meta.touched && <div>{meta.error}</div>}
-    </>
-  )
 }
 
 export const AddPersonForm = ({
@@ -154,9 +120,9 @@ export const AddPersonForm = ({
               <Field
                 name="notes"
                 label="Notes"
-                component={TextField}
                 multiline
                 rows={10}
+                component={TextField}
               />
             </Form>
             )
@@ -196,34 +162,3 @@ const AddPersonDialog = ({
 }
 
 export default AddPersonDialog;
-
-
-// Attempt at wrapping <ComboBox>.
-// Works except for creating new items
-const FormikComboBox = ({
-  field, // { name, value, onChange, onBlur }
-  form: { touched, errors, handleChange, setFieldValue }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-  ...props
-})  => {
-  return (
-    <ComboBox
-      {...field}
-      {...props}
-      onChange={(event, option, index, value) => {
-        console.log('change', option, index, value);
-        if (option && option.key) {
-          setFieldValue(field.name, option.key);
-          return;
-        }
-        locationOptions.push({
-          key: value,
-          text: value,
-        });
-
-        setFieldValue(field.name, value);
-      }}
-    />
-  );
-};
-
-

@@ -1,16 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useField, Form, FormikProps, Formik } from 'formik';
 import {
-  DialogType,
-  ActionButton,
-  BaseButton,
-  DefaultButton,
   DetailsList,
-  Dialog,
-  DialogFooter,
   getTheme,
-  Label,
-  Modal,
   PrimaryButton,
   TextField,
   DatePicker,
@@ -45,7 +37,7 @@ const onFormatDate = (date?: Date): string => {
 const ActivePeriodSelector = (props) => {
   const theme = getTheme();
   const [items, setItems] = useState([]);
-  const [field, meta, helpers] = useField(props.name);
+  const [field, meta, helpers] = useField(props.field.name);
   const [selectedItem, setSelectedItem] = useState(undefined);
 
   const selection = new Selection({
@@ -56,7 +48,6 @@ const ActivePeriodSelector = (props) => {
 
   useEffect(() => {
       // Do something with the selected item
-      console.log('Selected: ', selectedItem)
   }, [selectedItem])
 
   const { value } = meta;
@@ -90,8 +81,6 @@ const ActivePeriodSelector = (props) => {
     ]);
   }
 
-  console.log({ meta, helpers, field });
-
   const detailsStyles: IDetailsListStyles = {
     root: {
       '.ms-DetailsRow-cell, .ms-DetailsHeader-cell': {
@@ -119,7 +108,6 @@ const ActivePeriodSelector = (props) => {
 
   return (
     <Stack>
-        <Label>{props.label}</Label>
         <div
           style={{
             border: `1px solid ${theme.semanticColors.inputBorder}`,

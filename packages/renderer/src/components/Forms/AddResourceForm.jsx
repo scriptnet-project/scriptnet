@@ -8,12 +8,11 @@ import {
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Field, Form, Formik } from 'formik';
-import { baseJurisdictionOptions, baseLocationOptions } from './sharedOptions';
+import { baseJurisdictionOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 
 const locationOptions = [
   {key: 'N/A', text: 'N/A'},
-  ...baseLocationOptions,
 ];
 
 const functionOptions = [

@@ -109,7 +109,7 @@ const MapModal = ({ onClose }) => {
 
 const LocationSelector = ({ label, ...props }) => {
   const [showPicker, setShowPicker] = useState(false);
-  const [field, meta, helpers] = useField(props);
+  const [field, meta, helpers] = useField(props.field.name);
 
   return (
     <div>

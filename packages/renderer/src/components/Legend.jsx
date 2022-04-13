@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { getTheme, Text } from '@fluentui/react';
 import { modes } from 'Store/mode';
 import 'Components/Legend.scss';
-import { baseLocationOptions } from './Forms/sharedOptions';
 
 
 const theme = getTheme();
@@ -39,29 +38,6 @@ const jurisdictions = [
   { glyph: 'group', type: 'jurisdiction', label: 'national', color: '#0078d733' },
   { glyph: 'group', type: 'jurisdiction', label: 'Transnational', color: '#6b69d633' },
 ];
-
-const getGeographyLegend = (showCountries) => {
-  if (!showCountries) return;
-
-  const colors = [
-    '#1f77b4',
-    '#ff7f0e',
-    '#2ca02c',
-    '#d62728',
-    '#9467bd',
-    '#8c564b',
-    '#e377c2',
-    '#7f7f7f',
-    '#bcbd22',
-    '#17becf',
-  ];
-
-  return showCountries.map((country) => {
-    const colorIndex = findIndex(baseLocationOptions, ['text', country]);
-    return { glyph: 'group', type: 'country', label: country, color: colors[colorIndex % 10]}
-  })
-
-}
 
 const getElements = (mode, options) => {
   if (mode === modes.CONFIGURE) {

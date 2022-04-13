@@ -9,7 +9,7 @@ import {
   labelledNodes,
   defaultEntityColours,
 } from '../../components/Cytoscape/stylesheets';
-import { baseJurisdictionOptions, baseLocationOptions } from '../../components/Forms/sharedOptions';
+import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
 import { findIndex } from 'lodash';
 
 let layout;
@@ -239,52 +239,6 @@ const useCyModes = (cy, id) => {
     });
   }
 
-  const applyGeographyPreset = () => {
-    console.log('enabling geography preset');
-    if (!cy.current) { return; }
-
-    enableAttributeBoundingBoxes();
-
-    // Apply styles:
-    applyStylesheet([
-      ...baseStylesheet,
-      ...(showLabels ? labelledNodes : []),
-    ]);
-
-    const colors = [
-      '#1f77b4',
-      '#ff7f0e',
-      '#2ca02c',
-      '#d62728',
-      '#9467bd',
-      '#8c564b',
-      '#e377c2',
-      '#7f7f7f',
-      '#bcbd22',
-      '#17becf',
-    ];
-
-    const countriesInUse = new Set();
-    cy.current.nodes().forEach(node => {
-      countriesInUse.add(node.data('location'));
-    });
-
-    [...countriesInUse].sort().forEach((country, index) => {
-      if (!state.options.showCountry || !state.options.showCountry.includes(country)) {
-        return;
-      }
-
-      const selector = `node[location="${country}"]`;
-      const colorIndex = findIndex(baseLocationOptions, ['text', country]);
-      bb.current.addPath(cy.current.nodes(selector), null, cy.current.nodes().difference(cy.current.nodes(selector)), {
-        virtualEdges: true,
-        style: {
-          opacity: 0.5,
-          fill: colors[colorIndex % 10],
-        }});
-    });
-  }
-
   const applyStylesheet = (stylesheet) => {
     if (!cy.current) { return; }
     cy.current.style(stylesheet);
@@ -449,7 +403,7 @@ const useCyModes = (cy, id) => {
         applyJurisdictionPreset();
         break;
       case 'geography':
-        applyGeographyPreset();
+        console.log('applyGeographyPreset()');
         break;
       default:
         break;

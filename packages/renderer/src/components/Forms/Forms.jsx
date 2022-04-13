@@ -1,15 +1,11 @@
-import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { noop } from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import AddPersonForm from './AddPersonForm';
-import AddLocationForm from './AddLocationForm';
 import AddOrganisationForm from './AddOrganisationForm';
 import AddResourceForm from './AddResourceForm';
 
 export const formsByType = {
   person: AddPersonForm,
-  location: AddLocationForm,
   resource: AddResourceForm,
   organisation: AddOrganisationForm,
 };
