@@ -1,3 +1,6 @@
+- complete location picker as inline component in details panel. use build in search box - don't try to recreate
+
+
 - Period of involvement custom input component
 - Geographical location custom input component
 - Geographic visualisation
