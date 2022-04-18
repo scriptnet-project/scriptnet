@@ -94,7 +94,7 @@ const LocationSelector = ({ label, ...props }) => {
         prefix={<FontIcon iconName="MapPin" />}
         // iconProps={{ iconName: "mapPin" }}
         autoAdjustHeight
-        multiline={!!get(field, ['value', 'label'], null)}
+        multiline={!!get(field, ['value', 'label'], null) && field.value.label.length > 50}
         borderless
         placeholder='Set a location'
         onFocus={() => {
