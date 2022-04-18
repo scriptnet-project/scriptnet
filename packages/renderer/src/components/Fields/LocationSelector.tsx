@@ -1,95 +1,136 @@
-import { useEffect, useRef, useState } from 'react';
-import { DefaultButton, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton } from "@fluentui/react";
-import { SearchControl, OpenStreetMapProvider,  } from 'react-leaflet-geosearch';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { get } from 'lodash';
+import { Text, DefaultButton, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
+import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
+import { GeoSearchControl } from 'leaflet-geosearch';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
 import { useField } from 'formik';
+import { searchReverseLocation } from '@/utils/searchReverseLocation';
 
+const SearchControl = ({ onSelectResult }) => {
+  const map = useMap();
 
-function LocationMarker() {
-  const [position, setPosition] = useState([53.3498, -6.2603])
-  const map = useMapEvents({
-    click(e) {
-      console.log('click', e);
-      setPosition(e.latlng)
-      map.flyTo(e.latlng, map.getZoom())
-      // map.locate()
-    },
-    locationfound(e) {
-      console.log('locationfound', e);
-      setPosition(e.latlng)
-      map.flyTo(e.latlng, map.getZoom())
-    },
-  })
-
-  return position === null ? null : (
-    <Marker
-      position={position}
-      draggable={true}
-    >
-      <Popup>You are here</Popup>
-    </Marker>
-  )
-}
-
-const MapModal = ({ onClose, initialValue, setValue }) => {
-  const theme = getTheme();
-
-  const markerRef = useRef(null);
-  const [markerPosition, setMarkerPosition] = useState([53.3498, -6.2603]);
   const provider = OpenStreetMapProvider();
-  const GeoSearchControlElement = SearchControl;
-  const [location, setLocation] = useState(initialValue || null);
 
   useEffect(() => {
+    const searchControl = new GeoSearchControl({
+      provider: provider,
+      // style: 'bar',
+      showMarker: false,
+      autoClose: true,
+      keepResult: true,
+      // updateMap: false,
+      notFoundMessage: 'Sorry, that address could not be found.',
+    });
 
-  }, [location])
+    map.addControl(searchControl);
 
-  const handleSearch = async (value: string) => {
-    const results = await provider.search({ query: value });
-    console.log(results);
-  }
+    map.on('geosearch/showlocation', onSelectResult);
 
-  const moveMarker = (e) => {
-    console.log(e);
-  }
+    return () => map.removeControl(searchControl)
+  }, []);
 
-  return (
-    <Modal
-      isOpen
-      onDismissed={onClose}
-      styles={{ main: { width: '500px', height: '500px' } }}
-    >
-      <Stack>
-        <SearchBox onSearch={handleSearch} />
-      </Stack>
-    </Modal>
-  )
-}
+  return null;
+};
 
 const LocationSelector = ({ label, ...props }) => {
-  const [showPicker, setShowPicker] = useState(false);
   const [field, meta, helpers] = useField(props.field.name);
+
+  const [markerPosition, setMarkerPosition] = useState([0, 0]);
+  const markerRef = useRef(null);
+
+  console.log({ field, meta, helpers });
 
   const style = {
     map: {
-      height: '400px',
-      width: '100%'
+      height: '250px',
+      width: '100%',
     }
   }
 
+  const handleSelectResult = ({ location }) => {
+    console.log(location)
+    const {
+      x: lon,
+      y: lat,
+    } = location;
+
+    console.log('handleSelectResult', location);
+    setMarkerPosition([lat, lon]);
+    helpers.setValue(location);
+  };
+
+    const eventHandlers = useMemo(
+    () => ({
+      async dragend() {
+        const marker = markerRef.current
+        if (marker != null) {
+          console.log('dragend', marker.getLatLng())
+          const markerPosition = marker.getLatLng();
+          const result = await searchReverseLocation({
+            latitude: markerPosition.lat,
+            longitude: markerPosition.lng,
+          });
+
+          helpers.setValue(result);
+
+        }
+      },
+    }),
+    [],
+  )
+
+  const theme = getTheme();
+
   return (
     <Stack
-      horizontal
+      style={{
+        border: `1px solid ${theme.semanticColors.inputBorder}`,
+      }}
     >
+      <TextField
+        value={get(field, ['value', 'label'], null)}
+        readOnly
+        prefix={<FontIcon iconName="MapPin" />}
+        // iconProps={{ iconName: "mapPin" }}
+        autoAdjustHeight
+        multiline={!!get(field, ['value', 'label'], null)}
+        borderless
+        placeholder='Set a location'
+        onFocus={() => {
+          console.log('focus')
+        }}
+      />
+      {/* <Link>Change</Link> */}
       <MapContainer
         center={[53.3498, -6.2603]}
         zoom={13}
         style={style.map}
+        whenCreated={(map) => {
+          map.on('click', async (e) => {
+            console.log('click', e);
+            setMarkerPosition(e.latlng);
+            map.flyTo(e.latlng, map.getZoom())
+            const result = await searchReverseLocation({ latitude: e.latlng.lat, longitude: e.latlng.lng, zoom: map.getZoom() });
+            console.log(result);
+            helpers.setValue(result);
+          });
+
+          map.on('geosearch/showlocation', (e) => {
+            console.log('showlocation', e);
+          });
+        }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LocationMarker />
+        <Marker
+          ref={markerRef}
+          position={markerPosition}
+          draggable
+          eventHandlers={eventHandlers}
+        />
+        <SearchControl onSelectResult={handleSelectResult} />
       </MapContainer>
     </Stack>
   )

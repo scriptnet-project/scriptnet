@@ -22,7 +22,7 @@ const sexOptions = [
 
 const defaultValues = {
   name: '',
-  location: 'Ireland',
+  location: null,
   jurisdiction: 'local',
   role: '',
   sex: 'Male',
@@ -95,7 +95,7 @@ export const AddPersonForm = ({
               />
               <Field
                 name="location"
-                label="Geographical location"
+                label="Location"
                 placeholder="Select a location"
                 component={LocationSelector}
               />

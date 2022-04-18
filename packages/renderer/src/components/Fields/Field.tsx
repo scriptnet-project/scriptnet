@@ -17,7 +17,7 @@ const Field = ({label, ...props}: FieldProps) => {
   const theme = getTheme()
   const labelStyles: Partial<ILabelStyles> = {
     root: {
-      marginTop: theme.spacing.m,
+      marginTop: theme.spacing.s1,
     },
   };
 

@@ -51,6 +51,14 @@ const ViewDetailsPanel = ({
         isBlocking={false}
         onDismiss={handleDismiss}
         headerText="Details"
+        styles={{
+          root: {
+            ".ms-Panel-commands": {
+              backgroundColor: theme.semanticColors.bodyBackground,
+              zIndex: 999999,
+            },
+          }
+        }}
       >
         <AddPersonForm
           initialValues={details}
