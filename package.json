@@ -61,7 +61,8 @@
     "typescript": "^4.5.5",
     "uuid": "^8.3.2",
     "vite": "^2.8.0",
-    "vite-plugin-resolve": "^1.5.2"
+    "vite-plugin-resolve": "^1.5.2",
+    "yup": "^0.32.11"
   },
   "env": {
     "//": "Used in build scripts",

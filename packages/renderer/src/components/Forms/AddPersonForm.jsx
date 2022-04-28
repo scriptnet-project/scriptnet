@@ -5,6 +5,7 @@ import {
   DialogType,
   DialogFooter,
 } from '@fluentui/react';
+import * as Yup from 'yup';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Form, Formik } from 'formik';
 import { baseJurisdictionOptions, baseRoleOptions } from './sharedOptions';
@@ -13,19 +14,25 @@ import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
 import TextField from '../Fields/TextField';
 import Dropdown from '../Fields/Dropdown';
 import Field from '../Fields/Field';
+import FieldArray from '../Fields/FieldArray';
+import AutoSave from './AutoSave';
 
-const sexOptions = [
+const genderOptions = [
   {key: 'Male', text: 'Male' },
   {key: 'Female', text: 'Female' },
+  {key: 'Transgender Female', text: 'Transgender Female'},
+  {key: 'Transgender Male', text: 'Transgender Male'},
+  {key: 'Gender Nonconforming', text: 'Gender Nonconforming'},
   {key: 'Unknown', text: 'Unknown' },
+  {key: 'Other', text: 'Other' },
 ];
 
 const defaultValues = {
   name: '',
   location: null,
   jurisdiction: 'local',
-  role: '',
-  sex: 'Male',
+  role: 'null',
+  gender: 'Male',
   involvements: [],
   notes: '',
 }
@@ -55,6 +62,22 @@ export const AddPersonForm = ({
     return true;
   }
 
+  const SignupSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    role: Yup.string()
+      .required('Required role'),
+    involvements: Yup.array()
+      .of(Yup.object().shape({
+        start: Yup.string().required('Start date is required'),
+        end: Yup.string().required('End date is required'),
+      }))
+      .min('1', 'At least one involvement is required')
+      .required('Required'),
+  });
+
   const validate = (values) => {
     const errors = {};
 
@@ -73,18 +96,20 @@ export const AddPersonForm = ({
     <Formik
         initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
-        validate={validate}
-        validateOnBlur={false}
+        validationSchema={SignupSchema}
+        validateOnBlur={true}
         innerRef={formRef}
       >
-        {({ isSubmitting, handleSubmit }) => {
+        {() => {
           return (
             <Form>
+              <AutoSave debounceMs={500} />
               <Field
                 name="name"
                 label="Name"
                 placeholder="Enter the person's name"
                 component={TextField}
+                required
               />
               <Field
                 name="role"
@@ -92,6 +117,7 @@ export const AddPersonForm = ({
                 placeholder="Select a role"
                 component={Dropdown}
                 options={baseRoleOptions}
+                required
               />
               <Field
                 name="location"
@@ -107,15 +133,16 @@ export const AddPersonForm = ({
                 options={baseJurisdictionOptions}
               />
               <Field
-                name="sex"
-                label="Sex"
+                name="gender"
+                label="Gender"
                 component={Dropdown}
-                options={sexOptions}
+                options={genderOptions}
               />
-              <Field
+              <FieldArray
                 name="involvements"
                 label="Period(s) of involvement"
                 component={ActivePeriodSelector}
+                required
               />
               <Field
                 name="notes"

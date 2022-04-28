@@ -4,7 +4,6 @@ import { Dropdown as FluentDropdown } from "@fluentui/react";
 
 const Dropdown = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props.field.name);
-  console.log({ props, field, meta, helpers})
   return (
     <FluentDropdown
       {...meta}
@@ -14,6 +13,7 @@ const Dropdown = ({ label, ...props }) => {
       onChange={(_, d) => helpers.setValue(d)}
       options={props.options}
       label={label}
+      errorMessage={meta.touched && meta.error}
     />
   );
 };

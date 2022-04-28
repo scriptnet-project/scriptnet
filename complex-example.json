@@ -10,7 +10,7 @@
           "preparation": "true",
           "jurisdiction": "local",
           "role": "Suspected Primary Offender",
-          "sex": "Male",
+          "gender": "Male",
           "notes": "notes about this person"
         },
         "position": {
@@ -76,7 +76,7 @@
           "post-activity": "true",
           "jurisdiction": "local",
           "role": "Suspected Facilitator",
-          "sex": "Male",
+          "gender": "Male",
           "notes": "things!",
           "firstInvolvement": "2022-02-08T22:00:00.000Z",
           "lastInvolvement": "2022-02-15T22:00:00.000Z"

@@ -1,8 +1,6 @@
 - complete location picker as inline component in details panel. use build in search box - don't try to recreate
 
 
-- Period of involvement custom input component
-- Geographical location custom input component
 - Geographic visualisation
 - Temporal visualisation of actors added to existing visualisations
 
@@ -13,3 +11,4 @@
 - Add scene assignment to details panel
 - Fix all existing entity forms
 - Fix visualisation side panels
+- zindex issue for map search results

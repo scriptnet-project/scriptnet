@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useField, Form, FormikProps, Formik } from 'formik';
+import { useField } from 'formik';
 import {
   DetailsList,
   getTheme,
@@ -16,28 +16,53 @@ import {
   Text,
 } from '@fluentui/react';
 
-function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
-const onFormatDate = (date?: Date): string => {
-  return !date ? '' : date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear() % 100);
+const detailsStyles: IDetailsListStyles = {
+  root: {
+    '.ms-DetailsRow-cell, .ms-DetailsHeader-cell': {
+      width: '50% !important',
+    },
+    '.ms-DetailsRow-fields, .ms-DetailsRow': {
+      width: '100%',
+    },
+  },
+  headerWrapper: {
+    '.ms-DetailsHeader': {
+      padding: 0,
+    },
+  },
+  focusZone: undefined,
+  contentWrapper: undefined
 };
 
+const columns: IColumn[] = [
+  {
+    key: 'startDate',
+    name: 'Start Date',
+    fieldName: 'start',
+    minWidth: 0,
+    maxWidth: 0,
+  },
+  {
+    key: 'endDate',
+    name: 'End Date',
+    fieldName: 'end',
+    minWidth: 0,
+    maxWidth: 0,
+  },
+];
+
 const ActivePeriodSelector = (props) => {
+  const {
+    name,
+    push,
+    remove,
+    replace,
+  } = props;
+  console.log(props);
+
   const theme = getTheme();
-  const [items, setItems] = useState([]);
-  const [field, meta, helpers] = useField(props.field.name);
+  const [field, meta, helpers] = useField(name);
+  console.log({field, meta, helpers});
   const [selectedItem, setSelectedItem] = useState(undefined);
 
   const selection = new Selection({
@@ -50,59 +75,58 @@ const ActivePeriodSelector = (props) => {
       // Do something with the selected item
   }, [selectedItem])
 
-  const { value } = meta;
-  const { setValue } = helpers;
-
-  const columns: IColumn[] = [
-    {
-      key: 'startDate',
-      name: 'Start Date',
-      fieldName: 'start',
-      minWidth: 0,
-      maxWidth: 0,
-    },
-    {
-      key: 'endDate',
-      name: 'End Date',
-      fieldName: 'end',
-      minWidth: 0,
-      maxWidth: 0,
-    },
-  ];
+  const { touched, error } = meta;
 
   const handleAddNew = () => {
-    setItems([
-      ...items,
-      {
-        key: items.length + 1,
-        start: null,
-        end: null,
-      },
-    ]);
+    push({
+      key: field.value.length + 1,
+      start: undefined,
+      end: undefined,
+    });
   }
 
-  const detailsStyles: IDetailsListStyles = {
-    root: {
-      '.ms-DetailsRow-cell, .ms-DetailsHeader-cell': {
-        width: '50% !important',
-      },
-      '.ms-DetailsRow-fields, .ms-DetailsRow': {
-        width: '100%',
-      },
-    },
-    headerWrapper: {
-      '.ms-DetailsHeader': {
-        padding: 0,
-      },
-    },
-    focusZone: undefined,
-    contentWrapper: undefined
-  };
-
   const handleDeleteSelectedItem = () => {
-    const newItems = items.filter(item => item.key !== selectedItem.key);
-    setItems(newItems);
+    // Find index of selected item by key
+    const index = field.value.findIndex(item => item.key === selectedItem.key);
+    remove(index);
     setSelectedItem(undefined);
+  }
+
+  const renderSingleError = error => <Text variant="small" styles={{ root: { color: theme.palette.red } }}>{error}</Text>
+
+  const renderError = (error) => {
+    if (typeof error === 'string') {
+      return renderSingleError(error);
+    }
+
+    return (
+      <>
+        <p>
+          {renderSingleError('Multiple errors found.')}
+        </p>
+        {error.map((err, i) => {
+
+          // When an error is resolved, the array item is set to 'undefined'
+          if (!err) {
+            return null;
+          }
+
+          const keys = Object.keys(err);
+          return (
+            <Stack key={i}>
+              {renderSingleError(`Period ${i + 1}`)}
+              <ul>
+                {keys.map((key, index) => (
+                  <li key={`${i}_${key}_${index}`}>
+                    {renderSingleError(err[key])}
+                  </li>
+                ))}
+              </ul>
+            </Stack>
+          )
+        })}
+      </>
+    )
   }
 
 
@@ -115,7 +139,7 @@ const ActivePeriodSelector = (props) => {
         >
         <DetailsList
           theme={theme}
-          items={items}
+          items={field.value}
           columns={columns}
           selection={selection}
           selectionMode={SelectionMode.single}
@@ -125,14 +149,37 @@ const ActivePeriodSelector = (props) => {
           onRenderItemColumn={(item, index, { fieldName }: IColumn) => {
             const data = item[fieldName];
             return (
-              <DatePicker value={data} />
+              <DatePicker
+                value={data}
+                onSelectDate={(date) => {
+                  replace(index, {
+                    ...item,
+                    [fieldName]: date,
+                  })
+                }}
+              />
             )
           }}
           styles={detailsStyles}
         />
-        { !items.length && (
+        { !field.value.length && (
           <Stack horizontalAlign='center' style={{ paddingBottom: theme.spacing.m }}>
             <Text>No periods of involvement defined.</Text>
+          </Stack>
+        )}
+        { touched && error && (
+          <Stack>
+            <Text
+              styles={{
+                root: {
+                  color: theme.semanticColors.errorText,
+                  fontSize: theme.fonts.small.fontSize,
+                  padding: theme.spacing.s1,
+                },
+              }}
+            >
+              {renderError(error)}
+            </Text>
           </Stack>
         )}
         <Stack

@@ -13,6 +13,7 @@ type FieldProps = {
   };
 };
 
+// Wrapper component that adds a label to a formik field so we can style it
 const Field = ({label, ...props}: FieldProps) => {
   const theme = getTheme()
   const labelStyles: Partial<ILabelStyles> = {

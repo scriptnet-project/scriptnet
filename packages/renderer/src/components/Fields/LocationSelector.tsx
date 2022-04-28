@@ -7,24 +7,30 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 're
 import { useField } from 'formik';
 import { searchReverseLocation } from '@/utils/searchReverseLocation';
 
-const SearchControl = ({ onSelectResult }) => {
-  const map = useMap();
+type SearchControlProps = {
+  onSelectResult: (location: any) => void;
+}
 
+
+
+const SearchControl = ({ onSelectResult }: SearchControlProps) => {
+  const map = useMap();
   const provider = OpenStreetMapProvider();
 
+  const searchControlOptions = {
+    provider: provider,
+    // style: 'bar',
+    showMarker: false,
+    autoClose: true,
+    keepResult: true,
+    // updateMap: false,
+    notFoundMessage: 'Sorry, that address could not be found.',
+  };
+
   useEffect(() => {
-    const searchControl = new GeoSearchControl({
-      provider: provider,
-      // style: 'bar',
-      showMarker: false,
-      autoClose: true,
-      keepResult: true,
-      // updateMap: false,
-      notFoundMessage: 'Sorry, that address could not be found.',
-    });
+    const searchControl = GeoSearchControl(searchControlOptions);
 
     map.addControl(searchControl);
-
     map.on('geosearch/showlocation', onSelectResult);
 
     return () => map.removeControl(searchControl)
@@ -35,11 +41,8 @@ const SearchControl = ({ onSelectResult }) => {
 
 const LocationSelector = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props.field.name);
-
   const [markerPosition, setMarkerPosition] = useState([0, 0]);
   const markerRef = useRef(null);
-
-  console.log({ field, meta, helpers });
 
   const style = {
     map: {
@@ -48,14 +51,18 @@ const LocationSelector = ({ label, ...props }) => {
     }
   }
 
-  const handleSelectResult = ({ location }) => {
-    console.log(location)
+  type ResultProps = {
+    location: {
+      x: number;
+      y: number;
+    };
+  }
+
+  const handleSelectResult = ({ location }: ResultProps ): void => {
     const {
       x: lon,
       y: lat,
     } = location;
-
-    console.log('handleSelectResult', location);
     setMarkerPosition([lat, lon]);
     helpers.setValue(location);
   };
@@ -65,7 +72,6 @@ const LocationSelector = ({ label, ...props }) => {
       async dragend() {
         const marker = markerRef.current
         if (marker != null) {
-          console.log('dragend', marker.getLatLng())
           const markerPosition = marker.getLatLng();
           const result = await searchReverseLocation({
             latitude: markerPosition.lat,
@@ -108,17 +114,14 @@ const LocationSelector = ({ label, ...props }) => {
         style={style.map}
         whenCreated={(map) => {
           map.on('click', async (e) => {
-            console.log('click', e);
             setMarkerPosition(e.latlng);
             map.flyTo(e.latlng, map.getZoom())
             const result = await searchReverseLocation({ latitude: e.latlng.lat, longitude: e.latlng.lng, zoom: map.getZoom() });
-            console.log(result);
             helpers.setValue(result);
           });
-
-          map.on('geosearch/showlocation', (e) => {
-            console.log('showlocation', e);
-          });
+          // map.on('geosearch/showlocation', (e) => {
+          //   console.log('showlocation', e);
+          // });
         }}
       >
         <TileLayer
