@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Checkbox, ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from '../../../hooks/Cytoscape';
 import { actionCreators as modeActions } from '../../../store/mode';
-import { Panel } from './';
+import SidePanel from './SidePanel';
 
 const ScenePresetPanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
@@ -25,17 +25,17 @@ const ScenePresetPanel = ({ isOpen, onDismiss }) => {
     // Otherwise we are selecting, so remove from hideScenes
     dispatch(modeActions.setOption('hideScenes', [
       ...hideScenes.filter(scene => scene !== event.target.name),
-    ]));  
+    ]));
   }, [id, hideScenes]);
 
   const isChecked = name => !(hideScenes && hideScenes.includes(name));
 
   return (
-    <Panel
+    <SidePanel
       name="assign-attributes-panel"
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Scene Visualisation Mode"
+      handleDismiss={onDismiss}
+      title="Scene Visualisation Mode"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>You are now in scene visualisation mode. When in this mode, a container is drawn around the nodes you have named, based on the "scenes" that each node was involved in.</Text>
@@ -45,7 +45,7 @@ const ScenePresetPanel = ({ isOpen, onDismiss }) => {
         <Checkbox name="activity" label="Activity" checked={isChecked('activity')} onChange={onChange} />
         <Checkbox name="post-activity" label="Post-Activity" checked={isChecked('post-activity')} onChange={onChange} />
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

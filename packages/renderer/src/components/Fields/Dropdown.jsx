@@ -10,7 +10,7 @@ const Dropdown = ({ label, ...props }) => {
       {...field}
       {...props}
       defaultSelectedKey={field.value}
-      onChange={(_, d) => helpers.setValue(d)}
+      onChange={(_, d) => helpers.setValue(d.text)}
       options={props.options}
       label={label}
       errorMessage={meta.touched && meta.error}

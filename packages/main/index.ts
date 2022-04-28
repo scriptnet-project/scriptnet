@@ -1,7 +1,77 @@
-import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu } from 'electron'
 import { release } from 'os'
 import fse from 'fs-extra';
 import { join, parse } from 'path'
+
+const isMac = process.platform === 'darwin'
+
+const menuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'New Case...',
+        click: () => {
+          console.log('new');
+          // win.webContents.send('new-case')
+        },
+        accelerator: 'CmdOrCtrl+N'
+      },
+      {
+        label: 'Open Case',
+        accelerator: 'CmdOrCtrl+O',
+        click: () => {
+          console.log('open case');
+          // win.webContents.send('open-file')
+        },
+      },
+      {
+        label: 'Save Case',
+        accelerator: 'CmdOrCtrl+S',
+        click: () => {
+          console.log('save case');
+          // win.webContents.send('save-file')
+        },
+        disabled: true,
+      },
+      {
+        label: 'Save Case As...',
+        click: () => {
+          console.log('save case as');
+          // win.webContents.send('save-file')
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Export',
+        submenu: [
+          {
+            label: 'Export Screenshot...',
+            click: () => {
+              console.log('export screenshot');
+              // win.webContents.send('export-screenshot')
+            },
+          },
+          {
+            label: 'Export CSV...',
+            click: () => {
+              console.log('export csv');
+              // win.webContents.send('export-csv')
+            },
+          },
+        ]
+      },
+      { type: 'separator' },
+      { role: 'quit' }
+    ],
+  },
+];
+
+const menu = Menu.buildFromTemplate(menuTemplate);
+
+Menu.setApplicationMenu(menu);
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -51,7 +121,7 @@ function registerListeners() {
     const path = await dialog.showSaveDialog(win!, options)
       .then(({ canceled, filePath }) => {
         if (canceled) { return; }
-  
+
         if (filePath) {
           return filePath;
         }

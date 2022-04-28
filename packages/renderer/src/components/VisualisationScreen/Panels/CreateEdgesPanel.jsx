@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChoiceGroup, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { actionCreators as modeActions } from 'Store/mode';
-import { Panel } from './';
+import SidePanel from './SidePanel';
 
 const AddEdgePanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
@@ -16,10 +16,10 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
   }, [id]);
 
   return (
-    <Panel
+    <SidePanel
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Add Relationship"
+      handleDismiss={onDismiss}
+      title="Add Relationship"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>Select a relationship type below, and create links between nodes by dragging a line between them.</Text>
@@ -38,7 +38,7 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
           ]}
         />
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

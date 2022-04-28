@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/react';
+import { ChoiceGroup, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { actionCreators as modeActions } from 'Store/mode';
-import { Panel } from './';
+import SidePanel from './SidePanel';
 
 const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
@@ -16,11 +16,10 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
   }, [id]);
 
   return (
-    <Panel
-      name="assign-attributes-panel"
+    <SidePanel
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Assign Scenes"
+      handleDismiss={onDismiss}
+      title="Assign Scenes"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>Select a scene from the list below, and then tap actors to add them to it.</Text>
@@ -36,7 +35,7 @@ const AssignAttributesPanel = ({ isOpen, onDismiss }) => {
             ]}
           />
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

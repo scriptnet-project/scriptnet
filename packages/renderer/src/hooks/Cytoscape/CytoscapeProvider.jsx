@@ -15,7 +15,12 @@ Cytoscape.use(cola);
 Cytoscape.use(edgeHandles);
 Cytoscape.use(BubbleSets);
 
-const cyOptions = { maxZoom: 1.5, headless: true, wheelSensitivity: 0.25, boxSelectionEnabled: false }
+const cyOptions = {
+  maxZoom: 1.5,
+  headless: true,
+  // wheelSensitivity: 0.25,
+  boxSelectionEnabled: false,
+};
 
 const CyProvider = ({ children }) => {
   const cyRef = useRef(new Cytoscape(cyOptions));

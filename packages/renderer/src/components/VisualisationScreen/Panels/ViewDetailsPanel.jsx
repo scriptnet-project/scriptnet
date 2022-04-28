@@ -5,7 +5,7 @@ import { actionCreators as visualisationActions } from 'Store/visualisation';
 import { getSelectedId } from 'Store/selectors/visualisation';
 import { useCytoscape } from 'Hooks/Cytoscape';
 import { AddPersonForm } from '../../Forms/AddPersonForm';
-import panelTheme from '../../../themes/panel';
+import SidePanel from './SidePanel';
 
 const theme = getTheme();
 
@@ -41,32 +41,17 @@ const ViewDetailsPanel = ({
   }
 
   return (
-    <ThemeProvider>
-      <Panel
-        name="view-details-panel"
+      <SidePanel
         isOpen={isOpen}
-        isLightDismiss
-        type={PanelType.customNear}
-        customWidth={400}
-        isBlocking={false}
-        onDismiss={handleDismiss}
-        headerText="Details"
-        styles={{
-          root: {
-            ".ms-Panel-commands": {
-              backgroundColor: theme.semanticColors.bodyBackground,
-              zIndex: 999999,
-            },
-          }
-        }}
+        handleDismiss={handleDismiss}
+        title="Details"
       >
         <AddPersonForm
           initialValues={details}
           isUpdate
           formRef={form}
         />
-      </Panel>
-    </ThemeProvider>
+      </SidePanel>
   );
 }
 

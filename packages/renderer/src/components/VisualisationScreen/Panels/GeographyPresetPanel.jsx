@@ -4,7 +4,7 @@ import { Checkbox, ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/rea
 import { useCytoscape } from '../../../hooks/Cytoscape';
 import { actionCreators as modeActions } from '../../../store/mode';
 import { Panel } from './';
-import { baseJurisdictionOptions } from '../../Forms/sharedOptions';
+import SidePanel from './SidePanel';
 
 const GeographyPresetPanel = ({ isOpen, onDismiss }) => {
   const { cy, id } = useCytoscape();
@@ -35,11 +35,10 @@ const GeographyPresetPanel = ({ isOpen, onDismiss }) => {
   });
 
   return (
-    <Panel
-      name="assign-attributes-panel"
+    <SidePanel
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Geographic Visualisation Mode"
+      handleDismiss={onDismiss}
+      title="Geographic Visualisation Mode"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>You are now in geographic visualisation mode. When in this mode, a container can be drawn around the nodes you have named, based on the country you said they were located in.</Text>
@@ -48,7 +47,7 @@ const GeographyPresetPanel = ({ isOpen, onDismiss }) => {
           <Checkbox key={`${country}`} name={country} label={country} checked={isChecked(country)} onChange={onChange} />
         ))}
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

@@ -103,7 +103,9 @@ export const AddPersonForm = ({
         {() => {
           return (
             <Form>
-              <AutoSave debounceMs={500} />
+              { isUpdate && (
+                <AutoSave debounceMs={500} />
+              )}
               <Field
                 name="name"
                 label="Name"
