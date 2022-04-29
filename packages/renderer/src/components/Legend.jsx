@@ -51,26 +51,26 @@ const Legend = () => {
   const theme = getTheme();
 
   const relationships = [
-    { glyph: 'line', type: 'relationship', label: 'personal', color: theme.palette.yellow },
-    { glyph: 'line', type: 'relationship', label: 'communication', color: theme.palette.purpleLight },
-    { glyph: 'line', type: 'relationship', label: 'financial', color: theme.palette.greenLight },
-    { glyph: 'line', type: 'relationship', label: 'business', color: theme.palette.tealLight },
-    { glyph: 'line', type: 'relationship', label: 'ownership', color: theme.palette.magentaLight },
-    { glyph: 'line', type: 'relationship', label: 'working', color: theme.palette.red },
+    { glyph: 'line', type: 'relationships', label: 'personal', color: theme.palette.yellow },
+    { glyph: 'line', type: 'relationships', label: 'communication', color: theme.palette.purpleLight },
+    { glyph: 'line', type: 'relationships', label: 'financial', color: theme.palette.greenLight },
+    { glyph: 'line', type: 'relationships', label: 'business', color: theme.palette.tealLight },
+    { glyph: 'line', type: 'relationships', label: 'ownership', color: theme.palette.magentaLight },
+    { glyph: 'line', type: 'relationships', label: 'working', color: theme.palette.red },
   ];
 
   const nodes = [
-    { glyph: 'circle', type: 'node', label: 'person', color: theme.palette.blue },
-    { glyph: 'square', type: 'node', label: 'location', color: theme.palette.purple },
-    { glyph: 'triangle', type: 'node', label: 'resource', color: theme.palette.tealLight },
-    { glyph: 'diamond', type: 'node', label: 'organisation', color: theme.palette.orange },
+    { glyph: 'circle', type: 'node types', label: 'person', color: theme.palette.blue },
+    { glyph: 'square', type: 'node types', label: 'location', color: theme.palette.purple },
+    { glyph: 'triangle', type: 'node types', label: 'resource', color: theme.palette.tealLight },
+    { glyph: 'diamond', type: 'node types', label: 'organisation', color: theme.palette.orange },
   ];
 
   const scenes = [
-    { glyph: 'group', type: 'scene', label: 'preparation', color: '#ffb90033' },
-    { glyph: 'group', type: 'scene', label: 'pre-activity', color: '#e7485633' },
-    { glyph: 'group', type: 'scene', label: 'activity', color: '#0078d733' },
-    { glyph: 'group', type: 'scene', label: 'post-activity', color: '#6b69d633' },
+    { glyph: 'group', type: 'scenes', label: 'preparation', color: '#ffb90033' },
+    { glyph: 'group', type: 'scenes', label: 'pre-activity', color: '#e7485633' },
+    { glyph: 'group', type: 'scenes', label: 'activity', color: '#0078d733' },
+    { glyph: 'group', type: 'scenes', label: 'post-activity', color: '#6b69d633' },
   ];
 
   const jurisdictions = [
@@ -95,7 +95,7 @@ const Legend = () => {
       }
 
       if (options.preset === 'geography') {
-        return getGeographyLegend(options.showCountry);
+        return null;
       }
 
       return [...relationships, ...nodes];
@@ -110,12 +110,14 @@ const Legend = () => {
 
   const elements = groupBy(getElements(mode, options), 'type');
 
+  // const visRect = document.getElementById('Visualisation').getBoundingClientRect();
+
   return (
       <motion.div
         className="Legend"
         id="legend"
         drag
-        dragSnapToOrigin
+        // dragConstraints={visRect}
         layout
         style={{
           boxShadow: theme.effects.elevation16,
@@ -123,6 +125,7 @@ const Legend = () => {
           zIndex: 9999,
           cursor: 'move',
         }}
+        whileHover={{ opacity: 0.4 }}
       >
         <Stack>
           <StackItem>
@@ -134,6 +137,10 @@ const Legend = () => {
               </Text>
             </div>
           ))}
+          </StackItem>
+          {/* Divider */}
+          <StackItem>
+            <hr style={{ border: '1px solid #ccc' }}/>
           </StackItem>
           <AutomaticLayoutToggle />
           <CommandBarToggle />

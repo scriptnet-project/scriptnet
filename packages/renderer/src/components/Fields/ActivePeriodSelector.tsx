@@ -16,6 +16,18 @@ import {
   Text,
 } from '@fluentui/react';
 
+const getFormattedValue = (data) => {
+  if (!data) {
+    return undefined;
+  }
+
+  if (typeof data.toDateString === 'function') {
+    return data;
+  }
+
+  return new Date(data);
+}
+
 const detailsStyles: IDetailsListStyles = {
   root: {
     '.ms-DetailsRow-cell, .ms-DetailsHeader-cell': {
@@ -58,11 +70,9 @@ const ActivePeriodSelector = (props) => {
     remove,
     replace,
   } = props;
-  console.log(props);
 
   const theme = getTheme();
   const [field, meta, helpers] = useField(name);
-  console.log({field, meta, helpers});
   const [selectedItem, setSelectedItem] = useState(undefined);
 
   const selection = new Selection({
@@ -101,9 +111,9 @@ const ActivePeriodSelector = (props) => {
 
     return (
       <>
-        <p>
+        {/* <p>
           {renderSingleError('Multiple errors found.')}
-        </p>
+        </p> */}
         {error.map((err, i) => {
 
           // When an error is resolved, the array item is set to 'undefined'
@@ -148,9 +158,10 @@ const ActivePeriodSelector = (props) => {
           constrainMode={ConstrainMode.horizontalConstrained}
           onRenderItemColumn={(item, index, { fieldName }: IColumn) => {
             const data = item[fieldName];
+
             return (
               <DatePicker
-                value={data}
+                value={getFormattedValue(data)}
                 onSelectDate={(date) => {
                   replace(index, {
                     ...item,

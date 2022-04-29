@@ -22,9 +22,14 @@ contextBridge.exposeInMainWorld('fse', fse)
 contextBridge.exposeInMainWorld('path', path)
 contextBridge.exposeInMainWorld('devMode', devMode)
 
-contextBridge.exposeInMainWorld('saveFile', async (options, data) => {
-    return await ipcRenderer.invoke('save-file', options, data);
+contextBridge.exposeInMainWorld('saveFile', async (options, data, path) => {
+    return await ipcRenderer.invoke('save-file', options, data, path);
 });
+
+contextBridge.exposeInMainWorld('openSampleNetwork', () => {
+  console.log('heyyy')
+  return ipcRenderer.invoke('open-sample-network');
+})
 
 contextBridge.exposeInMainWorld('openFile', async (filePath) => {
     return await ipcRenderer.invoke('open-file', filePath);

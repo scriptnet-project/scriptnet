@@ -1,10 +1,10 @@
 .Visualisation {
   position: absolute;
-  top: 0;
+  top: 44px;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  height: calc(100% - 44px);
 
   .cyContainer {
     height: 100%;

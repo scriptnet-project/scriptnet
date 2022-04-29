@@ -16,7 +16,8 @@ Cytoscape.use(edgeHandles);
 Cytoscape.use(BubbleSets);
 
 const cyOptions = {
-  maxZoom: 1.5,
+  maxZoom: 1.25,
+  minZoom: 0.25,
   headless: true,
   // wheelSensitivity: 0.25,
   boxSelectionEnabled: false,

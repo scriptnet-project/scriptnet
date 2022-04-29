@@ -67,8 +67,9 @@ const useCyModes = (cy, id) => {
       cy.current.animate({
         fit: {
           eles: 'node:selected',
-          padding: 100,
-        }
+          padding: 200,
+        },
+        center: { x: 200, y: 100 },
       }, {
         duration: 200
       });
@@ -83,7 +84,7 @@ const useCyModes = (cy, id) => {
       cy.current.animate({
         fit: {
           eles: 'node:selected',
-          padding: 100,
+          padding: 200,
         }
       }, {
         duration: 200

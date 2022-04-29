@@ -6,7 +6,7 @@ import './Visualisation.scss';
 const Visualisation = ({
   panelOpen
 }) => (
-  <div className={`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`}>
+  <div id="Visualisation" className={`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`}>
     <Legend />
     <Cytoscape />
   </div>

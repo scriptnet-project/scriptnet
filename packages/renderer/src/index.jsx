@@ -9,9 +9,14 @@ import './index.scss';
 import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import App from './components/App';
+import { DEV_MODE } from './components/VisualisationScreen/VisualisationScreen';
 
 const { store, persistor } = getStore();
 initializeIcons();
+
+if (DEV_MODE) {
+  window.openSampleNetwork();
+}
 
 ReactDOM.render((
   <Provider store={store}>

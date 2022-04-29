@@ -11,8 +11,6 @@ type SearchControlProps = {
   onSelectResult: (location: any) => void;
 }
 
-
-
 const SearchControl = ({ onSelectResult }: SearchControlProps) => {
   const map = useMap();
   const provider = OpenStreetMapProvider();
@@ -41,7 +39,7 @@ const SearchControl = ({ onSelectResult }: SearchControlProps) => {
 
 const LocationSelector = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props.field.name);
-  const [markerPosition, setMarkerPosition] = useState([0, 0]);
+  const [markerPosition, setMarkerPosition] = useState([get(field, ['value', 'x'], 0), get(field, ['value', 'y'], 0)]);
   const markerRef = useRef(null);
 
   const style = {
@@ -113,6 +111,16 @@ const LocationSelector = ({ label, ...props }) => {
         zoom={13}
         style={style.map}
         whenCreated={(map) => {
+          // Update center and marker to existing value
+          if (field.value) {
+            const {
+              x: lon,
+              y: lat,
+            } = field.value;
+            setMarkerPosition([lat, lon]);
+            map.setView([lat, lon], 13);
+          }
+
           map.on('click', async (e) => {
             setMarkerPosition(e.latlng);
             map.flyTo(e.latlng, map.getZoom())

@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Checkbox, ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from '../../../hooks/Cytoscape';
 import { actionCreators as modeActions } from '../../../store/mode';
-import { Panel } from './';
 import { baseJurisdictionOptions } from '../../Forms/sharedOptions';
+import SidePanel from './SidePanel';
 
 const JurisdictionPresetPanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
@@ -32,11 +32,10 @@ const JurisdictionPresetPanel = ({ isOpen, onDismiss }) => {
   const isChecked = name => !(hideJurisdiction && hideJurisdiction.includes(name));
 
   return (
-    <Panel
-      name="assign-attributes-panel"
+    <SidePanel
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Jurisdiction Visualisation Mode"
+      handleDismiss={onDismiss}
+      title="Jurisdiction Visualisation Mode"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>You are now in jurisdiction visualisation mode. When in this mode, a container is drawn around the nodes you have named, based on the jurisdiction that you identified.</Text>
@@ -45,7 +44,7 @@ const JurisdictionPresetPanel = ({ isOpen, onDismiss }) => {
           <Checkbox key={jurisdiction.key} name={jurisdiction.key} label={jurisdiction.text} checked={isChecked(jurisdiction.key)} onChange={onChange} />
         ))}
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

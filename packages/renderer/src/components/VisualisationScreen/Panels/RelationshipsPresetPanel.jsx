@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Checkbox, ChoiceGroup, DefaultButton, Stack, Text } from '@fluentui/react';
+import { Checkbox, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from '../../../hooks/Cytoscape';
 import { actionCreators as modeActions } from '../../../store/mode';
-import { Panel } from './';
+import SidePanel from './SidePanel';
 
 const RelationshipsPresetPanel = ({ isOpen, onDismiss }) => {
   const { id } = useCytoscape();
@@ -31,11 +31,10 @@ const RelationshipsPresetPanel = ({ isOpen, onDismiss }) => {
   const isChecked = name => !(hideEdges && hideEdges.includes(name));
 
   return (
-    <Panel
-      name="assign-attributes-panel"
+    <SidePanel
       isOpen={isOpen}
-      onDismiss={onDismiss}
-      headerText="Filter by Relationships"
+      handleDismiss={onDismiss}
+      title="Filter by Relationships"
     >
       <Stack tokens={{ childrenGap: 10 }}>
         <Text>You are now in filter by relationships mode. In this mode you can toggle the display of relationship
@@ -47,7 +46,7 @@ const RelationshipsPresetPanel = ({ isOpen, onDismiss }) => {
         <Checkbox name="ownership" label="Ownership" checked={isChecked('ownership')} onChange={onChange} />
         <Checkbox name="working" label="Working" checked={isChecked('working')} onChange={onChange} />
       </Stack>
-    </Panel>
+    </SidePanel>
   );
 }
 

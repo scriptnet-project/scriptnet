@@ -23,7 +23,6 @@ const TopCommandBar = ({
   const {
     newNetwork,
     saveNetwork,
-    openNetwork,
     exportPNG,
     exportCSV,
   } = useCytoscapeActions();
@@ -46,7 +45,6 @@ const TopCommandBar = ({
       text: 'Save Case',
       iconProps: { iconName: 'Save' },
       onClick: saveNetwork,
-      disabled: true,
     },
     // {
     //   key: 'Cases',

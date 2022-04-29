@@ -5,9 +5,25 @@ import { join, parse } from 'path'
 
 const isMac = process.platform === 'darwin'
 
-const menuTemplate = [
+let win: BrowserWindow | null = null
+
+const template = [
+  // { role: 'appMenu' }
+  ...(isMac ? [{
+    label: app.name,
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' }
+    ]
+  }] : []),
+  // { role: 'fileMenu' }
   {
-    label: 'File',
+    label: '&File',
     submenu: [
       {
         label: 'New Case...',
@@ -20,9 +36,22 @@ const menuTemplate = [
       {
         label: 'Open Case',
         accelerator: 'CmdOrCtrl+O',
-        click: () => {
+        click: async () => {
           console.log('open case');
-          // win.webContents.send('open-file')
+          const path = await dialog.showOpenDialog(win, {
+            properties: ['openFile'],
+            filters: [
+              { name: 'Case', extensions: ['case'] }
+            ]
+          });
+
+          if (path.canceled) {
+            return;
+          }
+
+          const filePath = path.filePaths[0];
+          const data = await fse.readFile(filePath, 'utf8');
+          win?.webContents.send('case-opened', JSON.parse(data), filePath);
         },
       },
       {
@@ -67,9 +96,68 @@ const menuTemplate = [
       { role: 'quit' }
     ],
   },
-];
+  // { role: 'editMenu' }
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      ...(isMac ? [
+        { role: 'delete' },
+        { role: 'selectAll' },
+      ] : [
+        { role: 'delete' },
+        { type: 'separator' },
+        { role: 'selectAll' }
+      ])
+    ]
+  },
+  // { role: 'viewMenu' }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  // { role: 'windowMenu' }
+  {
+    label: 'Window',
+    submenu: [
+      { role: 'minimize' },
+      { role: 'zoom' },
+      ...(isMac ? [
+        { type: 'separator' },
+        { role: 'front' },
+        { type: 'separator' },
+        { role: 'window' }
+      ] : [
+        { role: 'close' }
+      ])
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://github.com/scriptnet-project/scriptnet')
+        }
+      }
+    ]
+  }
+]
 
-const menu = Menu.buildFromTemplate(menuTemplate);
+const menu = Menu.buildFromTemplate(template);
 
 Menu.setApplicationMenu(menu);
 
@@ -84,52 +172,38 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
-let win: BrowserWindow | null = null
-
 function registerListeners() {
-  ipcMain.handle('save-file', async (event, options, data) => {
+  ipcMain.handle('open-sample-network', async () => {
+    console.log('helloooo');
+    // Load the sample network when in dev mode
+    const SAMPLE_NETWORK_PATH = join(__dirname, '../../complex-example.case')
+    const data = await fse.readFile(SAMPLE_NETWORK_PATH, 'utf8');
+    win?.webContents.send('case-opened', JSON.parse(data), SAMPLE_NETWORK_PATH);
+  });
+
+  ipcMain.handle('save-file', async (event, options, data, existingPath) => {
       // do stuff
-      return dialog.showSaveDialog(win, options)
-      .then(({ canceled, filePath }) => {
-        if (canceled) { return; }
-        return parse(filePath);
-      })
-      .then(async (filePath) => {
-        const jsonFilePath = join(filePath.dir, `${filePath.name}.json`);
-        await fse.writeFile(jsonFilePath, data, 'utf8');
+      if (!existingPath) {
+        const path = await dialog.showSaveDialog(win, {
+          title: 'Save Case',
+          defaultPath: '',
+          filters: [
+            { name: 'Case', extensions: ['case'] }
+          ],
+          ...options
+        });
 
-        return jsonFilePath;
-      });
-  });
-
-  ipcMain.handle('open-file', (event, path = `${process.cwd()}/complex-example.json`) => {
-    return fse.readFile(path, 'utf8')
-  });
-
-  ipcMain.handle('open-dialog', (options) => {
-    return dialog.showOpenDialog(win, options)
-      .then(({ canceled, filePaths, ...rest }) => {
-        if (canceled) { return; }
-
-        const filePath = filePaths[0];
-        console.log(filePath);
-        return filePath;
-      });
-  });
-
-  ipcMain.handle('save-dialog', async (event, options) => {
-    const path = await dialog.showSaveDialog(win!, options)
-      .then(({ canceled, filePath }) => {
-        if (canceled) { return; }
-
-        if (filePath) {
-          return filePath;
+        if (path.canceled) {
+          return;
         }
-      });
 
-    return path;
-  }
-  );
+        const filePath = parse(path.filePath);
+        const jsonFilePath = join(filePath.dir, `${filePath.name}.case`);
+        return fse.writeFile(jsonFilePath, data, 'utf8');
+      }
+
+      return fse.writeFile(existingPath, data, 'utf8');
+  });
 }
 
 async function createWindow() {
@@ -152,9 +226,8 @@ async function createWindow() {
     win.webContents.openDevTools()
   }
 
-  // Test active push message to Renderer-process
-  win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', (new Date).toLocaleString())
+  win.webContents.on('did-finish-load', async () => {
+
   })
 
   // Make all links open with the browser, not with the application
