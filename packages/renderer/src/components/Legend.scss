@@ -2,10 +2,8 @@
   position: absolute;
   bottom: 30px;
   right: 20px;
-  padding: 0 20px;
-  width: 150px;
+  // width: 150px;
   z-index: 1;
-  backdrop-filter: blur(10px);
 
   &__element {
     text-transform: capitalize;

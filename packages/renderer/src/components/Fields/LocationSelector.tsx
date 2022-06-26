@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { get } from 'lodash';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { debounce, get, throttle } from 'lodash';
 import { Text, DefaultButton, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
 import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
 import { GeoSearchControl } from 'leaflet-geosearch';
@@ -11,34 +11,29 @@ type SearchControlProps = {
   onSelectResult: (location: any) => void;
 }
 
-const SearchControl = ({ onSelectResult }: SearchControlProps) => {
-  const map = useMap();
-  const provider = OpenStreetMapProvider();
+  const provider = new OpenStreetMapProvider();
 
-  const searchControlOptions = {
-    provider: provider,
-    // style: 'bar',
-    showMarker: false,
-    autoClose: true,
-    keepResult: true,
-    // updateMap: false,
-    notFoundMessage: 'Sorry, that address could not be found.',
-  };
+const search = async (term: string) => await provider.search({ query: term });
 
-  useEffect(() => {
-    const searchControl = GeoSearchControl(searchControlOptions);
+const ClearButton = ({ onClick }) => {
+  const theme = useTheme();
 
-    map.addControl(searchControl);
-    map.on('geosearch/showlocation', onSelectResult);
-
-    return () => map.removeControl(searchControl)
-  }, []);
-
-  return null;
+  return (
+    <IconButton
+      iconProps={{ iconName: 'Clear' }}
+      // styles={styles}
+      onClick={onClick}
+    />
+  );
 };
+
 
 const LocationSelector = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props.field.name);
+  const [searchTerm, setSearchTerm ] = useState(get(field, ['value', 'label'], null));
+  const [searchStatus, setSearchStatus] = useState('idle');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedResult, setSelectedResult] = useState(null);
   const [markerPosition, setMarkerPosition] = useState([get(field, ['value', 'x'], 0), get(field, ['value', 'y'], 0)]);
   const markerRef = useRef(null);
 
@@ -56,12 +51,49 @@ const LocationSelector = ({ label, ...props }) => {
     };
   }
 
-  const handleSelectResult = ({ location }: ResultProps ): void => {
+  const handleClear = () => {
+    setSearchTerm('');
+    setSearchResults([]);
+    setSelectedResult(null);
+    helpers.setValue({});
+  }
+
+  const doSearch = async (searchTerm: string) => {
+    if (!searchTerm) {
+      return;
+    }
+
+    const results = await search(searchTerm);
+    setSearchResults(results);
+    setSearchStatus('idle');
+  };
+
+  const throttledSearch = useCallback(throttle(doSearch, 500, { leading: false, trailing: true }), []);
+
+  const handleSearch = (searchTerm: string) => {
+    if(!searchTerm) {
+      setSearchStatus('idle');
+      setSearchResults([]);
+      setSearchTerm('');
+      return;
+    }
+
+    setSearchStatus('searching');
+    setSearchTerm(searchTerm);
+    throttledSearch(searchTerm);
+  };
+
+  const handleSelectResult = (location) => {
     const {
       x: lon,
       y: lat,
+      label,
     } = location;
+
     setMarkerPosition([lat, lon]);
+    setSearchTerm(label);
+    setSearchStatus('idle');
+    setSearchResults([]);
     helpers.setValue(location);
   };
 
@@ -93,22 +125,47 @@ const LocationSelector = ({ label, ...props }) => {
       }}
     >
       <TextField
-        value={get(field, ['value', 'label'], null)}
-        readOnly
-        prefix={<FontIcon iconName="MapPin" />}
-        // iconProps={{ iconName: "mapPin" }}
+        value={searchTerm}
+        onChange={(e, newValue) => handleSearch(newValue)}
+        prefix={<Icon iconName="MapPin" />}
         autoAdjustHeight
-        multiline={!!get(field, ['value', 'label'], null) && field.value.label.length > 50}
         borderless
-        placeholder='Set a location'
-        onFocus={() => {
-          console.log('focus')
-        }}
+        placeholder='Search for a location...'
+        onRenderSuffix={() => <ClearButton onClick={handleClear} />}
       />
+      <div
+        className="results"
+        style={{
+        }}
+      >
+        {searchStatus === 'searching' && (
+          <Text>Searching...</Text>
+        )}
+        {searchStatus === 'idle' && searchResults.length === 0 && (
+          <Text>No results found.</Text>
+        )}
+        {searchStatus === 'idle' && (
+          <>
+            {searchResults.map((result, index) => (
+              <div
+                key={index}
+                onClick={() => handleSelectResult(result)}
+                style={{
+                  cursor: 'pointer',
+                  padding: '5px',
+                }}
+              >
+                <Text>{result.label}</Text>
+              </div>
+            ))}
+          </>
+        )}
+      </div>
       {/* <Link>Change</Link> */}
       <MapContainer
         center={[53.3498, -6.2603]}
         zoom={13}
+        scrollWheelZoom={false}
         style={style.map}
         whenCreated={(map) => {
           // Update center and marker to existing value
@@ -141,7 +198,6 @@ const LocationSelector = ({ label, ...props }) => {
           draggable
           eventHandlers={eventHandlers}
         />
-        <SearchControl onSelectResult={handleSelectResult} />
       </MapContainer>
     </Stack>
   )

@@ -2,10 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { groupBy, findIndex } from 'lodash';
 import { motion } from 'framer-motion';
-import { getTheme, StackItem, Text, Stack, Toggle } from '@fluentui/react';
+import { getTheme, StackItem, Text, Stack, Toggle, DefaultButton } from '@fluentui/react';
 import { modes } from 'Store/mode';
 import { actionCreators as visualisationActions } from '../store/visualisation';
 import 'Components/Legend.scss';
+import useCytoscape from '@/hooks/Cytoscape';
 
 const CommandBarToggle = () => {
   const showLabels = useSelector(state => state.visualisation.showLabels);
@@ -47,6 +48,7 @@ const LegendItem = ({ type, label, ...options }) => {
 };
 
 const Legend = () => {
+  const { cy } = useCytoscape();
   const { mode, options } = useSelector(state => state.mode);
   const theme = getTheme();
 
@@ -110,14 +112,11 @@ const Legend = () => {
 
   const elements = groupBy(getElements(mode, options), 'type');
 
-  // const visRect = document.getElementById('Visualisation').getBoundingClientRect();
-
   return (
       <motion.div
         className="Legend"
         id="legend"
         drag
-        // dragConstraints={visRect}
         layout
         style={{
           boxShadow: theme.effects.elevation16,
@@ -125,9 +124,10 @@ const Legend = () => {
           zIndex: 9999,
           cursor: 'move',
         }}
-        whileHover={{ opacity: 0.4 }}
       >
-        <Stack>
+        <Stack
+          styles={{ root: { margin: '20px' } }}
+        >
           <StackItem>
           {Object.keys(elements).map((group) => (
             <div className="Legend__group" key={group}>
@@ -144,6 +144,21 @@ const Legend = () => {
           </StackItem>
           <AutomaticLayoutToggle />
           <CommandBarToggle />
+          <StackItem>
+            <DefaultButton
+              iconProps={ { iconName: 'ZoomToFit' } }
+              onClick={() => cy.current.animate({
+                fit: {
+                  eles: 'node',
+                  padding: 100,
+                }
+              }, {
+                duration: 500
+              })}
+            >
+              Center View
+            </DefaultButton>
+          </StackItem>
         </Stack>
       </motion.div>
   );
