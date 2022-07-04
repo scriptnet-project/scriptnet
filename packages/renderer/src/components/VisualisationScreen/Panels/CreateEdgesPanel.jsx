@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChoiceGroup, Stack, Text } from '@fluentui/react';
 import { useCytoscape } from 'Hooks/Cytoscape';
@@ -34,7 +34,6 @@ const AddEdgePanel = ({ isOpen, onDismiss }) => {
             { key: 'business', text: 'Business Relationship'},
             { key: 'ownership', text: 'Ownership Relationship'},
             { key: 'working', text: 'Working Relationship'},
-            { key: 'geographical', text: 'Geographical Relationship'},
           ]}
         />
       </Stack>

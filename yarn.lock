@@ -1251,6 +1251,21 @@ cytoscape-edgehandles@^3.6.0:
     lodash.memoize "^4.1.2"
     lodash.throttle "^4.1.1"
 
+cytoscape-leaf@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/cytoscape-leaf/-/cytoscape-leaf-1.2.4.tgz#bc56c1c3691496ed488c10da41a36a0e31dd2e20"
+  integrity sha512-4Ff92oBneANlbu3t6sBsc4nfLXYve5hNBdS2SzXFpArnBbaWj/ltMI1wBBzIwAjcyB7esgBLCNiuyPzzU80cvQ==
+  dependencies:
+    leaflet "^1.7.1"
+    leaflet-providers "^1.12.0"
+
+cytoscape-leaflet@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/cytoscape-leaflet/-/cytoscape-leaflet-1.0.13.tgz#56826e13ee65d0b4b3a5b2e1da148ef984caaa1b"
+  integrity sha512-MC5OUXUWxEHsXnrY4eILPzabV+Ax2frczo641TuNrK5d3OFdU9TpY74osrqsoY4cxbgNz3/Tih8ueIp6/rho2A==
+  dependencies:
+    memoize-one "^6.0.0"
+
 cytoscape@^3.16.1, cytoscape@^3.2.19:
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.21.0.tgz#8a73f6f0f3a44f948e266ac7df9b2eff65e8bd3c"
@@ -2352,10 +2367,20 @@ leaflet-geosearch@^3.6.0:
   optionalDependencies:
     leaflet "^1.6.0"
 
-leaflet@^1.6.0, leaflet@^1.7.1:
+leaflet-providers@^1.12.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/leaflet-providers/-/leaflet-providers-1.13.0.tgz#10c843a23d5823a65096d40ad53f27029e13434b"
+  integrity sha512-f/sN5wdgBbVA2jcCYzScIfYNxKdn2wBJP9bu+5cRX9Xj6g8Bt1G9Sr8WgJAt/ckIFIc3LVVxCBNFpSCfTuUElg==
+
+leaflet@1.7.1, leaflet@^1.6.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
   integrity sha512-/xwPEBidtg69Q3HlqPdU3DnrXQOvQU/CCHA1tcDQVzOwm91YMYaILjNp7L4Eaw5Z4sOYdbBz6koWyibppd8Zqw==
+
+leaflet@^1.7.1:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.8.0.tgz#4615db4a22a304e8e692cae9270b983b38a2055e"
+  integrity sha512-gwhMjFCQiYs3x/Sf+d49f10ERXaEFCPr+nVTryhAW8DWbMGqJqt9G4XuIaHmFW08zYvhgdzqXGr8AlW8v8dQkA==
 
 locate-path@^3.0.0:
   version "3.0.0"
@@ -2442,6 +2467,11 @@ matcher@^3.0.0:
   integrity sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==
   dependencies:
     escape-string-regexp "^4.0.0"
+
+memoize-one@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-6.0.0.tgz#b2591b871ed82948aee4727dc6abceeeac8c1045"
+  integrity sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==
 
 merge-stream@^2.0.0:
   version "2.0.0"

@@ -9,7 +9,7 @@ import {
   Toggle,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from '../../hooks/Cytoscape';
-import './CommandBar.scss';
+// import './CommandBar.scss';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useDispatch, useSelector } from 'react-redux';

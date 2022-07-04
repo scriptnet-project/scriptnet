@@ -22,12 +22,11 @@ const useCyLoader = (cy, initializeCy) => {
   };
 
   window.ipcRenderer.on('case-opened', (event, data, path) => {
-    console.log('case-opened', event, data, path) // prints "pong"
+    // console.log('case-opened', event, data, path) // prints "pong"
     handleFileOpen(data, path);
   })
 
   const handleFileOpen = async (parsedData, filePath) => {
-    console.log('handl', filePath);
     const elements = get(parsedData, 'network.elements', []);
     const options = get(parsedData, 'options', {});
     initializeVisualisationOptions(options.visualisation);

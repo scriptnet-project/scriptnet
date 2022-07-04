@@ -76,6 +76,12 @@ export const labelledNodes = [
 
 export const baseStylesheet = [
   {
+    selector: 'core',
+    style: {
+      'active-bg-opacity': 0
+    }
+  },
+  {
     selector: 'node[type = "person"]',
     style: {
       shape: 'circle'

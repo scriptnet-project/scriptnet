@@ -2,12 +2,13 @@ import { useCallback, useState } from 'react';
 import {
   ThemeProvider,
   VerticalDivider,
+  Stack,
+  CompoundButton,
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCytoscape } from '../../hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import Forms from '../Forms/Forms';
-
 import './ControlBar.scss';
 import panelTheme from '../../themes/panel';
 
@@ -30,11 +31,11 @@ const ControlBar = () => {
 
   return (
     <ThemeProvider theme={panelTheme}>
-      {/* <Forms
+      <Forms
         form={form}
         onClose={() => setForm(null)}
-      /> */}
-      {/* <div className="ControlBar">
+      />
+      <div className="ControlBar">
         <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
           <Stack.Item grow verticalFill className="primary-action-button">
             <CompoundButton className="primary-action-button__button"
@@ -145,7 +146,7 @@ const ControlBar = () => {
             />
           </Stack.Item>
         </Stack>
-      </div> */}
+      </div>
     </ThemeProvider>
   );
 };

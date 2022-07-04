@@ -1,7 +1,5 @@
-import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import VisualisationScreen from '../components/VisualisationScreen';
-import './Screens.scss';
 import { getTheme } from '@fluentui/react';
 
 const getScreen = (name) => ({

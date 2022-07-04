@@ -1,4 +1,3 @@
-import React from 'react';
 import Cytoscape from '../Cytoscape';
 import Legend from '../Legend';
 import './Visualisation.scss';
@@ -9,6 +8,7 @@ const Visualisation = ({
   <div id="Visualisation" className={`Visualisation ${panelOpen ? 'Visualisation--openPanel' : ''}`}>
     <Legend />
     <Cytoscape />
+    <div id="cy-leaflet" />
   </div>
 );
 

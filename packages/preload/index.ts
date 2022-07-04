@@ -27,7 +27,7 @@ contextBridge.exposeInMainWorld('saveFile', async (options, data, path) => {
 });
 
 contextBridge.exposeInMainWorld('openSampleNetwork', () => {
-  console.log('heyyy')
+  console.log('Opening sample network...')
   return ipcRenderer.invoke('open-sample-network');
 })
 

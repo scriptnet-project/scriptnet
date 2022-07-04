@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useCytoscape } from '../../hooks/Cytoscape';
 
 /**
@@ -19,7 +19,7 @@ const Cytoscape = (props) => {
     };
   }, [!!cyContainer.current, id]);
 
-  return <div ref={cyContainer} {...props} className="cyContainer"/>;
+  return <div id="cy" ref={cyContainer} {...props} className="cyContainer"/>;
 };
 
 export default Cytoscape;

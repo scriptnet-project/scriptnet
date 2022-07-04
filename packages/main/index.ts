@@ -174,9 +174,8 @@ if (!app.requestSingleInstanceLock()) {
 
 function registerListeners() {
   ipcMain.handle('open-sample-network', async () => {
-    console.log('helloooo');
     // Load the sample network when in dev mode
-    const SAMPLE_NETWORK_PATH = join(__dirname, '../../complex-example.case')
+    const SAMPLE_NETWORK_PATH = join(__dirname, '../../map-example.case')
     const data = await fse.readFile(SAMPLE_NETWORK_PATH, 'utf8');
     win?.webContents.send('case-opened', JSON.parse(data), SAMPLE_NETWORK_PATH);
   });

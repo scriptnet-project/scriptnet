@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import Cytoscape, { CytoscapeOptions } from 'cytoscape';
+// import cytoscapeLeaflet from 'cytoscape-leaflet';
+import leaflet from 'cytoscape-leaf';
 import cola from 'cytoscape-cola';
 import BubbleSets from 'cytoscape-bubblesets';
 import edgeHandles from 'cytoscape-edgehandles';
@@ -14,6 +16,8 @@ import useExportCSV from './useExportCSV';
 Cytoscape.use(cola);
 Cytoscape.use(edgeHandles);
 Cytoscape.use(BubbleSets);
+Cytoscape.use(leaflet);
+
 
 const cyOptions: CytoscapeOptions = {
   maxZoom: 1.25,
@@ -30,12 +34,14 @@ const CyProvider = ({ children }) => {
   }));
 
   const initializeCy = (elements = []) => {
+    console.info("Initializing Cytoscape");
     if (cyRef.current) {
       cyRef.current.destroy();
     }
     const cy = Cytoscape(cyOptions);
     cy.add(elements);
     cyRef.current = cy;
+
     setState(() => ({ id: uuid() }));
   };
 

@@ -10,7 +10,7 @@ import {
   defaultEntityColours,
 } from '../../components/Cytoscape/stylesheets';
 import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
-import { findIndex } from 'lodash';
+import { get } from 'lodash';
 
 let layout;
 
@@ -42,8 +42,8 @@ const getSVGImage = () => {
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
-  const showLabels = useSelector(s => s.visualisation.showLabels);
-  const automaticLayout = useSelector(s => s.visualisation.automaticLayout);
+  const showLabels = useSelector(s => get(s, 'options.showLabels', true));
+  const automaticLayout = useSelector(s => get(s, 'options.automaticLayout', true));
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
@@ -77,22 +77,6 @@ const useCyModes = (cy, id) => {
       dispatch(visualisationActions.setSelected(selectedID));
     });
 
-    // cy.current.on('select', 'edge', (event) => {
-    //   const selectedID = event.target.data().id;
-    //   console.log('An edge was selected', selectedID);
-    //   // Animate to the selected node
-    //   cy.current.animate({
-    //     fit: {
-    //       eles: 'node:selected',
-    //       padding: 200,
-    //     }
-    //   }, {
-    //     duration: 200
-    //   });
-
-    //   dispatch(visualisationActions.setSelected(selectedID, 'edge'));
-    // });
-
     cy.current.on('unselect', (event) => {
       console.log('A node or edge was de-selected', event);
       dispatch(visualisationActions.clearSelected());
@@ -125,17 +109,17 @@ const useCyModes = (cy, id) => {
 
   const runLayout = () =>
     {
-      if (!cy.current) { return; }
-      if (layout) { stopLayout() }
+      // if (!cy.current) { return; }
+      // if (layout) { stopLayout() }
 
-      if (automaticLayout) {
-      // See: https://github.com/cytoscape/cytoscape.js-cola#api
-      const layoutOptions = { name: 'cola', infinite: true, fit: false };
-      layout = cy.current.layout(layoutOptions);
-      console.log('layout created', layout);
+      // if (automaticLayout) {
+      // // See: https://github.com/cytoscape/cytoscape.js-cola#api
+      // const layoutOptions = { name: 'cola', infinite: true, fit: false };
+      // layout = cy.current.layout(layoutOptions);
+      // console.log('layout created', layout);
 
-      layout.run();
-      }
+      // layout.run();
+      // }
     };
 
   const stopLayout = () => {
@@ -247,6 +231,11 @@ const useCyModes = (cy, id) => {
 
   const resetStyles = () => {
     if (!cy.current) { return; }
+
+    if (window.leaf) {
+      window.leaf.destroy();
+      window.leaf = null;
+    }
 
     cy.current.elements().removeClass('hidden half-opacity');
     applyStylesheet([
@@ -389,6 +378,34 @@ const useCyModes = (cy, id) => {
     });
   }
 
+  const applyGeographyPreset = () => {
+    console.log('applying geography preset');
+    if (!cy.current) { return; }
+
+    // This ends up being called multiple times, which causes it to crash.
+    // To fix this, destroy any existing instance found so it can be recreated.
+    if (window.leaf) {
+      console.log('leaf found');
+      window.leaf.destroy();
+    }
+
+    // Filter nodes that don't have a location
+    cy.current.nodes().filter(node => node.data('location'));
+
+    const options = {
+      // the container in which the map should live, should be a sibling of the cytoscape container
+      container: document.getElementById('cy-leaflet'),
+
+      // the data field for latitude
+      latitude: 'lat',
+      // the data field for longitude
+      longitude: 'lng'
+    };
+
+    window.leaf = cy.current.leaflet(options);
+  }
+
+
   const applyPreset = () => {
     switch (state.options.preset) {
       case 'scene':
@@ -405,6 +422,7 @@ const useCyModes = (cy, id) => {
         break;
       case 'geography':
         console.log('applyGeographyPreset()');
+        applyGeographyPreset();
         break;
       default:
         break;
@@ -417,7 +435,8 @@ const useCyModes = (cy, id) => {
     disableNodeHighlighting();
     disableEdgeCreation();
     disableAttributeBoundingBoxes();
-    resetStyles()
+    resetStyles();
+    applyGeographyPreset();
 
     switch (state.mode) {
       case modes.ASSIGN_ATTRIBUTES:
