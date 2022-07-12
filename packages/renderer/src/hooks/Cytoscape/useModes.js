@@ -42,8 +42,8 @@ const getSVGImage = () => {
 
 const useCyModes = (cy, id) => {
   const state = useSelector(s => s.mode);
-  const showLabels = useSelector(s => get(s, 'options.showLabels', true));
-  const automaticLayout = useSelector(s => get(s, 'options.automaticLayout', true));
+  const showLabels = useSelector(s => get(s, 'visualisation.showLabels', true));
+  const automaticLayout = useSelector(s => get(s, 'visualisation.automaticLayout', true));
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
@@ -109,17 +109,17 @@ const useCyModes = (cy, id) => {
 
   const runLayout = () =>
     {
-      // if (!cy.current) { return; }
-      // if (layout) { stopLayout() }
+      if (!cy.current) { return; }
+      if (layout) { stopLayout() }
 
-      // if (automaticLayout) {
-      // // See: https://github.com/cytoscape/cytoscape.js-cola#api
-      // const layoutOptions = { name: 'cola', infinite: true, fit: false };
-      // layout = cy.current.layout(layoutOptions);
-      // console.log('layout created', layout);
+      if (automaticLayout) {
+      // See: https://github.com/cytoscape/cytoscape.js-cola#api
+      const layoutOptions = { name: 'cola', infinite: true, fit: false };
+      layout = cy.current.layout(layoutOptions);
+      console.log('layout created', layout);
 
-      // layout.run();
-      // }
+      layout.run();
+      }
     };
 
   const stopLayout = () => {
@@ -378,6 +378,17 @@ const useCyModes = (cy, id) => {
     });
   }
 
+  const disableGeographyPreset = () => {
+    if (!cy.current) { return; }
+
+    // This ends up being called multiple times, which causes it to crash.
+    // To fix this, destroy any existing instance found so it can be recreated.
+    if (window.leaf) {
+      console.log('leaf found');
+      window.leaf.destroy();
+    }
+  }
+
   const applyGeographyPreset = () => {
     console.log('applying geography preset');
     if (!cy.current) { return; }
@@ -389,20 +400,24 @@ const useCyModes = (cy, id) => {
       window.leaf.destroy();
     }
 
+    console.log(cy.current.nodes().length);
+
     // Filter nodes that don't have a location
-    cy.current.nodes().filter(node => node.data('location'));
+    var eles = cy.current.nodes().filter('[!location]').remove();
+
+    console.log(cy.current.nodes().length);
 
     const options = {
       // the container in which the map should live, should be a sibling of the cytoscape container
       container: document.getElementById('cy-leaflet'),
 
       // the data field for latitude
-      latitude: 'lat',
+      latitude: (data) => data.location.y,
       // the data field for longitude
-      longitude: 'lng'
+      longitude: (data) => data.location.x,
     };
 
-    window.leaf = cy.current.leaflet(options);
+    window.leaf = cy.current.leaflet(options, );
   }
 
 
@@ -421,7 +436,6 @@ const useCyModes = (cy, id) => {
         applyJurisdictionPreset();
         break;
       case 'geography':
-        console.log('applyGeographyPreset()');
         applyGeographyPreset();
         break;
       default:
@@ -436,7 +450,6 @@ const useCyModes = (cy, id) => {
     disableEdgeCreation();
     disableAttributeBoundingBoxes();
     resetStyles();
-    applyGeographyPreset();
 
     switch (state.mode) {
       case modes.ASSIGN_ATTRIBUTES:

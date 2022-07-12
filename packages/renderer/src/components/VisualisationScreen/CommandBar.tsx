@@ -27,6 +27,8 @@ const TopCommandBar = ({
     exportCSV,
   } = useCytoscapeActions();
 
+  const theme = getTheme();
+
   const mode = useSelector(state => state.mode);
   const dispatch = useDispatch();
   const setMode = (mode) => dispatch(modeActions.setMode(mode));
@@ -93,82 +95,107 @@ const TopCommandBar = ({
 
   const farItems: ICommandBarItemProps[] = [
     {
-      key: 'addNodes',
-      text: 'Add Node',
-      iconProps: { iconName: 'AddFriend' },
-      onMenuClick: () => setMode(modes.DEFAULT),
-      subMenuProps: {
-        items: [
-          {
-            key: 'addPerson',
-            text: 'Person',
-            iconProps: { iconName: 'AddFriend' },
-          },
-          {
-            key: 'addOrganisation',
-            text: 'Organisation',
-            iconProps: { iconName: 'Work' },
-          },
-          {
-            key: 'addLocation',
-            text: 'Location',
-            iconProps: { iconName: 'MapPin' },
-          },
-          {
-            key: 'addResource',
-            text: 'Resource',
-            iconProps: { iconName: 'SharepointAppIcon16' },
-          }
-        ],
-      }
-    },
-    {
-      key: 'addEdges',
-      text: 'Add Relationships',
-      iconProps: { iconName: 'GitGraph' },
-      onClick: () => setMode(modes.CREATE_EDGES),
+      key: 'Visualise',
+      text: "Visualise Mode",
+      commandBarButtonAs: (props) => {
+        return (
+          <Toggle
+            label='Visualisation Mode'
+            styles={{
+              root: {
+                margin: '10px',
+              },
+            }}
+            inlineLabel
+            checked={mode === modes.VISUALISE}
+            onChange={(event, checked) => {
+              if (checked) {
+                setMode(modes.VISUALISE);
+                return;
+              }
 
-    },
-    {
-      key: 'addScenes',
-      text: 'Add Scenes',
-      iconProps: { iconName: 'Fingerprint' },
-      onClick: () => setMode(modes.ASSIGN_ATTRIBUTES)
-    },
-    {
-      key: 'showVisualisation',
-      text: 'Visualise',
-      iconProps: { iconName: 'PictureFill' },
-      subMenuProps: {
-        items: [
-          {
-            key: 'scene',
-            text: 'Scenes',
-            onClick: setVisualisation,
-          },
-          {
-            key: 'relationship-filter',
-            text: 'Relationships',
-            onClick: setVisualisation,
-          },
-          {
-            key: 'focal',
-            text: 'Focal Individual',
-            onClick: setVisualisation,
-          },
-          {
-            key: 'jurisdiction',
-            text: 'Jurisdictions',
-            onClick: setVisualisation,
-          },
-          {
-            key: 'geography',
-            text: 'Locations',
-            onClick: setVisualisation,
-          }
-        ],
-      },
-    },
+              setMode(modes.EDIT);
+            }}
+          />
+        )
+      }
+    }
+    // {
+    //   key: 'addNodes',
+    //   text: 'Add Node',
+    //   iconProps: { iconName: 'AddFriend' },
+    //   onMenuClick: () => setMode(modes.DEFAULT),
+    //   subMenuProps: {
+    //     items: [
+    //       {
+    //         key: 'addPerson',
+    //         text: 'Person',
+    //         iconProps: { iconName: 'AddFriend' },
+    //       },
+    //       {
+    //         key: 'addOrganisation',
+    //         text: 'Organisation',
+    //         iconProps: { iconName: 'Work' },
+    //       },
+    //       {
+    //         key: 'addLocation',
+    //         text: 'Location',
+    //         iconProps: { iconName: 'MapPin' },
+    //       },
+    //       {
+    //         key: 'addResource',
+    //         text: 'Resource',
+    //         iconProps: { iconName: 'SharepointAppIcon16' },
+    //       }
+    //     ],
+    //   }
+    // },
+    // {
+    //   key: 'addEdges',
+    //   text: 'Add Relationships',
+    //   iconProps: { iconName: 'GitGraph' },
+    //   onClick: () => setMode(modes.CREATE_EDGES),
+    // },
+    // {
+    //   key: 'addScenes',
+    //   text: 'Add Scenes',
+    //   iconProps: { iconName: 'Fingerprint' },
+    //   onClick: () => setMode(modes.ASSIGN_ATTRIBUTES)
+    // },
+    // {
+    //   key: 'showVisualisation',
+    //   text: 'Visualise',
+    //   iconProps: { iconName: 'PictureFill' },
+    //   subMenuProps: {
+    //     items: [
+    //       {
+    //         key: 'scene',
+    //         text: 'Scenes',
+    //         onClick: setVisualisation,
+    //       },
+    //       {
+    //         key: 'relationship-filter',
+    //         text: 'Relationships',
+    //         onClick: setVisualisation,
+    //       },
+    //       {
+    //         key: 'focal',
+    //         text: 'Focal Individual',
+    //         onClick: setVisualisation,
+    //       },
+    //       {
+    //         key: 'jurisdiction',
+    //         text: 'Jurisdictions',
+    //         onClick: setVisualisation,
+    //       },
+    //       {
+    //         key: 'geography',
+    //         text: 'Locations',
+    //         onClick: setVisualisation,
+    //       }
+    //     ],
+    //   },
+    // },
     // {
     //   key: 'run layout',
     //   text: 'Run Automatic Layout',
@@ -195,22 +222,20 @@ const TopCommandBar = ({
     //    });
     //   },
     // },
-    {
-      key: 'fit',
-      text: 'Center view',
-      iconProps: { iconName: 'ZoomToFit' },
-      onClick: () => cy.current.animate({
-        fit: {
-          eles: 'node',
-          padding: 100,
-        }
-      }, {
-        duration: 500
-      }),
-    }
+    // {
+    //   key: 'fit',
+    //   text: 'Center view',
+    //   iconProps: { iconName: 'ZoomToFit' },
+    //   onClick: () => cy.current.animate({
+    //     fit: {
+    //       eles: 'node',
+    //       padding: 100,
+    //     }
+    //   }, {
+    //     duration: 500
+    //   }),
+    // }
   ];
-
-  const theme = getTheme();
 
   return (
     <ThemeProvider theme={panelTheme}>

@@ -1251,20 +1251,12 @@ cytoscape-edgehandles@^3.6.0:
     lodash.memoize "^4.1.2"
     lodash.throttle "^4.1.1"
 
-cytoscape-leaf@^1.2.4:
+cytoscape-leaf@jthrilly/cytoscape.js-leaflet#feature/nested-property-paths:
   version "1.2.4"
-  resolved "https://registry.yarnpkg.com/cytoscape-leaf/-/cytoscape-leaf-1.2.4.tgz#bc56c1c3691496ed488c10da41a36a0e31dd2e20"
-  integrity sha512-4Ff92oBneANlbu3t6sBsc4nfLXYve5hNBdS2SzXFpArnBbaWj/ltMI1wBBzIwAjcyB7esgBLCNiuyPzzU80cvQ==
+  resolved "https://codeload.github.com/jthrilly/cytoscape.js-leaflet/tar.gz/b79715dfaf4669874420fb2ee8ba955a47d2e89d"
   dependencies:
     leaflet "^1.7.1"
     leaflet-providers "^1.12.0"
-
-cytoscape-leaflet@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/cytoscape-leaflet/-/cytoscape-leaflet-1.0.13.tgz#56826e13ee65d0b4b3a5b2e1da148ef984caaa1b"
-  integrity sha512-MC5OUXUWxEHsXnrY4eILPzabV+Ax2frczo641TuNrK5d3OFdU9TpY74osrqsoY4cxbgNz3/Tih8ueIp6/rho2A==
-  dependencies:
-    memoize-one "^6.0.0"
 
 cytoscape@^3.16.1, cytoscape@^3.2.19:
   version "3.21.0"
@@ -2467,11 +2459,6 @@ matcher@^3.0.0:
   integrity sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==
   dependencies:
     escape-string-regexp "^4.0.0"
-
-memoize-one@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-6.0.0.tgz#b2591b871ed82948aee4727dc6abceeeac8c1045"
-  integrity sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==
 
 merge-stream@^2.0.0:
   version "2.0.0"

@@ -1,6 +1,8 @@
 # TODO List
 Refactor modes concept
 
+- Use legend to create nodes and edges? When in edit mode, clicking legend item could trigger action and mark it as selected
+
 - Two fundamental "modes" (views): (1) editing, (2) visualising.
 - Editing mode:
   - Editing mode is the default mode.
@@ -16,9 +18,6 @@ Refactor modes concept
   - Also enable switching between layout based on coordinates or based on map
   - Also allow filtering based on period of involvement.
     - Filtering component is a two-way slider which automatically detects start and end date ranges
-  
-
-
 
 ## Current
 
@@ -29,6 +28,8 @@ Refactor modes concept
 - Temporal visualisation of actors added to existing visualisations
 - Refactor modes
 - refactor toolbars
+- delete edges
+- entities all have gender
 - Fix all existing entity forms
 
 ## Backlog

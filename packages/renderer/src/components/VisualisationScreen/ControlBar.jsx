@@ -4,6 +4,9 @@ import {
   VerticalDivider,
   Stack,
   CompoundButton,
+  MessageBar,
+  Link,
+  MessageBarType,
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCytoscape } from '../../hooks/Cytoscape';
@@ -18,8 +21,6 @@ const ControlBar = () => {
   const selectedNode = useSelector(state => state.selectedNode);
   const dispatch = useDispatch();
   const setMode = (mode) => dispatch(modeActions.setMode(mode));
-
-  console.log('control bar,', mode);
 
   const [form, setForm] = useState(null);
 
@@ -36,6 +37,16 @@ const ControlBar = () => {
         onClose={() => setForm(null)}
       />
       <div className="ControlBar">
+      <MessageBar
+        messageBarType={MessageBarType.error}
+        isMultiline={false}
+        dismissButtonAriaLabel="Close"
+      >
+        Error MessageBar with single line, with dismiss button.
+        <Link href="www.bing.com" target="_blank" underline>
+          Visit our website.
+        </Link>
+      </MessageBar>
         <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
           <Stack.Item grow verticalFill className="primary-action-button">
             <CompoundButton className="primary-action-button__button"
@@ -105,7 +116,7 @@ const ControlBar = () => {
               primary={mode === modes.ASSIGN_ATTRIBUTES}
             />
           </Stack.Item>
-          <VerticalDivider />
+          {/* <VerticalDivider />
           <Stack.Item grow verticalFill className="primary-action-button">
             <CompoundButton className="primary-action-button__button"
               secondaryText="Change the way the network is displayed"
@@ -144,7 +155,7 @@ const ControlBar = () => {
                 ],
               }}
             />
-          </Stack.Item>
+          </Stack.Item> */}
         </Stack>
       </div>
     </ThemeProvider>

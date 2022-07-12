@@ -6,13 +6,14 @@ const actionCreators = createActions({
   CLEAR_SELECTED: undefined, // noop
   TOGGLE_SHOW_LABELS: undefined,
   TOGGLE_AUTOMATIC_LAYOUT: undefined,
-  INITIALIZE_VISUALISATION_OPTIONS: options => options,
+  TOGGLE_SHOW_MAP: undefined,
 });
 
 const initialState = {
   selected: null,
   showLabels: true,
   automaticLayout: true,
+  showMap: false,
 };
 
 const reducer = handleActions({
@@ -30,14 +31,13 @@ const reducer = handleActions({
     ...state,
     showLabels: !state.showLabels,
   }),
+  [actionCreators.toggleShowMap]: (state) => ({
+    ...state,
+    showMap: !state.showMap,
+  }),
   [actionCreators.toggleAutomaticLayout]: (state) => ({
     ...state,
     automaticLayout: !state.automaticLayout,
-  }),
-  [actionCreators.initializeVisualisationOptions]: (state, action) => ({
-    ...state,
-    ...initialState,
-    ...action.payload,
   }),
   [modeActions.setMode]: (state) => ({
     ...state,

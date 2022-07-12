@@ -11,10 +11,6 @@ const initialState = {
 const useCyLoader = (cy, initializeCy) => {
   console.log('useCyLoader');
   const [state, setState] = useState(initialState);
-  const visualisationOptions = useSelector(state => state.visualisation);
-  const dispatch = useDispatch();
-  const initializeVisualisationOptions = (options = {}) =>
-    dispatch(visualisationActions.initializeVisualisationOptions(options));
 
   const newNetwork = () => {
     initializeCy();
@@ -28,8 +24,6 @@ const useCyLoader = (cy, initializeCy) => {
 
   const handleFileOpen = async (parsedData, filePath) => {
     const elements = get(parsedData, 'network.elements', []);
-    const options = get(parsedData, 'options', {});
-    initializeVisualisationOptions(options.visualisation);
     initializeCy(elements);
     setState(s => ({ ...s, filePath, isLoading: false }));
   }
@@ -39,8 +33,7 @@ const useCyLoader = (cy, initializeCy) => {
     const dialogOptions = state.filePath ? { defaultPath: state.filePath } : {};
 
     const elements = cy.current.elements().jsons();
-    const options = { visualisation: visualisationOptions };
-    const data = JSON.stringify({ network: { elements }, options });
+    const data = JSON.stringify({ network: { elements } });
 
     setState({ isLoading: true });
     const jsonFilePath = await window.saveFile(dialogOptions, data, state.filePath)

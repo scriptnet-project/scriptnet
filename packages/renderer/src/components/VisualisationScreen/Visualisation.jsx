@@ -1,5 +1,5 @@
 import Cytoscape from '../Cytoscape';
-import Legend from '../Legend';
+import Legend from '../Legend/Legend';
 import './Visualisation.scss';
 
 const Visualisation = ({

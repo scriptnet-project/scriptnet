@@ -4,7 +4,6 @@ import {
   DetailsList,
   getTheme,
   PrimaryButton,
-  TextField,
   DatePicker,
   Selection,
   SelectionMode,
