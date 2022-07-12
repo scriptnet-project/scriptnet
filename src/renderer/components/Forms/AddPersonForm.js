@@ -9,22 +9,29 @@ import {
   ComboBox,
 } from '@fluentui/react';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
-import { Field, Form, Formik } from 'formik';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import { FormikTextField, FormikChoiceGroup, FormikDropdown } from 'formik-office-ui-fabric-react'
 import { baseJurisdictionOptions, baseLocationOptions, baseRoleOptions } from './sharedOptions';
+import ActivePeriodSelector from './ActivePeriodSelector';
 
-const sexOptions = [
+const genderOptions = [
   {key: 'Male', text: 'Male' },
   {key: 'Female', text: 'Female' },
+  {key: 'Transgender Female', text: 'Transgender Female'},
+  {key: 'Transgender Male', text: 'Transgender Male'},
+  {key: 'Gender Nonconforming', text: 'Gender Nonconforming'},
   {key: 'Unknown', text: 'Unknown' },
+  {key: 'Other', text: 'Other' },
 ];
 
 const defaultValues = {
   name: '',
-  location: 'Ireland',
+  location: null,
   jurisdiction: 'local',
   role: '',
-  sex: 'Male',
+  gender: 'Male',
+  involvements: [],
+  notes: '',
 }
 
 const AddPersonForm = ({
@@ -118,10 +125,16 @@ const AddPersonForm = ({
             options={baseJurisdictionOptions}
           />
           <Field
-            name="sex"
-            label="Sex"
+            name="gender"
+            label="Gender"
             component={FormikChoiceGroup}
-            options={sexOptions}
+            options={genderOptions}
+          />
+          <FieldArray
+            name="involvements"
+            label="Period(s) of involvement"
+            component={ActivePeriodSelector}
+            required
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />

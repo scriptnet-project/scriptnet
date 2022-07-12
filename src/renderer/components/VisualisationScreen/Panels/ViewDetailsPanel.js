@@ -67,7 +67,7 @@ const ViewDetailsPanel = ({
           <Text variant={'large'}>Name: {name}</Text>
         </Stack> */}
         <Stack tokens={{ childrenGap: 10 }}>
-          <DetailsList
+          {/* <DetailsList
             items={formattedAttributes}
             columns={[
               { key: 'column1', name: 'Name', fieldName: 'name', minWidth: 0, maxWidth: 30, },
@@ -77,7 +77,7 @@ const ViewDetailsPanel = ({
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.none}
             compact
-          />
+          /> */}
         </Stack>
         <Stack>
           { isNode && <DefaultButton text="Edit" onClick={handleEdit} /> }
