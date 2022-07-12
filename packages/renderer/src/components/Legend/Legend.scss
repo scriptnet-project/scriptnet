@@ -1,12 +1,16 @@
 .Legend {
   position: absolute;
-  // top: 30px;
-  // right: 20px;
-  // width: 450px;
+  bottom: 130px;
+  right: 20px;
+  padding: 0 20px;
+  width: 150px;
+  background-color: rgba(255, 255, 255, 0.65);
   z-index: 1;
 
   &__element {
     text-transform: capitalize;
+    // display: flex;
+    // align-items: center;
   }
 }
 
@@ -24,11 +28,11 @@
     &:after {
       content: '';
       position: absolute;
-      width: 20px;
+      left: 12px;
+      width: 25px;
       height: 20px;
       background: var(--color);
-      border-radius: 50%;
-      margin-left: 12px;
+      border-radius: 50%
     }
   }
 
@@ -38,7 +42,6 @@
     background: var(--color);
     border-radius: 2px;
     transform: rotate(40deg);
-    margin-left: 12px;
   }
 
   &--circle {

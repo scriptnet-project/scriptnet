@@ -43,11 +43,11 @@ const ShowMapToggle = () => {
       checked={showMap}
       onChange={toggleShowMap}
     />
-    {showMap && (
+    {/* {showMap && (
       <Stack>
         <Text>{numberOfHiddenNodes} node(s) are currently hidden.</Text>
       </Stack>
-    )}
+    )} */}
   </>
   );
 }

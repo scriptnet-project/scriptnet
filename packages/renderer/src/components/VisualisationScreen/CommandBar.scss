@@ -1,6 +1,7 @@
 .CommandBar {
-  position: relative;
-  z-index: 999999;
+  z-index: 99999999;
+  background: white;
+  border-bottom: 4px solid #0078d4;
 
   .ms-Toggle {
     margin-bottom: 0;

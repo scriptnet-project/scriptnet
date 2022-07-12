@@ -34,6 +34,7 @@ const reducer = handleActions({
   [actionCreators.toggleShowMap]: (state) => ({
     ...state,
     showMap: !state.showMap,
+    automaticLayout: state.showMap ? false : true,
   }),
   [actionCreators.toggleAutomaticLayout]: (state) => ({
     ...state,

@@ -4,11 +4,13 @@
   height: 5rem;
   width: 100%;
   padding: 1rem;
+  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 999999;
+  z-index: 99999999;
+  border-top: 4px solid #0078d4;
 
   .primary-stack {
     .primary-action-button {
@@ -19,7 +21,12 @@
         height: 100%;
         width: 100%;
         border: 0;
+
+        &:not(.ms-Button--compoundPrimary) {
+          color: #0078d4;
+        }
       }
     }
   }
 }
+

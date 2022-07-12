@@ -19,14 +19,6 @@ const SidePanel = ({
         isBlocking={false}
         onDismiss={handleDismiss}
         headerText={title}
-        styles={{
-          root: {
-            ".ms-Panel-commands": {
-              backgroundColor: theme.semanticColors.bodyBackground,
-              zIndex: 999999,
-            },
-          }
-        }}
       >
         {children}
       </Panel>

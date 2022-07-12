@@ -18,16 +18,6 @@ const AutoSave = ({ debounceMs }) => {
     debouncedSubmit();
   }, [debouncedSubmit, formik.values]);
 
-  // return (
-  //   <>
-  //     {!!formik.isSubmitting
-  //       ? 'saving...'
-  //       : lastSaved !== null
-  //       ? `Last Saved: ${lastSaved}`
-  //       : null}
-  //   </>
-  // );
-
   return null;
 };
 

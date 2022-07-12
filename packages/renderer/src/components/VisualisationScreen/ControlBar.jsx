@@ -1,28 +1,24 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import {
-  ThemeProvider,
   VerticalDivider,
   Stack,
   CompoundButton,
-  MessageBar,
-  Link,
-  MessageBarType,
 } from '@fluentui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCytoscape } from '../../hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from '../../store/mode';
+import { actionCreators as formActions, forms } from '../../store/form';
 import Forms from '../Forms/Forms';
 import './ControlBar.scss';
-import panelTheme from '../../themes/panel';
 
 const ControlBar = () => {
   const { id } = useCytoscape();
-  const mode = useSelector(state => state.mode);
+  const mode = useSelector(state => state.mode);;
   const selectedNode = useSelector(state => state.selectedNode);
   const dispatch = useDispatch();
-  const setMode = (mode) => dispatch(modeActions.setMode(mode));
 
-  const [form, setForm] = useState(null);
+  const setMode = (mode) => dispatch(modeActions.setMode(mode));
+  const setForm = (form) => dispatch(formActions.setForm(form));
 
   const setVisualisation = useCallback((event, option) => {
     console.log('changed preset to:', option.key);
@@ -31,22 +27,8 @@ const ControlBar = () => {
   }, [id]);
 
   return (
-    <ThemeProvider theme={panelTheme}>
-      <Forms
-        form={form}
-        onClose={() => setForm(null)}
-      />
+    <>
       <div className="ControlBar">
-      <MessageBar
-        messageBarType={MessageBarType.error}
-        isMultiline={false}
-        dismissButtonAriaLabel="Close"
-      >
-        Error MessageBar with single line, with dismiss button.
-        <Link href="www.bing.com" target="_blank" underline>
-          Visit our website.
-        </Link>
-      </MessageBar>
         <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
           <Stack.Item grow verticalFill className="primary-action-button">
             <CompoundButton className="primary-action-button__button"
@@ -62,28 +44,21 @@ const ControlBar = () => {
                     value: 'person',
                     text: 'Person',
                     iconProps: { iconName: 'AddFriend' },
-                    onClick: () => setForm('person'),
-                  },
-                  {
-                    key: 'location',
-                    value: 'location',
-                    text: 'Location',
-                    iconProps: { iconName: 'MapPin' },
-                    onClick: () => setForm('location'),
+                    onClick: () => setForm(forms.PERSON),
                   },
                   {
                     key: 'resource',
                     value: 'resource',
                     text: 'Resource',
                     iconProps: { iconName: 'SharepointAppIcon16' },
-                    onClick: () => setForm('resource'),
+                    onClick: () => setForm(forms.RESOURCE),
                   },
                   {
                     key: 'organisation',
                     value: 'organisation',
                     text: 'Organisation',
                     iconProps: { iconName: 'Work' },
-                    onClick: () => setForm('organisation'),
+                    onClick: () => setForm(forms.ORGANISATION),
                   },
                 ],
               }}
@@ -116,7 +91,7 @@ const ControlBar = () => {
               primary={mode === modes.ASSIGN_ATTRIBUTES}
             />
           </Stack.Item>
-          {/* <VerticalDivider />
+          <VerticalDivider />
           <Stack.Item grow verticalFill className="primary-action-button">
             <CompoundButton className="primary-action-button__button"
               secondaryText="Change the way the network is displayed"
@@ -155,10 +130,10 @@ const ControlBar = () => {
                 ],
               }}
             />
-          </Stack.Item> */}
+          </Stack.Item>
         </Stack>
       </div>
-    </ThemeProvider>
+    </>
   );
 };
 
