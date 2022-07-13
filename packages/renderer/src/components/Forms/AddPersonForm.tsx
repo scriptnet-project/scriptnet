@@ -167,7 +167,7 @@ export const AddPersonForm = ({
             ) : (
               <>
                 <DefaultButton text="Cancel" onClick={closeDialog} />
-                <PrimaryButton type="submit" text="Add to Network" />
+                <PrimaryButton type="submit" text="Add to Case" />
               </>
             )}
           </div>

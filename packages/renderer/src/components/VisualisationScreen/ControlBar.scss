@@ -1,9 +1,6 @@
 .ControlBar {
-  position: absolute;
-  bottom: 0;
-  height: 5rem;
+  flex: 0 0 5rem;
   width: 100%;
-  padding: 1rem;
   background: white;
   display: flex;
   justify-content: center;

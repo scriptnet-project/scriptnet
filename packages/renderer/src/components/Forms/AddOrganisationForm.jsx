@@ -175,7 +175,7 @@ const AddOrganisationForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Case"} />
           </DialogFooter>
         </Form>
         )}

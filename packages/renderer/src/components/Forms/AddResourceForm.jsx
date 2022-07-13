@@ -11,10 +11,6 @@ import { Field, Form, Formik } from 'formik';
 import { baseJurisdictionOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 
-const locationOptions = [
-  {key: 'N/A', text: 'N/A'},
-];
-
 const functionOptions = [
   {key: 'Production', text: 'Production' },
   {key: 'Distribution', text: 'Distribution' },
@@ -126,7 +122,7 @@ const AddResourceForm = ({
           />
           <DialogFooter>
             <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Network"} />
+            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Case"} />
           </DialogFooter>
         </Form>
         )}

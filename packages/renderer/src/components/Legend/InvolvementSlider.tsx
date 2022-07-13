@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import useCytoscape from '@/hooks/Cytoscape';
+import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider } from '@fluentui/react';
 
@@ -39,7 +40,19 @@ const InvolvementSlider = () => {
   }, [dates])
 
   return (
-    <>
+    <motion.div
+      className="involvement-slider-container"
+      style={{
+        position: 'absolute',
+        width: 600,
+        bottom: 95,
+        left: 'calc(50% - 300px)',
+        zIndex: 1,
+        background: 'white',
+        padding: 10,
+        borderRadius: 10,
+      }}
+    >
       <Slider
         label="Period(s) of Involvement"
         min={0}
@@ -59,7 +72,7 @@ const InvolvementSlider = () => {
           }
         }}
       />
-    </>
+    </motion.div>
   )
 };
 

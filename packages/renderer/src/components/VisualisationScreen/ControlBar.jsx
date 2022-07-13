@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useCytoscape } from '../../hooks/Cytoscape';
 import { actionCreators as modeActions, modes } from '../../store/mode';
 import { actionCreators as formActions, forms } from '../../store/form';
-import Forms from '../Forms/Forms';
+import InvolvementSlider from '../Legend/InvolvementSlider';
 import './ControlBar.scss';
 
 const ControlBar = () => {
@@ -28,6 +28,7 @@ const ControlBar = () => {
 
   return (
     <>
+      <InvolvementSlider />
       <div className="ControlBar">
         <Stack horizontal tokens={{ childrenGap: 10 }} verticalFill className="primary-stack">
           <Stack.Item grow verticalFill className="primary-action-button">
