@@ -11,6 +11,7 @@ import {
 import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
 import { getMode, getModeOptions } from '../../store/selectors/mode';
 import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
+import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
 
 let layout;
 
@@ -32,7 +33,7 @@ const useCyModes = (cy, id) => {
     if (showMap) {
       // Disable automatic layout
       // Do I need to update state here?
-      stopLayout();
+      dispatch(visualisationActions.setAutomaticLayout(false));
 
       // Filter nodes that don't have a location
       // TODO: this should add a "hidden" attribute to the nodes so it can be reverted.
@@ -49,26 +50,18 @@ const useCyModes = (cy, id) => {
       };
 
       window.leaf = cy.current.leaflet(options);
-
-      console.log('Created leaf with ID', window.leaf.map._container._leaflet_id);
+      console.info('Created leaflet map with ID', window.leaf.map._container._leaflet_id);
     }
 
     if (!showMap) {
       if (window.leaf) {
-        console.log('removing leaf with id', window.leaf.map._container._leaflet_id);
+        console.info('Removing leaflet map with id', window.leaf.map._container._leaflet_id);
         window.leaf.destroy();
       }
 
       resetStyles();
       runLayout();
     }
-
-    // return () => {
-    //   if (window.leaf) {
-    //     console.log('leaf found');
-    //     window.leaf.destroy();
-    //   }
-    // };
 
   }, [showMap])
 
@@ -368,7 +361,6 @@ const useCyModes = (cy, id) => {
 
     const cytopng = cy.current.png({scale: 4});
     await drawImageToVirtualCanvas(cytopng);
-
     const legendImage = await getLegendImage();
 
     // bottom right
