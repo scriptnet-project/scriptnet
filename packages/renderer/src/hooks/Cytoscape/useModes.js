@@ -31,10 +31,7 @@ const useCyModes = (cy, id) => {
     if (!cy.current) { return; }
 
     if (showMap) {
-      // Disable automatic layout
-      // Do I need to update state here?
-      dispatch(visualisationActions.setAutomaticLayout(false));
-
+      stopLayout();
       // Filter nodes that don't have a location
       // TODO: this should add a "hidden" attribute to the nodes so it can be reverted.
       cy.current.nodes().filter('[!location]').remove();
@@ -51,6 +48,10 @@ const useCyModes = (cy, id) => {
 
       window.leaf = cy.current.leaflet(options);
       console.info('Created leaflet map with ID', window.leaf.map._container._leaflet_id);
+
+      // Disable automatic layout
+      // Do I need to update state here?
+      dispatch(visualisationActions.setAutomaticLayout(false));
     }
 
     if (!showMap) {
@@ -60,7 +61,7 @@ const useCyModes = (cy, id) => {
       }
 
       resetStyles();
-      runLayout();
+      dispatch(visualisationActions.setAutomaticLayout(true));
     }
 
   }, [showMap])
@@ -352,7 +353,7 @@ const useCyModes = (cy, id) => {
     const context = virtualCanvas.getContext('2d');
 
     if(
-      mode.mode == modes.CONFIGURE &&
+      mode == modes.CONFIGURE &&
       (modeOptions.preset === 'scene' || modeOptions.preset === 'geography' || modeOptions.preset === 'jurisdiction')
     ) {
       const svgImage = await getSVGImage();
@@ -413,7 +414,7 @@ const useCyModes = (cy, id) => {
     disableAttributeBoundingBoxes();
     resetStyles();
 
-    switch (mode.mode) {
+    switch (mode) {
       case modes.ASSIGN_ATTRIBUTES:
         enableNodeHighlighting(modeOptions.highlightScene);
         break;
@@ -428,9 +429,8 @@ const useCyModes = (cy, id) => {
   }, [
     id,
     showLabels,
-    mode.mode,
+    mode,
     modeOptions,
-    automaticLayout,
   ]); // could even respond to modeOptions?
 
   const actions = {

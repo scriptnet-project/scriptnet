@@ -160,7 +160,7 @@ const LocationSelector = ({ label, ...props }) => {
           </>
         )}
       </div>
-      {/* <MapContainer
+      <MapContainer
         center={[53.3498, -6.2603]}
         zoom={13}
         scrollWheelZoom={false}
@@ -196,7 +196,7 @@ const LocationSelector = ({ label, ...props }) => {
           draggable
           eventHandlers={eventHandlers}
         />
-      </MapContainer> */}
+      </MapContainer>
     </Stack>
   )
 }

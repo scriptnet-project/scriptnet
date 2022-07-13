@@ -6,6 +6,8 @@ const actionCreators = createActions({
   CLEAR_SELECTED: undefined, // noop
   TOGGLE_SHOW_LABELS: undefined,
   TOGGLE_AUTOMATIC_LAYOUT: undefined,
+  SET_AUTOMATIC_LAYOUT: (value) => ({ value }),
+  SET_SHOW_MAP: (value) => ({ value }),
   TOGGLE_SHOW_MAP: undefined,
 });
 
@@ -36,9 +38,17 @@ const reducer = handleActions({
     showMap: !state.showMap,
     automaticLayout: state.showMap ? false : true,
   }),
+  [actionCreators.setShowMap]: (state, action) => ({
+    ...state,
+    showMap: action.payload.value,
+  }),
   [actionCreators.toggleAutomaticLayout]: (state) => ({
     ...state,
     automaticLayout: !state.automaticLayout,
+  }),
+  [actionCreators.setAutomaticLayout]: (state, action) => ({
+    ...state,
+    automaticLayout: action.payload.value,
   }),
   [modeActions.setMode]: (state) => ({
     ...state,
