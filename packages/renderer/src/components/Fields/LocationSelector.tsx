@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { debounce, get, throttle } from 'lodash';
-import { Text, DefaultButton, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
+import { useRef, useState, useMemo, useCallback } from 'react';
+import { get, throttle } from 'lodash';
+import { Text, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
 import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
-import { GeoSearchControl } from 'leaflet-geosearch';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { useField } from 'formik';
 import { searchReverseLocation } from '@/utils/searchReverseLocation';
 
@@ -161,8 +160,7 @@ const LocationSelector = ({ label, ...props }) => {
           </>
         )}
       </div>
-      {/* <Link>Change</Link> */}
-      <MapContainer
+      {/* <MapContainer
         center={[53.3498, -6.2603]}
         zoom={13}
         scrollWheelZoom={false}
@@ -198,7 +196,7 @@ const LocationSelector = ({ label, ...props }) => {
           draggable
           eventHandlers={eventHandlers}
         />
-      </MapContainer>
+      </MapContainer> */}
     </Stack>
   )
 }

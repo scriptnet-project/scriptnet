@@ -4,6 +4,7 @@ import { Dropdown as FluentDropdown } from "@fluentui/react";
 
 const Dropdown = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props.field.name);
+  console.log(meta.touched, meta.error);
   return (
     <FluentDropdown
       {...meta}

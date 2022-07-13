@@ -121,12 +121,6 @@ const ControlBar = () => {
                     text: 'Visualise Jurisdictions',
                     onClick: setVisualisation
                   },
-                  {
-                    key: 'geography',
-                    value: 'Scenes',
-                    text: 'Visualise Geography',
-                    onClick: setVisualisation
-                  },
                 ],
               }}
             />

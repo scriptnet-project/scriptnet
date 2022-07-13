@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
 import { saveAs } from 'file-saver';
-import html2canvas from 'html2canvas';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import {
   baseStylesheet,
@@ -10,51 +9,75 @@ import {
   defaultEntityColours,
 } from '../../components/Cytoscape/stylesheets';
 import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
-import { get } from 'lodash';
+import { getMode, getModeOptions } from '../../store/selectors/mode';
+import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
 
 let layout;
 
-const getLegendImage = () => {
-  const legend = document.getElementById('legend');
-
-  return html2canvas(legend, { scale: 4 })
-    .then((canvas) => {
-      const width = canvas.getAttribute('width');
-      const height = canvas.getAttribute('height');
-      const ctx = canvas.getContext('2d');
-      const data = ctx.getImageData(0, 0, width, height);
-      return data;
-    });
-};
-
-const getSVGImage = () => {
-  const svg = document.getElementsByTagName('svg')[0];
-
-  return html2canvas(svg, { scale: 4 })
-    .then((canvas) => {
-      const width = canvas.getAttribute('width');
-      const height = canvas.getAttribute('height');
-      const ctx = canvas.getContext('2d');
-      const data = ctx.getImageData(0, 0, width, height);
-      return data;
-    });
-};
-
 const useCyModes = (cy, id) => {
-  const state = useSelector(s => s.mode);
-  const showLabels = useSelector(s => get(s, 'visualisation.showLabels', true));
-  const automaticLayout = useSelector(s => get(s, 'visualisation.automaticLayout', true));
+  const mode = useSelector(getMode);
+  const modeOptions = useSelector(getModeOptions);
+
+  const showLabels = useSelector(getShowLabels);
+  const automaticLayout = useSelector(getAutomaticLayout);
+  const showMap = useSelector(getShowMap);
+
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
 
   useEffect(() => {
-    console.log('ran cy mode', { cy, id });
+    if (!cy.current) { return; }
 
+    if (showMap) {
+      // Disable automatic layout
+      // Do I need to update state here?
+      stopLayout();
+
+      // Filter nodes that don't have a location
+      // TODO: this should add a "hidden" attribute to the nodes so it can be reverted.
+      cy.current.nodes().filter('[!location]').remove();
+
+      const options = {
+        // the container in which the map should live, should be a sibling of the cytoscape container
+        container: document.getElementById('cy-leaflet'),
+
+        // the data field for latitude
+        latitude: (data) => data.location.y,
+        // the data field for longitude
+        longitude: (data) => data.location.x,
+      };
+
+      window.leaf = cy.current.leaflet(options);
+
+      console.log('Created leaf with ID', window.leaf.map._container._leaflet_id);
+    }
+
+    if (!showMap) {
+      if (window.leaf) {
+        console.log('removing leaf with id', window.leaf.map._container._leaflet_id);
+        window.leaf.destroy();
+      }
+
+      resetStyles();
+      runLayout();
+    }
+
+    // return () => {
+    //   if (window.leaf) {
+    //     console.log('leaf found');
+    //     window.leaf.destroy();
+    //   }
+    // };
+
+  }, [showMap])
+
+  useEffect(() => {
     if (!cy.current) { return; }
 
     resetStyles()
 
+    // Bind event handlers for interactions
     cy.current.on('add', (event) => {
       console.log('something added to graph', event.target.classes(), event.target.data('type'));
       if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
@@ -63,6 +86,7 @@ const useCyModes = (cy, id) => {
     cy.current.on('select', 'node', (event) => {
       const selectedID = event.target.data().id;
       console.log('A node was selected', selectedID);
+
       // Animate to the selected node
       cy.current.animate({
         fit: {
@@ -74,6 +98,7 @@ const useCyModes = (cy, id) => {
         duration: 200
       });
 
+      // Dispatch an event so that UI can update
       dispatch(visualisationActions.setSelected(selectedID));
     });
 
@@ -82,13 +107,12 @@ const useCyModes = (cy, id) => {
       dispatch(visualisationActions.clearSelected());
     });
 
+    // 'eh' is the edge creation extension: https://github.com/cytoscape/cytoscape.js-edgehandles
     cy.current.on('ehstart', (event) => {
-      console.log('start');
       stopLayout();
     });
 
     cy.current.on('ehcomplete', (event) => {
-      console.log('complete');
       runLayout();
     });
 
@@ -97,7 +121,6 @@ const useCyModes = (cy, id) => {
     } else {
       stopLayout();
     }
-
 
     return () => {
       if (cy.current) {
@@ -116,8 +139,6 @@ const useCyModes = (cy, id) => {
       // See: https://github.com/cytoscape/cytoscape.js-cola#api
       const layoutOptions = { name: 'cola', infinite: true, fit: false };
       layout = cy.current.layout(layoutOptions);
-      console.log('layout created', layout);
-
       layout.run();
       }
     };
@@ -133,7 +154,7 @@ const useCyModes = (cy, id) => {
     console.log('enabling relationship preset');
     if (!cy.current) { return; }
 
-    const localHideEdges = state.options.hideEdges || [];
+    const localHideEdges = modeOptions.hideEdges || [];
 
     cy.current.elements((ele) => {
       if (ele.isEdge() && localHideEdges.includes(ele.data('type'))) { ele.addClass('hidden') }
@@ -174,7 +195,7 @@ const useCyModes = (cy, id) => {
     ]
 
     scenes.forEach((scene, index) => {
-      if (state.options.hideScenes && state.options.hideScenes.includes(scene)) {
+      if (modeOptions.hideScenes && modeOptions.hideScenes.includes(scene)) {
         return;
       }
 
@@ -209,7 +230,7 @@ const useCyModes = (cy, id) => {
     ];
 
     baseJurisdictionOptions.forEach((jurisdiction, index) => {
-      if (state.options.hideJurisdiction && state.options.hideJurisdiction.includes(jurisdiction.key)) {
+      if (modeOptions.hideJurisdiction && modeOptions.hideJurisdiction.includes(jurisdiction.key)) {
         return;
       }
 
@@ -231,11 +252,6 @@ const useCyModes = (cy, id) => {
 
   const resetStyles = () => {
     if (!cy.current) { return; }
-
-    if (window.leaf) {
-      window.leaf.destroy();
-      window.leaf = null;
-    }
 
     cy.current.elements().removeClass('hidden half-opacity');
     applyStylesheet([
@@ -343,8 +359,8 @@ const useCyModes = (cy, id) => {
     const context = virtualCanvas.getContext('2d');
 
     if(
-      state.mode == modes.CONFIGURE &&
-      (state.options.preset === 'scene' || state.options.preset === 'geography' || state.options.preset === 'jurisdiction')
+      mode.mode == modes.CONFIGURE &&
+      (modeOptions.preset === 'scene' || modeOptions.preset === 'geography' || modeOptions.preset === 'jurisdiction')
     ) {
       const svgImage = await getSVGImage();
       context.putImageData(svgImage, 0, 0);
@@ -378,51 +394,8 @@ const useCyModes = (cy, id) => {
     });
   }
 
-  const disableGeographyPreset = () => {
-    if (!cy.current) { return; }
-
-    // This ends up being called multiple times, which causes it to crash.
-    // To fix this, destroy any existing instance found so it can be recreated.
-    if (window.leaf) {
-      console.log('leaf found');
-      window.leaf.destroy();
-    }
-  }
-
-  const applyGeographyPreset = () => {
-    console.log('applying geography preset');
-    if (!cy.current) { return; }
-
-    // This ends up being called multiple times, which causes it to crash.
-    // To fix this, destroy any existing instance found so it can be recreated.
-    if (window.leaf) {
-      console.log('leaf found');
-      window.leaf.destroy();
-    }
-
-    console.log(cy.current.nodes().length);
-
-    // Filter nodes that don't have a location
-    var eles = cy.current.nodes().filter('[!location]').remove();
-
-    console.log(cy.current.nodes().length);
-
-    const options = {
-      // the container in which the map should live, should be a sibling of the cytoscape container
-      container: document.getElementById('cy-leaflet'),
-
-      // the data field for latitude
-      latitude: (data) => data.location.y,
-      // the data field for longitude
-      longitude: (data) => data.location.x,
-    };
-
-    window.leaf = cy.current.leaflet(options, );
-  }
-
-
   const applyPreset = () => {
-    switch (state.options.preset) {
+    switch (modeOptions.preset) {
       case 'scene':
         applyScenePreset();
         break;
@@ -434,9 +407,6 @@ const useCyModes = (cy, id) => {
         break;
       case 'jurisdiction':
         applyJurisdictionPreset();
-        break;
-      case 'geography':
-        applyGeographyPreset();
         break;
       default:
         break;
@@ -451,12 +421,12 @@ const useCyModes = (cy, id) => {
     disableAttributeBoundingBoxes();
     resetStyles();
 
-    switch (state.mode) {
+    switch (mode.mode) {
       case modes.ASSIGN_ATTRIBUTES:
-        enableNodeHighlighting(state.options.highlightScene);
+        enableNodeHighlighting(modeOptions.highlightScene);
         break;
       case modes.CREATE_EDGES:
-        enableEdgeCreation(state.options.createEdgeType);
+        enableEdgeCreation(modeOptions.createEdgeType);
         break;
       case modes.CONFIGURE:
         applyPreset();
@@ -466,10 +436,10 @@ const useCyModes = (cy, id) => {
   }, [
     id,
     showLabels,
-    state.mode,
-    state.options,
+    mode.mode,
+    modeOptions,
     automaticLayout,
-  ]); // could even respond to state.options?
+  ]); // could even respond to modeOptions?
 
   const actions = {
     runLayout,
@@ -482,7 +452,7 @@ const useCyModes = (cy, id) => {
     exportPNG,
   };
 
-  return [state, actions];
+  return [mode, actions];
 };
 
 export default useCyModes;

@@ -21,3 +21,12 @@ export const getSelectedEdge = state => {
   if (id && getSelectedType(state) !== 'edge') { return null; }
   return id;
 };
+
+export const getShowLabels = state =>
+  get(state, 'visualisation.showLabels');
+
+export const getAutomaticLayout = state =>
+  get(state, 'visualisation.automaticLayout');
+
+export const getShowMap = state =>
+  get(state, 'visualisation.showMap');
