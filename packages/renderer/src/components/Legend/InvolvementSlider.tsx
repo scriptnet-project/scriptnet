@@ -1,9 +1,12 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import useCytoscape from '@/hooks/Cytoscape';
+import { useCytoscape, useCytoscapeActions } from '@/hooks/Cytoscape';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider } from '@fluentui/react';
 import { isEmpty } from 'lodash';
+
+let maxPossibleDate = new Date(8640000000000000);
+let minPossibleDate = new Date(-8640000000000000);
 
 type Involvement = {
   key: number;
@@ -11,28 +14,46 @@ type Involvement = {
   end: string;
 };
 
-const getHighest = (dateArray: []) => {
-  return dateArray.reduce((highest, date) => {
-    if (date > highest) {
-      return date;
-    }
-    return highest;
-  }, new Date(0));
-}
+const getInvolvementRange = (involvements: Involvement[]) => {
+  return involvements.reduce(
+    (acc, curr) => {
+      const start = curr.start ? new Date(curr.start) : minPossibleDate;
+      const end = curr.end ? new Date(curr.end) : maxPossibleDate;
+      if (start < acc.start) {
+        acc.start = start;
+      }
+      if (end > acc.end) {
+        acc.end = end;
+      }
+      return acc;
+    }, { start: new Date(), end: new Date() }
+  )
+};
 
-const getLowest = (dateArray: []) => {
-  return dateArray.reduce((lowest, date) => {
-    if (date < lowest) {
-      return date;
-    }
-    return lowest;
-  }, new Date(0));
+// Involvement 1: 01/2020 - 03/2020
+// Involvement 2: 05/2020 - null
+
+// Range slider:
+//  - 01/2020 - 04/2020 - YES
+//  - 06/2020 - All - YES
+//  - 04/2020 - 04/2020 - NO
+
+const nodeHasInvolvementWithinRange = (involvements: Involvement[], start: Date, end: Date) => {
+  return involvements.some(involvement => {
+    const startDate = involvement.start ? new Date(involvement.start) : minPossibleDate;
+    const endDate = involvement.end ? new Date(involvement.end) : maxPossibleDate;
+    return startDate <= start && endDate >= end;
+  });
 }
 
 let filteredElements;
 
 const InvolvementSlider = () => {
   const { cy } = useCytoscape();
+  const {
+    runLayout,
+  } = useCytoscapeActions();
+
   const [ dates, setDates ] = useState([]);
 
   useEffect(() => {
@@ -73,9 +94,9 @@ const InvolvementSlider = () => {
     });
 
     const datesWithBounds = [
-      -Infinity,
+      minPossibleDate,
       ...sortedDates,
-      Infinity
+      maxPossibleDate,
     ]
 
     setDates(datesWithBounds);
@@ -108,33 +129,30 @@ const InvolvementSlider = () => {
       return;
     }
 
+    const minSliderDate = value[0] === 0 ? maxPossibleDate : new Date(dates[start]);
+    const maxSliderDate = value[1] === dates.length -1 ? minPossibleDate : new Date(dates[end]);
+
+    // Filter nodes whose involvements don't intersect the min and max dates
     filteredElements = cy.current.nodes().filter((node) => {
       const nodeInvolvements = node.data('involvements');
 
-      // Filter nodes with no involvements
+      // Remove nodes with no involvements
       if (!nodeInvolvements) {
+        return false;
+      }
+
+      const involvementRange = getInvolvementRange(nodeInvolvements);
+
+      const overlap = nodeHasInvolvementWithinRange(nodeInvolvements, minSliderDate, maxSliderDate);
+
+      if (overlap) {
         return true;
       }
 
-      const highestEnd = getHighest(nodeInvolvements.map((involvement: Involvement) => {
-        if (involvement.end) {
-          return new Date(involvement.end);
-        }
-        return Infinity;
-      }));
-
-      const lowestStart = getLowest(nodeInvolvements.map((involvement: Involvement) => {
-        if (involvement.start) {
-          return new Date(involvement.start);
-        }
-        return -Infinity;
-      }));
-
-      const sliderEnd = new Date(dates[end]);
-      const sliderStart = new Date(dates[start]);
-
-      return highestEnd > sliderEnd || lowestStart < sliderStart;
+      return false;
     }).remove();
+
+    runLayout();
   }, [cy, dates, sliderValue]);
 
   const formatValue = useCallback((value) => {
@@ -149,6 +167,8 @@ const InvolvementSlider = () => {
     const date = new Date(dates[value]);
     return date.toISOString().slice(0, 10);
   }, [dates]);
+
+  console.log(dates);
 
   return (
     <motion.div

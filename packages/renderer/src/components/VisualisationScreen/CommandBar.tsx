@@ -1,20 +1,11 @@
-import { useState, useCallback } from 'react';
 import {
   CommandBar,
-  DefaultButton,
-  getTheme,
-  ICommandBarItemProps,
-  PrimaryButton,
-  ThemeProvider,
   Toggle,
 } from '@fluentui/react';
 import { useCytoscape, useCytoscapeActions } from '../../hooks/Cytoscape';
-// import './CommandBar.scss';
+import './CommandBar.scss';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
-import { actionCreators as modeActions, modes } from '../../store/mode';
 import { useDispatch, useSelector } from 'react-redux';
-import panelTheme from '../../themes/panel';
-import Forms from '../Forms/Forms';
 import ShowMapToggle from '../Legend/ShowMapToggle';
 import AutomaticLayoutToggle from '../Legend/AutomaticLayoutToggle';
 import './CommandBar.scss';
