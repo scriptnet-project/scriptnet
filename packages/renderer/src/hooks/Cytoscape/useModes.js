@@ -14,6 +14,7 @@ import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selec
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
 
 let layout;
+let filteredElements;
 
 const useCyModes = (cy, id) => {
   const mode = useSelector(getMode);
@@ -33,8 +34,7 @@ const useCyModes = (cy, id) => {
     if (showMap) {
       stopLayout();
       // Filter nodes that don't have a location
-      // TODO: this should add a "hidden" attribute to the nodes so it can be reverted.
-      cy.current.nodes().filter('[!location]').remove();
+      filteredElements = cy.current.nodes().filter('[!location]').remove();
 
       const options = {
         // the container in which the map should live, should be a sibling of the cytoscape container
@@ -60,6 +60,11 @@ const useCyModes = (cy, id) => {
         window.leaf.destroy();
       }
 
+      if (filteredElements && !showMap) {
+        filteredElements.restore();
+        filteredElements = null;
+      }
+
       resetStyles();
       dispatch(visualisationActions.setAutomaticLayout(true));
     }
@@ -73,7 +78,6 @@ const useCyModes = (cy, id) => {
 
     // Bind event handlers for interactions
     cy.current.on('add', (event) => {
-      console.log('something added to graph', event.target.classes(), event.target.data('type'));
       if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
     });
 
@@ -247,7 +251,9 @@ const useCyModes = (cy, id) => {
   const resetStyles = () => {
     if (!cy.current) { return; }
 
+
     cy.current.elements().removeClass('hidden half-opacity');
+
     applyStylesheet([
       ...baseStylesheet,
       ...defaultEntityColours,

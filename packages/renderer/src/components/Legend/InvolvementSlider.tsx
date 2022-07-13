@@ -1,43 +1,154 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import useCytoscape from '@/hooks/Cytoscape';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider } from '@fluentui/react';
+import { isEmpty } from 'lodash';
+
+type Involvement = {
+  key: number;
+  start: string;
+  end: string;
+};
+
+const getHighest = (dateArray: []) => {
+  return dateArray.reduce((highest, date) => {
+    if (date > highest) {
+      return date;
+    }
+    return highest;
+  }, new Date(0));
+}
+
+const getLowest = (dateArray: []) => {
+  return dateArray.reduce((lowest, date) => {
+    if (date < lowest) {
+      return date;
+    }
+    return lowest;
+  }, new Date(0));
+}
+
+let filteredElements;
 
 const InvolvementSlider = () => {
-  const { id } = useCytoscape();
-  const dispatch = useDispatch();
-  // const { involvement } = useSelector(s => s.visualisation);
+  const { cy } = useCytoscape();
+  const [ dates, setDates ] = useState([]);
 
-  const dates = [
-    'Start',
-    '2022-03-31T22:00:00.000Z',
-    '2022-04-04T22:00:00.000Z',
-    '2022-04-12T22:00:00.000Z',
-    '2022-04-15T22:00:00.000Z',
-    'Future',
-  ];
+  useEffect(() => {
+    if(!cy) return;
 
-  const max = useMemo(() => dates.length -1, [dates]);
-  const [sliderValue, setSliderValue] = useState([0, max]);
+    const nodes = cy.current.nodes();
 
-  const onChange = useCallback((event, value) => {
-    setSliderValue(value);
-    // dispatch(visualisationActions.setInvolvement(value));
-  }, [id, dispatch]);
-
-  const formatValue = useCallback((value) => {
-    // First and last entries are special
-    if (value === max || value === 0) {
-      return dates[value];
+    if (isEmpty(nodes)) {
+      return;
     }
 
-    // Middle entries are formatted as dates
-    const date = new Date(dates[value]);
+    const newDates = [];
 
-    // Ensure that the date is in the correct format
+    cy.current.nodes().map((node) => {
+      const involvements = node.data('involvements');
+
+      if (!involvements) {
+        return;
+      }
+
+      involvements.forEach((involvement: Involvement) => {
+        if (involvement.start) {
+          newDates.push(involvement.start);
+        }
+
+        if (involvement.end) {
+          newDates.push(involvement.end);
+        }
+      });
+    });
+
+    // Make sure we have unique dates
+    const uniqueDates = new Set(newDates);
+
+    // Sort dates
+    const sortedDates = [...uniqueDates].sort((a, b) => {
+      return new Date(a) - new Date(b);
+    });
+
+    const datesWithBounds = [
+      -Infinity,
+      ...sortedDates,
+      Infinity
+    ]
+
+    setDates(datesWithBounds);
+
+  }, [cy.current]);
+
+  const [sliderValue, setSliderValue] = useState([0, 0]);
+
+  // Update the upper slider value when the dates change
+  useEffect(() => {
+    if (isEmpty(dates)) {
+      return;
+    }
+
+    setSliderValue(value => [value[0], dates.length - 1]);
+  }, [dates]);
+
+  const onChange = useCallback((event, value) => {
+    if (filteredElements) {
+      filteredElements.restore();
+      filteredElements = null;
+    }
+
+    setSliderValue(value);
+
+    const [start, end] = value;
+
+    // Don't filter at all if we are at "all" on both sides
+    if (value[0] === 0 && value[1] === dates.length - 1) {
+      return;
+    }
+
+    filteredElements = cy.current.nodes().filter((node) => {
+      const nodeInvolvements = node.data('involvements');
+
+      // Filter nodes with no involvements
+      if (!nodeInvolvements) {
+        return true;
+      }
+
+      const highestEnd = getHighest(nodeInvolvements.map((involvement: Involvement) => {
+        if (involvement.end) {
+          return new Date(involvement.end);
+        }
+        return Infinity;
+      }));
+
+      const lowestStart = getLowest(nodeInvolvements.map((involvement: Involvement) => {
+        if (involvement.start) {
+          return new Date(involvement.start);
+        }
+        return -Infinity;
+      }));
+
+      const sliderEnd = new Date(dates[end]);
+      const sliderStart = new Date(dates[start]);
+
+      return highestEnd > sliderEnd || lowestStart < sliderStart;
+    }).remove();
+  }, [cy, dates, sliderValue]);
+
+  const formatValue = useCallback((value) => {
+    if (isEmpty(dates)) {
+      return '';
+    }
+
+    if (value === 0 || value === dates.length - 1) {
+      return 'All';
+    }
+
+    const date = new Date(dates[value]);
     return date.toISOString().slice(0, 10);
-  }, [dates])
+  }, [dates]);
 
   return (
     <motion.div
@@ -56,15 +167,12 @@ const InvolvementSlider = () => {
       <Slider
         label="Period(s) of Involvement"
         min={0}
-        max={max}
+        max={dates.length - 1}
         step={1}
         lowerValue={sliderValue[0]}
         value={sliderValue[1]}
         valueFormat={formatValue}
-        // defaultLowerValue
-        // value={involvement}
         onChange={onChange}
-        // showValue
         ranged
         styles={{
           valueLabel: {
