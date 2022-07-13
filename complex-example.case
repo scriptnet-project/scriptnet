@@ -1,1 +1,697 @@
-{"network":{"elements":[{"data":{"name":"Person","type":"person","id":"654eda0e-081d-4e1c-930e-4b08a54cf3ed","pre-activity":"true","preparation":"true","jurisdiction":"local","role":"Suspected Primary Offender","gender":"Male","notes":"notes about this person","location":{"x":"-2.2451148","y":"53.4794892","label":"Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom","bounds":[[53.3194892,-2.4051148],[53.6394892,-2.0851148]],"raw":{"place_id":692549,"licence":"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright","osm_type":"node","osm_id":294001443,"lat":"53.4794892","lon":"-2.2451148","display_name":"Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom","address":{"city":"Manchester","county":"Lancashire","ISO3166-2-lvl6":"GB-LAN","state_district":"North West England","state":"England","ISO3166-2-lvl4":"GB-ENG","postcode":"M60 2UB","country":"United Kingdom","country_code":"gb"},"boundingbox":["53.3194892","53.6394892","-2.4051148","-2.0851148"]}},"involvements":[{"key":1,"start":"2022-03-31T22:00:00.000Z","end":"2022-04-04T22:00:00.000Z"},{"key":2,"start":"2022-04-12T22:00:00.000Z","end":"2022-04-15T22:00:00.000Z"}]},"position":{"x":408.29098162477476,"y":436.6376452283444},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"source":"adb42a75-948a-41a4-9e46-45f2d758718d","target":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","type":"financial","id":"8f654130-5e7b-4f15-91eb-792d0f3b34fc"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","target":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","type":"personal","id":"7723da08-be24-4834-b2ab-2e3dd2b1b07c"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"adb42a75-948a-41a4-9e46-45f2d758718d","target":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","type":"personal","id":"d5580ffb-2a96-4be7-899e-5aaa6ce3dbea"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"type":"person","name":"Joshua M.","id":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","location":{"x":"-1.1330789","y":"52.6361398","label":"Leicester, Leicestershire, East Midlands, England, LE1 5YA, United Kingdom","bounds":[[52.4761398,-1.2930789],[52.7961398,-0.9730789]],"raw":{"place_id":285529636,"licence":"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright","osm_type":"node","osm_id":10021976,"boundingbox":["52.4761398","52.7961398","-1.2930789","-0.9730789"],"lat":"52.6361398","lon":"-1.1330789","display_name":"Leicester, Leicestershire, East Midlands, England, LE1 5YA, United Kingdom","class":"place","type":"city","importance":0.7085193587026449,"icon":"https://nominatim.openstreetmap.org/ui/mapicons/poi_place_city.p.20.png"}},"jurisdiction":"local","role":"Regulator","gender":"Male","involvements":[{"key":1,"start":"2019-02-05T22:00:00.000Z","end":"2022-11-30T22:00:00.000Z"}],"notes":"","pre-activity":"true"},"position":{"x":645.2222091638108,"y":357.670928877619},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"type":"person","name":"Steve","id":"adb42a75-948a-41a4-9e46-45f2d758718d","location":{"x":"-0.12693017575934035","y":"50.8389149","label":"Brighton, Brighton and Hove, South East England, England, United Kingdom","bounds":[[50.8072983,-0.1744421],[50.8703661,-0.0875354]],"raw":{"place_id":183529414,"licence":"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright","osm_type":"way","osm_id":341820414,"lat":"50.8389149","lon":"-0.12693017575934035","display_name":"Brighton, Brighton and Hove, South East England, England, United Kingdom","address":{"city":"Brighton","county":"Brighton and Hove","ISO3166-2-lvl6":"GB-BNH","state_district":"South East England","state":"England","ISO3166-2-lvl4":"GB-ENG","country":"United Kingdom","country_code":"gb"},"boundingbox":["50.8072983","50.8703661","-0.1744421","-0.0875354"]}},"jurisdiction":"local","role":"Suspected Victim","gender":"Male","involvements":[{"key":1,"start":"2022-03-26T22:00:00.000Z","end":"2022-04-06T22:00:00.000Z"}],"notes":"","pre-activity":"true"},"position":{"x":644.4322031493474,"y":258.97433280903164},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"source":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","target":"adb42a75-948a-41a4-9e46-45f2d758718d","type":"financial","id":"b0eaa0d1-4e4d-4b97-897e-d39c42b6f072"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"type":"person","name":"Nick","id":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","location":{"x":"-2.284415542727362","y":"53.4404341","label":"Chorlton, Manchester, Greater Manchester, North West England, England, United Kingdom","bounds":[[53.4302144,-2.3002012],[53.4507152,-2.2673374]],"raw":{"place_id":285381505,"licence":"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright","osm_type":"relation","osm_id":9070818,"lat":"53.4404341","lon":"-2.284415542727362","display_name":"Chorlton, Manchester, Greater Manchester, North West England, England, United Kingdom","address":{"boundary":"Chorlton","city":"Manchester","county":"Greater Manchester","state_district":"North West England","state":"England","ISO3166-2-lvl4":"GB-ENG","country":"United Kingdom","country_code":"gb"},"boundingbox":["53.4302144","53.4507152","-2.3002012","-2.2673374"]}},"jurisdiction":"local","role":"Suspected Facilitator","gender":"Male","involvements":[{"key":1,"start":"2021-10-31T22:00:00.000Z","end":"2022-02-23T22:00:00.000Z"},{"key":2,"start":"2020-02-10T22:00:00.000Z","end":"2021-08-18T22:00:00.000Z"},{"key":3,"start":"2022-04-11T22:00:00.000Z","end":"2022-03-28T22:00:00.000Z"}],"notes":"Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nSome other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nSome other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nIncluding some spacing.","preparation":"true"},"position":{"x":520.0896586463278,"y":405.118017229822},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"source":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","target":"654eda0e-081d-4e1c-930e-4b08a54cf3ed","type":"communication","id":"4f8c88da-5cfe-4b60-9bea-7b31a0c6083e"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"name":"Place","type":"location","id":"f00a818a-8280-4c3d-80a7-14d18bedb936","preparation":"true"},"position":{"x":300.7219701408623,"y":430.6411250386345},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"name":"Resource","type":"resource","id":"68edacbd-0ff7-468c-b055-6ed55058e513","activity":"true","preparation":"true"},"position":{"x":345.2386031537535,"y":520.2411063611773},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"name":"Business","type":"organisation","id":"06a7f512-c8d1-42a6-a17a-0aa26d24b419","pre-activity":"true","post-activity":"true","jurisdiction":"local","role":"Suspected Facilitator","gender":"Male","notes":"things!","firstInvolvement":"2022-02-08T22:00:00.000Z","lastInvolvement":"2022-02-15T22:00:00.000Z"},"position":{"x":199.1299444400298,"y":403.2131517420001},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"type":"person","name":"Elisa","id":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","preparation":"true","pre-activity":"true"},"position":{"x":571.2323516857394,"y":335.19474153107734},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"type":"person","name":"Cecelia","id":"a1d7aa9a-9144-463d-94ef-c5f80eed81fe","preparation":"true"},"position":{"x":595.5959383473177,"y":457.0831253311869},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":false,"classes":"eh-preview-active"},{"data":{"source":"a1d7aa9a-9144-463d-94ef-c5f80eed81fe","target":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","type":"working","id":"e2f82c5c-49f2-4bbc-b2ac-4b9e7be1cb17"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","target":"a1d7aa9a-9144-463d-94ef-c5f80eed81fe","type":"working","id":"8359a986-7a8b-4677-84df-66fb70734cbd"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","target":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","type":"personal","id":"6e2455c5-5619-4fdb-976e-13bc2ba3e29d"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","target":"adb42a75-948a-41a4-9e46-45f2d758718d","type":"personal","id":"61eedb51-4b4d-4727-9a6a-fd618254b95c"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e","target":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","type":"personal","id":"3927ca5a-a244-4fde-8f2b-833029381693"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"a1d7aa9a-9144-463d-94ef-c5f80eed81fe","target":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","type":"working","id":"f7e50026-66d6-4df0-8609-42a3b61f8617"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","target":"a1d7aa9a-9144-463d-94ef-c5f80eed81fe","type":"working","id":"2dc4a54e-07ee-4461-b35e-30d10c2f518d"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","target":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","type":"working","id":"084d90bf-4901-4301-9998-ac7afd9ccff5"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21","target":"bffb7ddf-a21b-4b38-963c-f2c2506637d9","type":"working","id":"7fdce4b3-58ce-4c92-af64-7b8fa9be570c"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"654eda0e-081d-4e1c-930e-4b08a54cf3ed","target":"68edacbd-0ff7-468c-b055-6ed55058e513","type":"ownership","id":"a38089f3-8531-491c-bb86-0ce5ed35a67f"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"654eda0e-081d-4e1c-930e-4b08a54cf3ed","target":"f00a818a-8280-4c3d-80a7-14d18bedb936","type":"ownership","id":"5939b671-486e-4302-9bda-9db1d8bd8177"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"68edacbd-0ff7-468c-b055-6ed55058e513","target":"f00a818a-8280-4c3d-80a7-14d18bedb936","type":"ownership","id":"3e0c3539-d2b5-4d5b-ba90-8185ea04645d"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"06a7f512-c8d1-42a6-a17a-0aa26d24b419","target":"f00a818a-8280-4c3d-80a7-14d18bedb936","type":"financial","id":"a603c188-370b-497d-a79e-b3a4ea06e048"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""},{"data":{"source":"f00a818a-8280-4c3d-80a7-14d18bedb936","target":"06a7f512-c8d1-42a6-a17a-0aa26d24b419","type":"financial","id":"865da305-bf01-4ce1-93d4-c97f1aace658"},"position":{"x":0,"y":0},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"pannable":true,"classes":""}]}}
+{
+  "network": {
+    "elements": [{
+      "data": {
+        "name": "Person",
+        "type": "person",
+        "id": "654eda0e-081d-4e1c-930e-4b08a54cf3ed",
+        "pre-activity": "true",
+        "preparation": "true",
+        "jurisdiction": "local",
+        "role": "Suspected Primary Offender",
+        "gender": "Male",
+        "notes": "notes about this person",
+        "location": {
+          "x": "-2.2451148",
+          "y": "53.4794892",
+          "label": "Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom",
+          "bounds": [
+            [53.3194892, -2.4051148],
+            [53.6394892, -2.0851148]
+          ],
+          "raw": {
+            "place_id": 692549,
+            "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+            "osm_type": "node",
+            "osm_id": 294001443,
+            "lat": "53.4794892",
+            "lon": "-2.2451148",
+            "display_name": "Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom",
+            "address": {
+              "city": "Manchester",
+              "county": "Lancashire",
+              "ISO3166-2-lvl6": "GB-LAN",
+              "state_district": "North West England",
+              "state": "England",
+              "ISO3166-2-lvl4": "GB-ENG",
+              "postcode": "M60 2UB",
+              "country": "United Kingdom",
+              "country_code": "gb"
+            },
+            "boundingbox": ["53.3194892", "53.6394892", "-2.4051148", "-2.0851148"]
+          }
+        }
+      },
+      "position": {
+        "x": 408.29098162477476,
+        "y": 436.6376452283444
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "source": "adb42a75-948a-41a4-9e46-45f2d758718d",
+        "target": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "type": "financial",
+        "id": "8f654130-5e7b-4f15-91eb-792d0f3b34fc"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "target": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "type": "personal",
+        "id": "7723da08-be24-4834-b2ab-2e3dd2b1b07c"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "adb42a75-948a-41a4-9e46-45f2d758718d",
+        "target": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "type": "personal",
+        "id": "d5580ffb-2a96-4be7-899e-5aaa6ce3dbea"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "type": "person",
+        "name": "Joshua M.",
+        "id": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "location": {
+          "x": "-1.1330789",
+          "y": "52.6361398",
+          "label": "Leicester, Leicestershire, East Midlands, England, LE1 5YA, United Kingdom",
+          "bounds": [
+            [52.4761398, -1.2930789],
+            [52.7961398, -0.9730789]
+          ],
+          "raw": {
+            "place_id": 285529636,
+            "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+            "osm_type": "node",
+            "osm_id": 10021976,
+            "boundingbox": ["52.4761398", "52.7961398", "-1.2930789", "-0.9730789"],
+            "lat": "52.6361398",
+            "lon": "-1.1330789",
+            "display_name": "Leicester, Leicestershire, East Midlands, England, LE1 5YA, United Kingdom",
+            "class": "place",
+            "type": "city",
+            "importance": 0.7085193587026449,
+            "icon": "https://nominatim.openstreetmap.org/ui/mapicons/poi_place_city.p.20.png"
+          }
+        },
+        "jurisdiction": "local",
+        "role": "Regulator",
+        "gender": "Male",
+        "involvements": [{
+          "key": 1,
+          "start": "2019-02-05T22:00:00.000Z",
+          "end": "2022-11-30T22:00:00.000Z"
+        }],
+        "notes": "",
+        "pre-activity": "true"
+      },
+      "position": {
+        "x": 645.2222091638108,
+        "y": 357.670928877619
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "type": "person",
+        "name": "Steve",
+        "id": "adb42a75-948a-41a4-9e46-45f2d758718d",
+        "location": {
+          "x": "-0.12693017575934035",
+          "y": "50.8389149",
+          "label": "Brighton, Brighton and Hove, South East England, England, United Kingdom",
+          "bounds": [
+            [50.8072983, -0.1744421],
+            [50.8703661, -0.0875354]
+          ],
+          "raw": {
+            "place_id": 183529414,
+            "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+            "osm_type": "way",
+            "osm_id": 341820414,
+            "lat": "50.8389149",
+            "lon": "-0.12693017575934035",
+            "display_name": "Brighton, Brighton and Hove, South East England, England, United Kingdom",
+            "address": {
+              "city": "Brighton",
+              "county": "Brighton and Hove",
+              "ISO3166-2-lvl6": "GB-BNH",
+              "state_district": "South East England",
+              "state": "England",
+              "ISO3166-2-lvl4": "GB-ENG",
+              "country": "United Kingdom",
+              "country_code": "gb"
+            },
+            "boundingbox": ["50.8072983", "50.8703661", "-0.1744421", "-0.0875354"]
+          }
+        },
+        "jurisdiction": "local",
+        "role": "Suspected Victim",
+        "gender": "Male",
+        "involvements": [{
+          "key": 1,
+          "start": "2022-03-26T22:00:00.000Z",
+          "end": "2022-04-06T22:00:00.000Z"
+        }],
+        "notes": "",
+        "pre-activity": "true"
+      },
+      "position": {
+        "x": 644.4322031493474,
+        "y": 258.97433280903164
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "source": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "target": "adb42a75-948a-41a4-9e46-45f2d758718d",
+        "type": "financial",
+        "id": "b0eaa0d1-4e4d-4b97-897e-d39c42b6f072"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "type": "person",
+        "name": "Nick",
+        "id": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "location": {
+          "x": "-2.284415542727362",
+          "y": "53.4404341",
+          "label": "Chorlton, Manchester, Greater Manchester, North West England, England, United Kingdom",
+          "bounds": [
+            [53.4302144, -2.3002012],
+            [53.4507152, -2.2673374]
+          ],
+          "raw": {
+            "place_id": 285381505,
+            "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+            "osm_type": "relation",
+            "osm_id": 9070818,
+            "lat": "53.4404341",
+            "lon": "-2.284415542727362",
+            "display_name": "Chorlton, Manchester, Greater Manchester, North West England, England, United Kingdom",
+            "address": {
+              "boundary": "Chorlton",
+              "city": "Manchester",
+              "county": "Greater Manchester",
+              "state_district": "North West England",
+              "state": "England",
+              "ISO3166-2-lvl4": "GB-ENG",
+              "country": "United Kingdom",
+              "country_code": "gb"
+            },
+            "boundingbox": ["53.4302144", "53.4507152", "-2.3002012", "-2.2673374"]
+          }
+        },
+        "jurisdiction": "local",
+        "role": "Suspected Facilitator",
+        "gender": "Male",
+        "involvements": [{
+          "key": 1,
+          "start": "2021-10-31T22:00:00.000Z",
+          "end": "2022-02-23T22:00:00.000Z"
+        }, {
+          "key": 2,
+          "start": "2020-02-10T22:00:00.000Z",
+          "end": "2021-08-18T22:00:00.000Z"
+        }, {
+          "key": 3,
+          "start": "2022-04-11T22:00:00.000Z",
+          "end": "2022-03-28T22:00:00.000Z"
+        }],
+        "notes": "Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nSome other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nSome other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. Some other notes that might be longer. \n\nIncluding some spacing.",
+        "preparation": "true"
+      },
+      "position": {
+        "x": 520.0896586463278,
+        "y": 405.118017229822
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "source": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "target": "654eda0e-081d-4e1c-930e-4b08a54cf3ed",
+        "type": "communication",
+        "id": "4f8c88da-5cfe-4b60-9bea-7b31a0c6083e"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "name": "Place",
+        "type": "location",
+        "id": "f00a818a-8280-4c3d-80a7-14d18bedb936",
+        "preparation": "true"
+      },
+      "position": {
+        "x": 300.7219701408623,
+        "y": 430.6411250386345
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "name": "Resource",
+        "type": "resource",
+        "id": "68edacbd-0ff7-468c-b055-6ed55058e513",
+        "activity": "true",
+        "preparation": "true"
+      },
+      "position": {
+        "x": 345.2386031537535,
+        "y": 520.2411063611773
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "name": "Business",
+        "type": "organisation",
+        "id": "06a7f512-c8d1-42a6-a17a-0aa26d24b419",
+        "pre-activity": "true",
+        "post-activity": "true",
+        "jurisdiction": "local",
+        "role": "Suspected Facilitator",
+        "gender": "Male",
+        "notes": "things!",
+        "firstInvolvement": "2022-02-08T22:00:00.000Z",
+        "lastInvolvement": "2022-02-15T22:00:00.000Z"
+      },
+      "position": {
+        "x": 199.1299444400298,
+        "y": 403.2131517420001
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "type": "person",
+        "name": "Elisa",
+        "id": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "preparation": "true",
+        "pre-activity": "true"
+      },
+      "position": {
+        "x": 571.2323516857394,
+        "y": 335.19474153107734
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "type": "person",
+        "name": "Cecelia",
+        "id": "a1d7aa9a-9144-463d-94ef-c5f80eed81fe",
+        "preparation": "true"
+      },
+      "position": {
+        "x": 595.5959383473177,
+        "y": 457.0831253311869
+      },
+      "group": "nodes",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": false,
+      "classes": "eh-preview-active"
+    }, {
+      "data": {
+        "source": "a1d7aa9a-9144-463d-94ef-c5f80eed81fe",
+        "target": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "type": "working",
+        "id": "e2f82c5c-49f2-4bbc-b2ac-4b9e7be1cb17"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "target": "a1d7aa9a-9144-463d-94ef-c5f80eed81fe",
+        "type": "working",
+        "id": "8359a986-7a8b-4677-84df-66fb70734cbd"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "target": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "type": "personal",
+        "id": "6e2455c5-5619-4fdb-976e-13bc2ba3e29d"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "target": "adb42a75-948a-41a4-9e46-45f2d758718d",
+        "type": "personal",
+        "id": "61eedb51-4b4d-4727-9a6a-fd618254b95c"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "7fa69df9-cc9a-4e3a-b286-4ab6bd1ca80e",
+        "target": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "type": "personal",
+        "id": "3927ca5a-a244-4fde-8f2b-833029381693"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "a1d7aa9a-9144-463d-94ef-c5f80eed81fe",
+        "target": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "type": "working",
+        "id": "f7e50026-66d6-4df0-8609-42a3b61f8617"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "target": "a1d7aa9a-9144-463d-94ef-c5f80eed81fe",
+        "type": "working",
+        "id": "2dc4a54e-07ee-4461-b35e-30d10c2f518d"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "target": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "type": "working",
+        "id": "084d90bf-4901-4301-9998-ac7afd9ccff5"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "c5a74e26-e3fc-44b4-bdcc-317fdbf1cb21",
+        "target": "bffb7ddf-a21b-4b38-963c-f2c2506637d9",
+        "type": "working",
+        "id": "7fdce4b3-58ce-4c92-af64-7b8fa9be570c"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "654eda0e-081d-4e1c-930e-4b08a54cf3ed",
+        "target": "68edacbd-0ff7-468c-b055-6ed55058e513",
+        "type": "ownership",
+        "id": "a38089f3-8531-491c-bb86-0ce5ed35a67f"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "654eda0e-081d-4e1c-930e-4b08a54cf3ed",
+        "target": "f00a818a-8280-4c3d-80a7-14d18bedb936",
+        "type": "ownership",
+        "id": "5939b671-486e-4302-9bda-9db1d8bd8177"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "68edacbd-0ff7-468c-b055-6ed55058e513",
+        "target": "f00a818a-8280-4c3d-80a7-14d18bedb936",
+        "type": "ownership",
+        "id": "3e0c3539-d2b5-4d5b-ba90-8185ea04645d"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "06a7f512-c8d1-42a6-a17a-0aa26d24b419",
+        "target": "f00a818a-8280-4c3d-80a7-14d18bedb936",
+        "type": "financial",
+        "id": "a603c188-370b-497d-a79e-b3a4ea06e048"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }, {
+      "data": {
+        "source": "f00a818a-8280-4c3d-80a7-14d18bedb936",
+        "target": "06a7f512-c8d1-42a6-a17a-0aa26d24b419",
+        "type": "financial",
+        "id": "865da305-bf01-4ce1-93d4-c97f1aace658"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "group": "edges",
+      "removed": false,
+      "selected": false,
+      "selectable": true,
+      "locked": false,
+      "grabbable": true,
+      "pannable": true,
+      "classes": ""
+    }]
+  }
+}
