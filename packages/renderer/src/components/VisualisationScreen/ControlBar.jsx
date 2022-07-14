@@ -61,6 +61,13 @@ const ControlBar = () => {
                     iconProps: { iconName: 'Work' },
                     onClick: () => setForm(forms.ORGANISATION),
                   },
+                  {
+                    key: 'location',
+                    value: 'location',
+                    text: 'Location',
+                    iconProps: { iconName: 'MapPin' },
+                    onClick: () => setForm(forms.LOCATION),
+                  },
                 ],
               }}
               iconProps={{ iconName: "addFriend"}}

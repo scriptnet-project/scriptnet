@@ -9,11 +9,13 @@ import { actionCreators as visualisationActions } from '../../store/visualisatio
 import { getSelectedId } from '../../store/selectors/visualisation';
 import useCytoscape from '../../hooks/Cytoscape';
 import { get } from 'lodash';
+import AddLocationForm from './AddLocationForm';
 
 export const formsByType = {
   PERSON: AddPersonForm,
   RESOURCE: AddResourceForm,
   ORGANISATION: AddOrganisationForm,
+  LOCATION: AddLocationForm
 };
 
 const Forms = () => {
@@ -24,7 +26,6 @@ const Forms = () => {
   const dispatch = useDispatch();
 
   const handleFormClose = useCallback(() => {
-    console.log('handleformclose');
     if (selectedNode) {
       cy.current.nodes().unselect();
       dispatch(visualisationActions.clearSelected())

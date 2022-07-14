@@ -8,6 +8,7 @@ export const forms = {
   PERSON: 'PERSON',
   ORGANISATION: 'ORGANISATION',
   RESOURCE: 'RESOURCE',
+  LOCATION: 'LOCATION',
 };
 
 const actionCreators = createActions({
