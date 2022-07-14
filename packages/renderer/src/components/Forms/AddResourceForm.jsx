@@ -2,14 +2,18 @@ import React from 'react';
 import {
   DefaultButton,
   PrimaryButton,
-  Dialog,
-  DialogType,
-  DialogFooter,
 } from '@fluentui/react';
+import * as Yup from 'yup';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { baseJurisdictionOptions } from './sharedOptions';
+import { formStyles, FormDialog } from './AddPersonForm';
 import LocationSelector from '../Fields/LocationSelector';
+import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
+import TextField from '../Fields/TextField';
+import Dropdown from '../Fields/Dropdown';
+import Field from '../Fields/Field';
+import FieldArray from '../Fields/FieldArray';
 
 const functionOptions = [
   {key: 'Production', text: 'Production' },
@@ -22,17 +26,16 @@ const functionOptions = [
 
 const defaultValues = {
   name: '',
-  location: 'N/A',
+  location: null,
   jurisdiction: 'local',
-  organisationType: 'Private',
-  function: '',
-  role: '',
+  function: null,
+  involvements: [],
+  notes: '',
 };
 
 const AddResourceForm = ({
-  show,
-  onClose,
-  isUpdate,
+  closeDialog,
+  isEditing,
   initialValues = {},
 }) => {
   const cyActions = useCytoscapeActions();
@@ -40,7 +43,7 @@ const AddResourceForm = ({
   const handleFormSubmit = (formData) => {
     console.log('form submitted', formData);
 
-    if (isUpdate) {
+    if (isEditing) {
       const { id, ...data } = formData;
       cyActions.update(id, data);
     } else {
@@ -53,56 +56,43 @@ const AddResourceForm = ({
       });
     }
 
-    onClose();
-    return true;
+    closeDialog();
   }
 
-  const validate = (values) => {
-    console.log('validate', values);
-    const errors = {};
-
-    if (!values.name) {
-      errors.name = 'Please enter a name';
-    }
-
-    if (!values.function) {
-      errors.function = 'Please select a function';
-    }
-
-    return errors
-  }
+  const addResourceSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    function: Yup.string()
+      .required('Required function'),
+    involvements: Yup.array()
+      .of(Yup.object().shape({
+        start: Yup.string().required('Start date is required'),
+        end: Yup.string().required('End date is required'),
+      }))
+      .min('1', 'At least one involvement is required')
+      .required('Required'),
+  });
 
   return (
-    <Dialog
-      hidden={!show}
-      onDismiss={onClose}
-      dialogContentProps={{
-        type: DialogType.largeHeader,
-        title: isUpdate ? 'Update Resource' : 'Add a Resource',
-      }}
-      modalProps={{
-        isBlocking: true, // Makes background click close dialog
-      }}
-      maxWidth="500px" // Default is too narrow - could use grid size?
-      minWidth="500px"
+    <Formik
+      initialValues={{ ...defaultValues, ...initialValues }}
+      onSubmit={handleFormSubmit}
+      validationSchema={addResourceSchema}
+      validateOnBlur={false}
     >
-      <Formik
-        initialValues={{ ...defaultValues, ...initialValues }}
-        onSubmit={handleFormSubmit}
-        validate={validate}
-        validateOnBlur={false}
-      >
-        {({ isSubmitting }) => (
-        <Form>
+      <Form>
+        <div className={formStyles.body}>
           <Field
             name="name"
             label="Type [e.g. van, website, distillery, product/goods]"
             placeholder="Enter the resource type"
-            component={FormikTextField}
+            component={TextField}
           />
           <Field
             name="location"
-            label="Geographical location"
+            label="Location"
             placeholder="Select a location"
             component={LocationSelector}
           />
@@ -110,25 +100,59 @@ const AddResourceForm = ({
             name="jurisdiction"
             label="Jurisdiction"
             placeholder="Select a jurisdiction"
-            component={FormikDropdown}
+            component={Dropdown}
             options={baseJurisdictionOptions}
           />
           <Field
             name="function"
             label="Function"
             placeholder="Select a function"
-            component={FormikDropdown}
+            component={Dropdown}
             options={functionOptions}
           />
-          <DialogFooter>
-            <DefaultButton onClick={onClose} text="Cancel" />
-            <PrimaryButton type="submit" text={ isUpdate ? "Update" : "Add to Case"} />
-          </DialogFooter>
-        </Form>
-        )}
-      </Formik>
-    </Dialog>
+          <FieldArray
+            name="involvements"
+            label="Period(s) of involvement"
+            component={ActivePeriodSelector}
+            required
+          />
+          <Field
+            name="notes"
+            label="Notes"
+            multiline
+            rows={10}
+            component={TextField}
+          />
+        </div>
+        <div
+          className={formStyles.footer}
+          style={{
+            flex: '0 0 auto',
+          }}
+        >
+          { isEditing ? (
+            <>
+              <DefaultButton text="Cancel" onClick={closeDialog} />
+              <PrimaryButton type="submit" text="Save and Close" />
+            </>
+          ) : (
+            <>
+              <DefaultButton text="Cancel" onClick={closeDialog} />
+              <PrimaryButton type="submit" text="Add to Case" />
+            </>
+          )}
+        </div>
+      </Form>
+    </Formik>
   );
 }
 
-export default AddResourceForm;
+const AddResourceDialog = (props) => (
+  <FormDialog
+    {...props}
+    Form={AddResourceForm}
+    entityLabel="Resource"
+  />
+);
+
+export default AddResourceDialog;

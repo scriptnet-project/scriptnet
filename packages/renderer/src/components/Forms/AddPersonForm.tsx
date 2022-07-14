@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, ReactNode, ReactComponentElement } from 'react';
 import {
   DefaultButton,
   PrimaryButton,
@@ -36,7 +36,7 @@ const defaultValues = {
   name: '',
   location: null,
   jurisdiction: 'local',
-  role: 'null',
+  role: null,
   gender: 'Male',
   involvements: [],
   notes: '',
@@ -47,16 +47,11 @@ export const AddPersonForm = ({
   isEditing,
   closeDialog,
 }) => {
-
-  console.log('Add persomn form', isEditing);
-
   const cyActions = useCytoscapeActions();
 
   const handleFormSubmit = async (formData) => {
-    console.log('add person submit called', isEditing, formData);
     if (isEditing) {
       const { id, ...data } = formData;
-      console.log(data);
       cyActions.update(id, data);
     } else {
       cyActions.add({
@@ -103,7 +98,7 @@ export const AddPersonForm = ({
           }}
         >
           <div
-            className={contentStyles.body}
+            className={formStyles.body}
           >
             <Field
               name="name"
@@ -154,7 +149,7 @@ export const AddPersonForm = ({
             />
           </div>
           <div
-            className={contentStyles.footer}
+            className={formStyles.footer}
             style={{
               flex: '0 0 auto',
             }}
@@ -176,17 +171,28 @@ export const AddPersonForm = ({
   )
 }
 
-const AddPersonDialog = ({
+type FormDialogProps = {
+  show: boolean,
+  isEditing: boolean,
+  initialValues: any,
+  onClose: () => void,
+  Form: React.FC,
+  entityLabel: string,
+};
+
+export const FormDialog = ({
   show,
   isEditing,
   initialValues = {},
   onClose,
-}) => {
+  Form,
+  entityLabel,
+}: FormDialogProps) => {
   return (
     <Modal
       isOpen={show}
       isBlocking={true}
-      containerClassName={contentStyles.container}
+      containerClassName={formStyles.container}
       styles={{
         scrollableContent: {
             overflow: "visible",
@@ -197,13 +203,13 @@ const AddPersonDialog = ({
       }}
     >
       <div
-        className={contentStyles.header}
+        className={formStyles.header}
         style={{
           flex: '0 0 auto',
         }}
       >
         <span>
-          {isEditing ? 'Edit Person' : 'Add Person'}
+          {isEditing ? `Edit ${entityLabel}` : `Add ${entityLabel}`}
         </span>
         <IconButton
           styles={iconButtonStyles}
@@ -212,7 +218,7 @@ const AddPersonDialog = ({
           onClick={onClose}
         />
       </div>
-      <AddPersonForm
+      <Form
         initialValues={initialValues}
         isEditing={isEditing}
         closeDialog={onClose}
@@ -225,7 +231,7 @@ const AddPersonDialog = ({
 const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
 const theme = getTheme();
-const contentStyles = mergeStyleSets({
+export const formStyles = mergeStyleSets({
   container: {
     display: 'flex',
     flexFlow: 'column nowrap',
@@ -272,5 +278,13 @@ const iconButtonStyles: Partial<IButtonStyles> = {
     color: theme.palette.neutralDark,
   },
 };
+
+const AddPersonDialog = (props) => (
+  <FormDialog
+    {...props}
+    Form={AddPersonForm}
+    entityLabel="Person"
+  />
+);
 
 export default AddPersonDialog;
