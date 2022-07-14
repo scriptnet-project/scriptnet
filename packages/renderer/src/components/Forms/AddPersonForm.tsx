@@ -70,16 +70,14 @@ export const AddPersonForm = ({
     name: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Please enter a name'),
     role: Yup.string()
-      .required('Required role'),
+      .required('Please choose a role').nullable(),
     involvements: Yup.array()
       .of(Yup.object().shape({
         start: Yup.string().required('Start date is required'),
         end: Yup.string().required('End date is required'),
       }))
-      .min('1', 'At least one involvement is required')
-      .required('Required'),
   });
 
   return (

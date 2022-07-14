@@ -87,18 +87,16 @@ const AddOrganisationForm = ({
     name: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Please enter a name for this organisation'),
     function: Yup.string()
-      .required('Required function'),
+      .required('Please select which function this organisation performed').nullable(),
     role: Yup.string()
-      .required('Required role'),
+      .required('Please select a role').nullable(),
     involvements: Yup.array()
       .of(Yup.object().shape({
         start: Yup.string().required('Start date is required'),
         end: Yup.string().required('End date is required'),
       }))
-      .min('1', 'At least one involvement is required')
-      .required('Required'),
   });
 
   return (
