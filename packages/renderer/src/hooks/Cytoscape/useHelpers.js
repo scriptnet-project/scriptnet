@@ -83,9 +83,15 @@ const useHelpers = (cy, id) => {
     cy.current.elements(`#${id}`).data(data);
   };
 
+  const remove = (id) => {
+    if (!cy.current) { return; }
+    cy.current.getElementById(id).remove();
+  };
+
   const actions = {
     add,
     update,
+    remove,
   };
 
   return [actions];

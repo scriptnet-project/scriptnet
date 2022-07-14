@@ -10,6 +10,7 @@ import {
   FontWeights,
   getTheme,
   mergeStyleSets,
+  useTheme,
 } from '@fluentui/react';
 import * as Yup from 'yup';
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
@@ -21,6 +22,8 @@ import TextField from '../Fields/TextField';
 import Dropdown from '../Fields/Dropdown';
 import Field from '../Fields/Field';
 import FieldArray from '../Fields/FieldArray';
+
+const theme = getTheme();
 
 const genderOptions = [
   {key: 'Male', text: 'Male' },
@@ -155,6 +158,16 @@ export const AddPersonForm = ({
             { isEditing ? (
               <>
                 <DefaultButton text="Cancel" onClick={closeDialog} />
+                <PrimaryButton
+                  iconProps={{ iconName: 'delete', children: theme.palette.red}}
+                  style={{backgroundColor: theme.palette.red, color:'white'}}
+                  onClick={() => {
+                    cyActions.remove(initialValues.id);
+                    closeDialog();
+                  }}
+                  >
+                    Delete
+                </PrimaryButton>
                 <PrimaryButton type="submit" text="Save and Close" />
               </>
             ) : (
@@ -228,7 +241,6 @@ export const FormDialog = ({
 
 const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
-const theme = getTheme();
 export const formStyles = mergeStyleSets({
   container: {
     display: 'flex',

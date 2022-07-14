@@ -185,6 +185,16 @@ const AddOrganisationForm = ({
           { isEditing ? (
             <>
               <DefaultButton text="Cancel" onClick={closeDialog} />
+              <PrimaryButton
+                iconProps={{ iconName: 'delete', children: theme.palette.red}}
+                style={{backgroundColor: theme.palette.red, color:'white'}}
+                onClick={() => {
+                  cyActions.remove(initialValues.id);
+                  closeDialog();
+                }}
+                >
+                  Delete
+              </PrimaryButton>
               <PrimaryButton type="submit" text="Save and Close" />
             </>
           ) : (

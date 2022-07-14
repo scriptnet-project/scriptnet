@@ -202,12 +202,12 @@ const ActivePeriodSelector = (props) => {
           <PrimaryButton iconProps={{ iconName: 'add'}} onClick={handleAddNew}>Add</PrimaryButton>
           { selectedItem && (
             <PrimaryButton
-              iconProps={{ iconName: 'delete', children: theme.palette.red}}
-              style={{backgroundColor:theme.palette.red, color:'white'}}
-              onClick={handleDeleteSelectedItem}
-              >
-                Delete
-              </PrimaryButton>
+            iconProps={{ iconName: 'delete', children: theme.palette.red}}
+            style={{backgroundColor:theme.palette.red, color:'white'}}
+            onClick={handleDeleteSelectedItem}
+            >
+              Delete
+            </PrimaryButton>
           )}
         </Stack>
       </div>

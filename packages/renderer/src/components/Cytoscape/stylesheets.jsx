@@ -177,6 +177,13 @@ export const baseStylesheet = [
     }
   },
   {
+    selector: 'edge:selected',
+    style: {
+      'width': 10,
+      'line-cap': 'round',
+    }
+  },
+  {
     selector: '.highlighted',
     style: {
       'border-width': 5,

@@ -114,6 +114,22 @@ const useCyModes = (cy, id) => {
       dispatch(visualisationActions.setSelected(selectedID));
     });
 
+    cy.current.on('select', 'edge', (event) => {
+      const selectedID = event.target.data().id;
+      console.log('An edge was selected', selectedID);
+      // Animate to the selected node
+      cy.current.animate({
+        fit: {
+          eles: 'edge:selected',
+          padding: 100,
+        }
+      }, {
+        duration: 200
+      });
+
+      dispatch(visualisationActions.setSelected(selectedID, 'edge'));
+    });
+
     cy.current.on('unselect', (event) => {
       console.log('A node or edge was de-selected', event);
       dispatch(visualisationActions.clearSelected());
