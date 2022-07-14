@@ -28,45 +28,53 @@ const useCyModes = (cy, id) => {
   const eh = useRef(null);
   const bb = useRef(null);
 
+  const initializeMap = () => {
+    stopLayout();
+    // Filter nodes that don't have a location
+    filteredElements = cy.current.nodes().filter('[!location]').remove();
+
+    const options = {
+      // the container in which the map should live, should be a sibling of the cytoscape container
+      container: document.getElementById('cy-leaflet'),
+
+      // the data field for latitude
+      latitude: (data) => data.location.y,
+      // the data field for longitude
+      longitude: (data) => data.location.x,
+    };
+
+    window.leaf = cy.current.leaflet(options);
+    console.info('Created leaflet map with ID', window.leaf.map._container._leaflet_id);
+
+    // Disable automatic layout
+    // Do I need to update state here?
+    dispatch(visualisationActions.setAutomaticLayout(false));
+  }
+
+  const destroyMap = () => {
+    if (window.leaf) {
+      console.info('Removing leaflet map with id', window.leaf.map._container._leaflet_id);
+      window.leaf.destroy();
+    }
+
+    if (filteredElements && !showMap) {
+      filteredElements.restore();
+      filteredElements = null;
+    }
+
+    resetStyles();
+    dispatch(visualisationActions.setAutomaticLayout(true));
+  }
+
   useEffect(() => {
     if (!cy.current) { return; }
 
     if (showMap) {
-      stopLayout();
-      // Filter nodes that don't have a location
-      filteredElements = cy.current.nodes().filter('[!location]').remove();
-
-      const options = {
-        // the container in which the map should live, should be a sibling of the cytoscape container
-        container: document.getElementById('cy-leaflet'),
-
-        // the data field for latitude
-        latitude: (data) => data.location.y,
-        // the data field for longitude
-        longitude: (data) => data.location.x,
-      };
-
-      window.leaf = cy.current.leaflet(options);
-      console.info('Created leaflet map with ID', window.leaf.map._container._leaflet_id);
-
-      // Disable automatic layout
-      // Do I need to update state here?
-      dispatch(visualisationActions.setAutomaticLayout(false));
+      initializeMap();
     }
 
     if (!showMap) {
-      if (window.leaf) {
-        console.info('Removing leaflet map with id', window.leaf.map._container._leaflet_id);
-        window.leaf.destroy();
-      }
-
-      if (filteredElements && !showMap) {
-        filteredElements.restore();
-        filteredElements = null;
-      }
-
-      resetStyles();
-      dispatch(visualisationActions.setAutomaticLayout(true));
+      destroyMap();
     }
 
   }, [showMap])
@@ -79,6 +87,12 @@ const useCyModes = (cy, id) => {
     // Bind event handlers for interactions
     cy.current.on('add', (event) => {
       if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
+
+      if (showMap) {
+        if (window.leaf) {
+          window.leaf.fit();
+        }
+      }
     });
 
     cy.current.on('select', 'node', (event) => {
