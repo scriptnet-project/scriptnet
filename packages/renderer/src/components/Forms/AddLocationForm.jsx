@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   DefaultButton,
+  getTheme,
   PrimaryButton,
 } from '@fluentui/react';
 import * as Yup from 'yup';
@@ -14,6 +15,8 @@ import TextField from '../Fields/TextField';
 import Dropdown from '../Fields/Dropdown';
 import Field from '../Fields/Field';
 import FieldArray from '../Fields/FieldArray';
+
+const theme = getTheme();
 
 const functionOptions = [
   {key: 'Offending location', text: 'Offending location' },

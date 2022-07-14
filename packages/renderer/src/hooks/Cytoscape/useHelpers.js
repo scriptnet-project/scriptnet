@@ -88,10 +88,25 @@ const useHelpers = (cy, id) => {
     cy.current.getElementById(id).remove();
   };
 
+  const centerGraph = () => {
+    if (!cy.current) { return; }
+
+    cy.current.animate({
+      fit: {
+        eles: 'node',
+        padding: 200,
+      },
+      center: { x: 200, y: 100 },
+    }, {
+      duration: 200
+    });
+  }
+
   const actions = {
     add,
     update,
     remove,
+    centerGraph,
   };
 
   return [actions];
