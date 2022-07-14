@@ -108,7 +108,14 @@ const AddOrganisationForm = ({
       validationSchema={addOrganisationSchema}
       validateOnBlur={false}
     >
-      <Form>
+      <Form
+        style={{
+          flex: '1 1 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: '80vh',
+        }}
+      >
         <div className={formStyles.body}>
           <Field
             name="name"
