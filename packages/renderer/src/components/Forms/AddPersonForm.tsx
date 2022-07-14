@@ -185,17 +185,14 @@ const AddPersonDialog = ({
   return (
     <Modal
       isOpen={show}
+      isBlocking={true}
       containerClassName={contentStyles.container}
-      overlay={{
-        zIndex: 999999999999999,
-      }}
       styles={{
         scrollableContent: {
             overflow: "visible",
             display: "flex",
             flexDirection: "column",
             maxHeight: '90vh',
-            zIndex: 99999999,
         }
       }}
     >

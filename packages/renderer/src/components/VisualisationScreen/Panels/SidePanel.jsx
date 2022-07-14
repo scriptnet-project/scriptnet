@@ -1,3 +1,4 @@
+import myTheme from '@/themes/panel';
 import { ThemeProvider, Panel, PanelType, getTheme } from '@fluentui/react';
 
 const SidePanel = ({
@@ -9,13 +10,13 @@ const SidePanel = ({
   const theme = getTheme();
 
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={myTheme}>
       <Panel
         name="view-details-panel"
         isOpen={isOpen}
         isLightDismiss
         type={PanelType.customNear}
-        customWidth={400}
+        customWidth={300}
         isBlocking={false}
         onDismiss={handleDismiss}
         headerText={title}

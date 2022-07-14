@@ -1,10 +1,12 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useCytoscape, useCytoscapeActions } from '@/hooks/Cytoscape';
-import { motion } from 'framer-motion';
-import { useDispatch, useSelector } from 'react-redux';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Slider } from '@fluentui/react';
 import { isEmpty } from 'lodash';
+import { getMode } from '../../store/selectors/mode';
+import { modes } from '../../store/mode';
 import { CollectionGraphManipulation, NodeSingular } from 'cytoscape';
+import { useSelector } from 'react-redux';
 
 let maxPossibleDate = new Date(8640000000000000);
 let minPossibleDate = new Date(-8640000000000000);
@@ -14,30 +16,6 @@ type Involvement = {
   start: string;
   end: string;
 };
-
-const getInvolvementRange = (involvements: Involvement[]) => {
-  return involvements.reduce(
-    (acc, curr) => {
-      const start = curr.start ? new Date(curr.start) : minPossibleDate;
-      const end = curr.end ? new Date(curr.end) : maxPossibleDate;
-      if (start < acc.start) {
-        acc.start = start;
-      }
-      if (end > acc.end) {
-        acc.end = end;
-      }
-      return acc;
-    }, { start: new Date(), end: new Date() }
-  )
-};
-
-// Involvement 1: 01/2020 - 03/2020
-// Involvement 2: 05/2020 - null
-
-// Range slider:
-//  - 01/2020 - 04/2020 - YES
-//  - 06/2020 - All - YES
-//  - 04/2020 - 04/2020 - NO
 
 const nodeHasInvolvementWithinRange = (involvements: Involvement[], start: Date, end: Date) => {
   return involvements.some((involvement: Involvement) => {
@@ -105,13 +83,21 @@ const InvolvementSlider = () => {
 
     setDates(datesWithBounds);
     setSliderValue(([lower]) => ([lower, datesWithBounds.length - 1]));
-    console.table(datesWithBounds);
   }, [cy.current]);
 
+  const restoreFilteredNodes = () => {
+    if (filteredElements) {
+      filteredElements.restore();
+      filteredElements = null;
+    }
+
+    runLayout();
+  }
+
   // Change handler
-  const onChange = (_: any, value: number[]) => {
+  const onChange = (_: number, value: [number, number] | undefined) => {
     // Reject if upper value is within 1 of lower value
-    if (value[1] - value[0] < 1) {
+    if (! value || value[1] - value[0] < 1) {
       return;
     }
 
@@ -119,10 +105,7 @@ const InvolvementSlider = () => {
 
     const [lowerValueIndex, upperValueIndex] = value;
     // Start with the full unfiltered network, by restoring any previously filtered items
-    if (filteredElements) {
-      filteredElements.restore();
-      filteredElements = null;
-    }
+    restoreFilteredNodes();
 
     // Don't filter at all if we are at "all" on both sides
     if (lowerValueIndex === 0 && upperValueIndex === dates.length - 1) {
@@ -142,9 +125,7 @@ const InvolvementSlider = () => {
         return true;
       }
 
-      const overlap = nodeHasInvolvementWithinRange(nodeInvolvements, lowerValueDate, upperValueDate);
-
-      if (overlap) {
+      if (nodeHasInvolvementWithinRange(nodeInvolvements, lowerValueDate, upperValueDate)) {
         return false;
       }
 
@@ -172,18 +153,21 @@ const InvolvementSlider = () => {
     return date.toLocaleDateString();
   };
 
+  useEffect(() => {
+    return () => {
+      restoreFilteredNodes();
+    }
+  }, []);
+
   return (
     <motion.div
       className="involvement-slider-container"
       style={{
         position: 'absolute',
-        width: 600,
+        width: 500,
         bottom: 95,
-        left: 'calc(50% - 300px)',
+        left: 'calc(50% - 250px)',
         zIndex: 1,
-        background: 'white',
-        padding: 10,
-        borderRadius: 10,
       }}
     >
       <Slider
@@ -206,4 +190,23 @@ const InvolvementSlider = () => {
   )
 };
 
-export default InvolvementSlider;
+const Wrapper = () => {
+  const mode = useSelector(getMode);
+
+  return (
+    <AnimatePresence>
+      { (mode === modes.DEFAULT || mode === modes.CONFIGURE) && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <InvolvementSlider />
+        </motion.div>
+      ) }
+    </AnimatePresence>
+  );
+
+}
+
+export default Wrapper;

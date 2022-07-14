@@ -1,5 +1,8 @@
 .ms-Panel-main {
-  padding-top: 44px;
-  padding-bottom: 112px;
-  // background: #c7e0f4;
+  position: relative;
+  height: calc(100% - 132px);
+  top: 48px;
+  box-shadow: none;
+  // background: #0078d4;
+  // color: white !important;
 }
