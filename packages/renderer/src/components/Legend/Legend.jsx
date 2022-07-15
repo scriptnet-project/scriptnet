@@ -16,7 +16,6 @@ const edges = [
   { glyph: 'line', type: 'edge', label: 'business', color: theme.palette.tealLight },
   { glyph: 'line', type: 'edge', label: 'ownership', color: theme.palette.magentaLight },
   { glyph: 'line', type: 'edge', label: 'working', color: theme.palette.red },
-  { glyph: 'line', type: 'edge', label: 'geographical', color: theme.palette.neutralSecondaryAlt },
 ];
 
 const nodes = [
