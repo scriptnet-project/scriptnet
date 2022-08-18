@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import { get, throttle } from 'lodash';
-import { Text, getTheme, IconButton, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
+import { Text, getTheme, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
 import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { useField } from 'formik';
@@ -18,9 +18,13 @@ const ClearButton = ({ onClick }) => {
   const theme = useTheme();
 
   return (
-    <IconButton
-      iconProps={{ iconName: 'Clear' }}
-      // styles={styles}
+    <Icon
+      iconName="Clear"
+      styles={{
+        root: {
+          cursor: 'pointer',
+        },
+      }}
       onClick={onClick}
     />
   );
@@ -32,6 +36,8 @@ const LocationSelector = ({ label, ...props }) => {
   const [searchTerm, setSearchTerm ] = useState(get(field, ['value', 'label'], null));
   const [searchStatus, setSearchStatus] = useState('idle');
   const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResultsPanel, setShowSearchResultsPanel] = useState(false);
+  const [selectedResult, setSelectedResult] = useState(null);
   const [markerPosition, setMarkerPosition] = useState([get(field, ['value', 'x'], 0), get(field, ['value', 'y'], 0)]);
   const markerRef = useRef(null);
 
@@ -41,66 +47,6 @@ const LocationSelector = ({ label, ...props }) => {
       width: '100%',
     }
   }
-
-  type ResultProps = {
-    location: {
-      x: number;
-      y: number;
-    };
-  }
-
-  const handleClear = () => {
-    setSearchTerm(null);
-    setSearchResults([]);
-    setMarkerPosition([0, 0]);
-    helpers.setValue(null);
-  }
-
-  const doSearch = async (searchTerm: string) => {
-    if (!searchTerm) {
-      return;
-    }
-
-    const results = await search(searchTerm);
-    setSearchResults(results);
-    setSearchStatus('finished');
-  };
-
-  const throttledSearch = useCallback(throttle(doSearch, 500, { leading: false, trailing: true }), []);
-
-  const handleSearch = (searchTerm: string) => {
-    if(!searchTerm) {
-      setSearchStatus('idle');
-      setSearchResults([]);
-      setSearchTerm('');
-      return;
-    }
-
-    setSearchStatus('searching');
-    setSearchTerm(searchTerm);
-    throttledSearch(searchTerm);
-  };
-
-  const handleSelectResult = (location) => {
-    setFocused(false);
-
-    console.log('handle select result', location);
-    const {
-      x: lon,
-      y: lat,
-      label,
-    } = location;
-
-    setMarkerPosition([lat, lon]);
-    setSearchTerm(label);
-    setSearchStatus('idle');
-    setSearchResults([]);
-    helpers.setValue(location);
-  };
-
-  const theme = getTheme();
-
-  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
     if (!map) {
@@ -122,6 +68,7 @@ const LocationSelector = ({ label, ...props }) => {
       map.flyTo(e.latlng, map.getZoom());
       const result = await searchReverseLocation({ latitude: e.latlng.lat, longitude: e.latlng.lng, zoom: map.getZoom() });
       helpers.setValue(result);
+      setSearchTerm(result.label);
     });
 
     return () => {
@@ -132,28 +79,78 @@ const LocationSelector = ({ label, ...props }) => {
   }, [map]);
 
   useEffect(() => {
-    console.log('value', field.value);
-    if (!field.value) {
-      return;
-    }
+    console.log('field value', field.value);
+    if (map && field.value && field.value.x && field.value.y) {
+      const location = {
+        lng: field.value.x,
+        lat: field.value.y,
+      };
 
-    if (map) {
-      const {
-        x: lon,
-        y: lat,
-      } = field.value;
-
-
-      map.flyTo([lat, lon], map.getZoom());
+      map.flyTo(location, map.getZoom());
     }
   }, [field.value])
 
+  const resetState = () => {
+    setSearchTerm(null);
+    setSearchResults([]);
+    setSelectedResult(null);
+    setMarkerPosition(null);
+    setShowSearchResultsPanel(false);
+  }
+
+  const handleClear = () => {
+    resetState();
+    helpers.setValue({});
+  }
+
+  const doSearch = async (searchTerm: string) => {
+    if (!searchTerm) {
+      return;
+    }
+
+    const results = await search(searchTerm);
+    setSearchResults(results);
+    setSearchStatus('idle');
+  };
+
+  const throttledSearch = useCallback(throttle(doSearch, 500, { leading: false, trailing: true }), []);
+
+  const handleSearch = (searchTerm: string) => {
+    if(!searchTerm) {
+      resetState();
+      return;
+    }
+
+    if (!showSearchResultsPanel) {
+      setShowSearchResultsPanel(true);
+    }
+
+    setSearchStatus('searching');
+    setSearchTerm(searchTerm);
+    throttledSearch(searchTerm);
+  };
+
+  const handleSelectResult = (location) => {
+    console.log('handleselectresult', location);
+    const {
+      x: lon,
+      y: lat,
+      label,
+    } = location;
+
+    resetState();
+
+    setMarkerPosition([lat, lon]);
+    setSearchTerm(label);
+    helpers.setValue(location);
+  };
+
+  const theme = getTheme();
 
   return (
     <Stack
       style={{
-        border: `1px solid ${theme.semanticColors.inputBorder}`,
-        position: 'relative',
+        // border: `1px solid ${theme.semanticColors.inputBorder}`,
       }}
     >
       <TextField
@@ -161,42 +158,26 @@ const LocationSelector = ({ label, ...props }) => {
         onChange={(e, newValue) => handleSearch(newValue)}
         prefix={<Icon iconName="MapPin" />}
         autoAdjustHeight
-        borderless
         placeholder='Search for a location...'
         onRenderSuffix={() => <ClearButton onClick={handleClear} />}
-        onFocus={() => setFocused(true)}
         onBlur={() => {
-          setFocused(false);
-          setSearchStatus('idle');
+          setShowSearchResultsPanel(false);
         }}
       />
-      {focused && searchStatus !== 'idle' && (searchTerm && searchTerm.length > 0) && (
+      { showSearchResultsPanel && (
         <div
           className="results"
           style={{
-            position: 'absolute',
-            top: 32,
-            left: -1,
-            right: -1,
-            // width: '100%',
-            maxHeight: '200px',
-            overflowY: 'auto',
-            backgroundColor: 'white',
-            border: `1px solid ${theme.semanticColors.inputBorder}`,
-            zIndex: 9999,
-            padding: '8px',
+            boxShadow: 'rgb(0 0 0 / 22%) 0px 25.6px 57.6px 0px, rgb(0 0 0 / 18%) 0px 4.8px 14.4px 0px',
           }}
         >
-          {/* { searchStatus === 'idle' && (
-            <Text></Text>
-          )} */}
           {searchStatus === 'searching' && (
             <Text>Searching...</Text>
           )}
-          {searchStatus === 'finished' && searchResults.length === 0 && (
+          {searchStatus === 'idle' && searchResults.length === 0 && (
             <Text>No results found.</Text>
           )}
-          {searchStatus === 'finished' && searchResults.length > 0 && (
+          {searchStatus === 'idle' && (
             <>
               {searchResults.map((result, index) => (
                 <div
@@ -226,25 +207,27 @@ const LocationSelector = ({ label, ...props }) => {
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker
-          ref={markerRef}
-          position={markerPosition}
-          draggable
-          eventHandlers={{
-            async dragend() {
-              const marker = markerRef.current
-              if (marker != null) {
-                const markerPosition = marker.getLatLng();
-                const result = await searchReverseLocation({
-                  latitude: markerPosition.lat,
-                  longitude: markerPosition.lng,
-                });
+        { markerPosition && (
+          <Marker
+            ref={markerRef}
+            position={markerPosition}
+            draggable
+            eventHandlers={{
+              async dragend() {
+                const marker = markerRef.current
+                if (marker != null) {
+                  const markerPosition = marker.getLatLng();
+                  const result = await searchReverseLocation({
+                    latitude: markerPosition.lat,
+                    longitude: markerPosition.lng,
+                  });
 
-                handleSelectResult(result);
-              }
-            },
-          }}
-        />
+                  handleSelectResult(result);
+                }
+              },
+            }}
+          />
+        )}
       </MapContainer>
     </Stack>
   )
