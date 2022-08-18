@@ -160,9 +160,10 @@ const LocationSelector = ({ label, ...props }) => {
         autoAdjustHeight
         placeholder='Search for a location...'
         onRenderSuffix={() => <ClearButton onClick={handleClear} />}
-        onBlur={() => {
-          setShowSearchResultsPanel(false);
-        }}
+        // onBlur={(e) => {
+        //   console.log('onBlur', e);
+        //   setShowSearchResultsPanel(false);
+        // }}
       />
       { showSearchResultsPanel && (
         <div
