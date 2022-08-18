@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
 import { saveAs } from 'file-saver';
@@ -12,6 +12,7 @@ import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
 import { getMode, getModeOptions } from '../../store/selectors/mode';
 import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
+import { debounce } from 'lodash';
 
 let layout;
 let filteredElements;
@@ -19,7 +20,7 @@ let filteredElements;
 const useCyModes = (cy, id) => {
   const mode = useSelector(getMode);
   const modeOptions = useSelector(getModeOptions);
-
+  const [layoutRunning, setLayoutRunning] = useState(false);
   const showLabels = useSelector(getShowLabels);
   const automaticLayout = useSelector(getAutomaticLayout);
   const showMap = useSelector(getShowMap);
@@ -29,6 +30,7 @@ const useCyModes = (cy, id) => {
   const bb = useRef(null);
 
   const initializeMap = () => {
+    console.log('initialize map');
     stopLayout();
     // Filter nodes that don't have a location
     filteredElements = cy.current.nodes().filter('[!location]').remove();
@@ -86,7 +88,8 @@ const useCyModes = (cy, id) => {
 
     // Bind event handlers for interactions
     cy.current.on('add', (event) => {
-      if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
+      console.log('add event');
+      // if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
 
       if (showMap) {
         if (window.leaf) {
@@ -141,14 +144,9 @@ const useCyModes = (cy, id) => {
     });
 
     cy.current.on('ehcomplete', (event) => {
+      console.log('ehcompleteevent');
       runLayout();
     });
-
-    if (automaticLayout) {
-      runLayout();
-    } else {
-      stopLayout();
-    }
 
     return () => {
       if (cy.current) {
@@ -156,20 +154,46 @@ const useCyModes = (cy, id) => {
       }
     }
 
-  }, [id, automaticLayout]);
+  }, [id]);
 
-  const runLayout = () =>
-    {
-      if (!cy.current) { return; }
-      if (layout) { stopLayout() }
+  useEffect(() => {
+    console.log('automaticLayout', automaticLayout);
+    if (automaticLayout) {
+      runLayout();
+    } else {
+      stopLayout();
+    }
+  }, [automaticLayout]);
 
-      if (automaticLayout) {
+  const actualRunLayout = () => {
+    console.log('runlayout');
+    stopLayout();
+    if (!cy.current) { return; }
+    if (layout) { stopLayout() }
+
+    if (automaticLayout) {
       // See: https://github.com/cytoscape/cytoscape.js-cola#api
-      const layoutOptions = { name: 'cola', infinite: true, fit: false };
+      const layoutOptions = {
+        name: 'cola',
+        infinite: true,
+        fit: false,
+        ready: () => {
+          console.log('layout ready');
+          return true;
+        },
+        stop: () => {
+          console.log('layout stopped');
+          return true;
+        }
+      };
+
       layout = cy.current.layout(layoutOptions);
       layout.run();
+
       }
-    };
+  };
+
+  const runLayout = debounce(actualRunLayout, 100, { trailing: true });
 
   const stopLayout = () => {
     if (!layout) return;
@@ -197,7 +221,6 @@ const useCyModes = (cy, id) => {
   }
 
   const applyScenePreset = () => {
-    console.log('enabling stage preset');
     if (!cy.current) { return; }
 
     enableAttributeBoundingBoxes();
@@ -293,6 +316,11 @@ const useCyModes = (cy, id) => {
 
   const enableAttributeBoundingBoxes = () => {
     if (!cy.current) { return; }
+
+    if (bb.current) {
+      disableAttributeBoundingBoxes();
+    }
+
     bb.current = cy.current.bubbleSets();
   }
 
@@ -473,6 +501,7 @@ const useCyModes = (cy, id) => {
     runLayout,
     applyStylesheet,
     applyScenePreset,
+    applyPreset,
     enableEdgeCreation,
     disableEdgeCreation,
     enableNodeHighlighting,

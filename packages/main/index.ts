@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain, dialog, Menu } from 'electron'
+import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { release } from 'os'
 import fse from 'fs-extra';
 import { join, parse } from 'path'
@@ -205,6 +206,12 @@ function registerListeners() {
   });
 }
 
+async function installDevtools() {
+  return installExtension([REDUX_DEVTOOLS.id, REACT_DEVELOPER_TOOLS.id])
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
+}
+
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
@@ -226,7 +233,6 @@ async function createWindow() {
   }
 
   win.webContents.on('did-finish-load', async () => {
-
   })
 
   // Make all links open with the browser, not with the application
@@ -236,7 +242,7 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(createWindow).then(registerListeners)
+app.whenReady().then(installDevtools).then(createWindow).then(registerListeners)
 
 app.on('window-all-closed', () => {
   win = null

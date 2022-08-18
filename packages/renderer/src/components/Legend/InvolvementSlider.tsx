@@ -34,6 +34,7 @@ const InvolvementSlider = () => {
   const { cy } = useCytoscape();
   const {
     runLayout,
+    applyPreset,
   } = useCytoscapeActions();
 
   const [ dates, setDates ] = useState([] as Date[]);
@@ -91,13 +92,20 @@ const InvolvementSlider = () => {
       filteredElements = null;
     }
 
+    console.log('restore');
     runLayout();
   }
 
   // Change handler
   const onChange = (_: number, value: [number, number] | undefined) => {
+    console.log('onchange');
     // Reject if upper value is within 1 of lower value
-    if (! value || value[1] - value[0] < 1) {
+    if (!value || value[1] - value[0] < 1) {
+      return;
+    }
+
+    // Reject if value hasn't changed
+    if (sliderValue[0] === value[0] && sliderValue[1] === value[1]) {
       return;
     }
 
@@ -133,6 +141,7 @@ const InvolvementSlider = () => {
     }).remove();
 
     runLayout();
+    applyPreset();
   };
 
   // Function to format the slider values in YYYY-MM-DD format
@@ -153,11 +162,11 @@ const InvolvementSlider = () => {
     return date.toLocaleDateString();
   };
 
-  useEffect(() => {
-    return () => {
-      restoreFilteredNodes();
-    }
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     restoreFilteredNodes();
+  //   }
+  // }, []);
 
   return (
     <motion.div

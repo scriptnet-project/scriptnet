@@ -11,8 +11,6 @@ const ScenePresetPanel = ({ isOpen, onDismiss }) => {
   const dispatch = useDispatch();
 
   const onChange = useCallback((event, value) => {
-    console.log('changed:', value, event, event.target.name);
-
     // Deselecting means adding to hideScenes
     if (!value) {
       dispatch(modeActions.setOption('hideScenes', [

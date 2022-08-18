@@ -84,7 +84,7 @@ export const baseStylesheet = [
   {
     selector: 'node[type = "person"]',
     style: {
-      shape: 'circle'
+      // shape: 'circle'
     },
   },
   {
@@ -166,7 +166,7 @@ export const baseStylesheet = [
       'color': theme.palette.themeDarker,
       'text-margin-y': 5,
       "text-valign": "bottom",
-      "text-halign": "bottom",
+      // "text-halign": "bottom",
     }
   },
   {

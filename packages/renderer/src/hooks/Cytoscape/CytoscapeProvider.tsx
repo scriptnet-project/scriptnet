@@ -24,6 +24,7 @@ const cyOptions: CytoscapeOptions = {
   minZoom: 0.25,
   headless: true,
   boxSelectionEnabled: false,
+  styleEnabled: true,
 };
 
 const CyProvider = ({ children }) => {
