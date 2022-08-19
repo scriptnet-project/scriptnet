@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
 import { saveAs } from 'file-saver';
@@ -14,13 +14,12 @@ import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selec
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
 import { debounce } from 'lodash';
 
-let layout;
 let filteredElements;
 
 const useCyModes = (cy, id) => {
   const mode = useSelector(getMode);
+  const layout = useRef();
   const modeOptions = useSelector(getModeOptions);
-  const [layoutRunning, setLayoutRunning] = useState(false);
   const showLabels = useSelector(getShowLabels);
   const automaticLayout = useSelector(getAutomaticLayout);
   const showMap = useSelector(getShowMap);
@@ -30,7 +29,6 @@ const useCyModes = (cy, id) => {
   const bb = useRef(null);
 
   const initializeMap = () => {
-    console.log('initialize map');
     stopLayout();
     // Filter nodes that don't have a location
     filteredElements = cy.current.nodes().filter('[!location]').remove();
@@ -88,8 +86,7 @@ const useCyModes = (cy, id) => {
 
     // Bind event handlers for interactions
     cy.current.on('add', (event) => {
-      console.log('add event');
-      // if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
+      if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
 
       if (showMap) {
         if (window.leaf) {
@@ -166,10 +163,9 @@ const useCyModes = (cy, id) => {
   }, [automaticLayout]);
 
   const actualRunLayout = () => {
-    console.log('runlayout');
     stopLayout();
     if (!cy.current) { return; }
-    if (layout) { stopLayout() }
+    if (layout.current) { stopLayout() }
 
     if (automaticLayout) {
       // See: https://github.com/cytoscape/cytoscape.js-cola#api
@@ -177,18 +173,10 @@ const useCyModes = (cy, id) => {
         name: 'cola',
         infinite: true,
         fit: false,
-        ready: () => {
-          console.log('layout ready');
-          return true;
-        },
-        stop: () => {
-          console.log('layout stopped');
-          return true;
-        }
       };
 
-      layout = cy.current.layout(layoutOptions);
-      layout.run();
+      layout.current = cy.current.layout(layoutOptions);
+      layout.current.run();
 
       }
   };
@@ -196,14 +184,13 @@ const useCyModes = (cy, id) => {
   const runLayout = debounce(actualRunLayout, 100, { trailing: true });
 
   const stopLayout = () => {
-    if (!layout) return;
+    if (!layout.current) return;
 
-    layout.stop();
-    layout = null;
+    layout.current.stop();
+    layout.current = null;
   }
 
   const applyRelationshipPreset = () => {
-    console.log('enabling relationship preset');
     if (!cy.current) { return; }
 
     const localHideEdges = modeOptions.hideEdges || [];
@@ -262,7 +249,6 @@ const useCyModes = (cy, id) => {
   }
 
   const applyJurisdictionPreset = () => {
-    console.log('enabling jurisdiction preset');
     if (!cy.current) { return; }
 
     enableAttributeBoundingBoxes();
@@ -332,13 +318,11 @@ const useCyModes = (cy, id) => {
   };
 
   const enableEdgeCreation = (type) => {
-    console.log('enabling', type);
     if (!cy.current) { return; }
 
     cy.current.autounselectify(true);
     eh.current = cy.current.edgehandles({
       edgeParams: ( sourceNode, targetNode, i ) => {
-        console.log('edge params', sourceNode, targetNode, i);
         // for edges between the specified source and target
         // return element object to be passed to cy.add() for edge
         // NB: i indicates edge index in case of edgeType: 'node'
@@ -362,13 +346,12 @@ const useCyModes = (cy, id) => {
 
   const enableNodeHighlighting = (attribute) => {
     if (!cy.current) { return; }
-    console.log('enabling node highlighting', attribute)
+
     cy.current.autounselectify(true);
 
     // Get nodes with attribute and apply .highlighted class
     const selector = `node[${attribute} = "true"]`;
     cy.current.nodes(selector).addClass('highlighted') ;
-    console.log('enable', selector);
 
     cy.current.on('tap', 'node', (event) => {
       // determine if attribute is already set
@@ -385,7 +368,6 @@ const useCyModes = (cy, id) => {
   };
 
   const disableNodeHighlighting = () => {
-    console.log('disabling node highlighting');
     cy.current.autounselectify(false);
     cy.current.nodes().removeClass('highlighted') ;
     cy.current.removeListener('tap');

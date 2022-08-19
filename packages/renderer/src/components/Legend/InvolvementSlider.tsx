@@ -31,7 +31,7 @@ const nodeHasInvolvementWithinRange = (involvements: Involvement[], start: Date,
 let filteredElements: CollectionGraphManipulation | null;
 
 const InvolvementSlider = () => {
-  const { cy } = useCytoscape();
+  const { cy, id } = useCytoscape();
   const {
     runLayout,
     applyPreset,
@@ -41,13 +41,8 @@ const InvolvementSlider = () => {
   const [sliderValue, setSliderValue] = useState([0, 0]);
 
   useEffect(() => {
+    console.log('involvement slider');
     if(!cy) return;
-
-    const nodes = cy.current.nodes();
-
-    if (isEmpty(nodes)) {
-      return;
-    }
 
     const newDates: Date[] = [];
 
@@ -84,7 +79,7 @@ const InvolvementSlider = () => {
 
     setDates(datesWithBounds);
     setSliderValue(([lower]) => ([lower, datesWithBounds.length - 1]));
-  }, [cy.current]);
+  }, [cy.current, id]);
 
   const restoreFilteredNodes = () => {
     if (filteredElements) {
@@ -92,13 +87,11 @@ const InvolvementSlider = () => {
       filteredElements = null;
     }
 
-    console.log('restore');
     runLayout();
   }
 
   // Change handler
   const onChange = (_: number, value: [number, number] | undefined) => {
-    console.log('onchange');
     // Reject if upper value is within 1 of lower value
     if (!value || value[1] - value[0] < 1) {
       return;
@@ -162,11 +155,12 @@ const InvolvementSlider = () => {
     return date.toLocaleDateString();
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     restoreFilteredNodes();
-  //   }
-  // }, []);
+  // Restore nodes when we re-render (caused by mode change)
+  useEffect(() => {
+    return () => {
+      restoreFilteredNodes();
+    }
+  }, []);
 
   return (
     <motion.div
