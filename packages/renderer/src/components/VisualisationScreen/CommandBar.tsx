@@ -32,60 +32,59 @@ const TopCommandBar = ({
   const {
     openNetwork,
     newNetwork,
-    saveNetwork,
     exportPNG,
     exportCSV,
   } = useCytoscapeActions();
 
   const items = [
-    {
-      key: 'Cases',
-      text: 'Cases',
-      iconProps: { iconName: 'Album' },
-      subMenuProps: {
-        items: [
-          {
-            key: 'New',
-            text: 'New Case',
-            iconProps: { iconName: 'Add' },
-            onClick: newNetwork,
-          },
-          {
-            key: 'Save',
-            text: 'Save Case',
-            iconProps: { iconName: 'Save' },
-            onClick: saveNetwork,
-          },
-          {
-            key: 'Open',
-            text: 'Open Case...',
-            iconProps: { iconName: 'FolderOpen' },
-            onClick: openNetwork,
-          },
-        ],
-      },
-    },
-    {
-      key: 'Export',
-      text: 'Export',
-      iconProps: { iconName: 'ShareiOS' },
-      subMenuProps: {
-        items: [
-          {
-            key: 'Export',
-            text: 'Export Screenshot',
-            iconProps: { iconName: 'Share' },
-            onClick: () => exportPNG(),
-          },
-          {
-            key: 'ExportCSV',
-            text: 'Export CSV',
-            iconProps: { iconName: 'Export' },
-            onClick: exportCSV,
-          }
-        ],
-      },
-    },
+    // {
+    //   key: 'Cases',
+    //   text: 'Cases',
+    //   iconProps: { iconName: 'Album' },
+    //   subMenuProps: {
+    //     items: [
+    //       {
+    //         key: 'New',
+    //         text: 'New Case',
+    //         iconProps: { iconName: 'Add' },
+    //         onClick: newNetwork,
+    //       },
+    //       {
+    //         key: 'Save',
+    //         text: 'Save Case',
+    //         iconProps: { iconName: 'Save' },
+    //         onClick: saveNetwork,
+    //       },
+    //       {
+    //         key: 'Open',
+    //         text: 'Open Case...',
+    //         iconProps: { iconName: 'FolderOpen' },
+    //         onClick: openNetwork,
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   key: 'Export',
+    //   text: 'Export',
+    //   iconProps: { iconName: 'ShareiOS' },
+    //   subMenuProps: {
+    //     items: [
+    //       {
+    //         key: 'Export',
+    //         text: 'Export Screenshot',
+    //         iconProps: { iconName: 'Share' },
+    //         onClick: () => exportPNG(),
+    //       },
+    //       {
+    //         key: 'ExportCSV',
+    //         text: 'Export CSV',
+    //         iconProps: { iconName: 'Export' },
+    //         onClick: exportCSV,
+    //       }
+    //     ],
+    //   },
+    // },
   ];
 
   const farItems = [

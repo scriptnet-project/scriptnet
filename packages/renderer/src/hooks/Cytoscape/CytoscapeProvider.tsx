@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import Cytoscape, { CytoscapeOptions } from 'cytoscape';
 // import cytoscapeLeaflet from 'cytoscape-leaflet';
@@ -11,6 +11,7 @@ import useLoader from './useLoader';
 import useModes from './useModes';
 import useHelpers from './useHelpers';
 import useExportCSV from './useExportCSV';
+import { IpcMainEvent } from 'electron';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -57,6 +58,28 @@ const CyProvider = ({ children }) => {
     { ...loadState, ...modeState, ...exportState },
     { ...loadActions, ...modeActions, ...exportActions, ...helperActions },
   ];
+
+  useEffect(() => {
+    console.log('bind IPC events');
+
+    window.api.onFileSaved((_: Event, filePath: string) => loadActions.updateFilePath(filePath));
+
+    window.api.onFileOpened((_: Event, data: Object, filePath: string) => {
+      console.log('onFileOpened', data, filePath);
+      loadActions.loadCase(data, filePath);
+    });
+
+    window.api.onTriggerSave((event: IpcMainEvent) => {
+      const response = loadActions.getSaveableData();
+      console.log('onTriggerSave', event, response);
+      event.sender.send('trigger-save-response', response)
+    });
+
+    return () => {
+      console.log('remove IPC events');
+      window.api.removeListeners();
+    }
+  }, [loadState])
 
   return (
     <CytoScapeContext.Provider value={value}>

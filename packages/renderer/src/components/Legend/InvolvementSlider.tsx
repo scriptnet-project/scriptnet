@@ -41,7 +41,6 @@ const InvolvementSlider = () => {
   const [sliderValue, setSliderValue] = useState([0, 0]);
 
   useEffect(() => {
-    console.log('involvement slider');
     if(!cy) return;
 
     const newDates: Date[] = [];

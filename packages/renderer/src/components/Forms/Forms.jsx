@@ -36,7 +36,6 @@ const Forms = () => {
   }, [dispatch, selectedNode, cy]);
 
   useEffect(() => {
-    console.log('selected', selectedNode)
     if (!selectedNode) {
       return;
     }

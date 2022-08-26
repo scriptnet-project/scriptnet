@@ -1,10 +1,7 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { get } from 'lodash';
-import { actionCreators as visualisationActions } from '../../store/visualisation';
 
 const initialState = {
-  isLoading: false,
   filePath: null,
 };
 
@@ -12,38 +9,45 @@ const useCyLoader = (cy, initializeCy) => {
   console.log('useCyLoader');
   const [state, setState] = useState(initialState);
 
-  const newNetwork = () => {
-    initializeCy();
-    setState(initialState);
-  };
-
-  window.ipcRenderer.on('case-opened', (event, data, path) => {
-    // console.log('case-opened', event, data, path) // prints "pong"
-    handleFileOpen(data, path);
-  })
-
-  const handleFileOpen = async (parsedData, filePath) => {
-    const elements = get(parsedData, 'network.elements', []);
-    initializeCy(elements);
-    setState(s => ({ ...s, filePath, isLoading: false }));
+  const resetLoader = () => {
+    console.log('reset loader');
   }
 
-  const saveNetwork = async () => {
-    console.log('save network', state);
-    const dialogOptions = state.filePath ? { defaultPath: state.filePath } : {};
+  const loadCase = async (data, filePath) => {
+    console.log('load case', data, filePath);
+    const elements = get(data, 'network.elements', []);
+    initializeCy(elements);
+    setState(s => ({ ...s, filePath }));
+  }
+
+  const getSaveableData = () => {
+    console.log('saveCase', state);
 
     const elements = cy.current.elements().jsons();
     const data = JSON.stringify({ network: { elements } });
 
-    setState({ isLoading: true });
-    const jsonFilePath = await window.saveFile(dialogOptions, data, state.filePath)
-    setState(s => ({ ...s, filePath: jsonFilePath, loading: false }));
+    // Call main process here
+    return {
+      data,
+      filePath: state.filePath
+    }
   };
 
+  const updateFilePath = (filePath) => {
+    console.log("Updating file path: ", filePath);
+    setState(s => ({
+      ...s, filePath
+    }))
+  }
+
+  useEffect(() => {
+    console.log('Loader state', state);
+  }, [state]);
+
   const actions = {
-    handleFileOpen,
-    saveNetwork,
-    newNetwork,
+    loadCase,
+    getSaveableData,
+    updateFilePath,
   };
 
   return [state, actions];

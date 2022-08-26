@@ -1,15 +1,19 @@
-import { app, BrowserWindow, shell, ipcMain, dialog, Menu } from 'electron'
+import { app, BrowserWindow, shell, Menu } from 'electron'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { release } from 'os'
-import fse from 'fs-extra';
-import { join, parse } from 'path'
+import { join } from 'path'
+import { handleNewCase, handleOpenCase, handleSaveAsCase, handleSaveCase } from './menuHandlers';
+import { registerListeners } from './fileOperations';
 
 const isMac = process.platform === 'darwin'
 
-let win: BrowserWindow | null = null
+let win: BrowserWindow;
+
+export const getBrowserWindow = () => {
+  return BrowserWindow.getFocusedWindow();
+}
 
 const template = [
-  // { role: 'appMenu' }
   ...(isMac ? [{
     label: app.name,
     submenu: [
@@ -22,82 +26,51 @@ const template = [
       { role: 'quit' }
     ]
   }] : []),
-  // { role: 'fileMenu' }
   {
     label: '&File',
     submenu: [
       {
         label: 'New Case...',
-        click: () => {
-          console.log('new');
-          // win.webContents.send('new-case')
-        },
+        click: handleNewCase,
         accelerator: 'CmdOrCtrl+N'
       },
       {
         label: 'Open Case',
         accelerator: 'CmdOrCtrl+O',
-        click: async () => {
-          console.log('open case');
-          const path = await dialog.showOpenDialog(win, {
-            properties: ['openFile'],
-            filters: [
-              { name: 'Case', extensions: ['case'] }
-            ]
-          });
-
-          if (path.canceled) {
-            return;
-          }
-
-          const filePath = path.filePaths[0];
-          const data = await fse.readFile(filePath, 'utf8');
-          win?.webContents.send('case-opened', JSON.parse(data), filePath);
-        },
+        click: handleOpenCase,
       },
       {
         label: 'Save Case',
         accelerator: 'CmdOrCtrl+S',
-        click: () => {
-          console.log('save case');
-          // win.webContents.send('save-file')
-        },
-        disabled: true,
+        click: handleSaveCase,
       },
       {
         label: 'Save Case As...',
-        click: () => {
-          console.log('save case as');
-          // win.webContents.send('save-file')
-        }
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Export',
-        submenu: [
-          {
-            label: 'Export Screenshot...',
-            click: () => {
-              console.log('export screenshot');
-              // win.webContents.send('export-screenshot')
-            },
-          },
-          {
-            label: 'Export CSV...',
-            click: () => {
-              console.log('export csv');
-              // win.webContents.send('export-csv')
-            },
-          },
-        ]
+        click: handleSaveAsCase,
       },
       { type: 'separator' },
       { role: 'quit' }
     ],
   },
-  // { role: 'editMenu' }
+  {
+    label: 'Export',
+    submenu: [
+      {
+        label: 'Export Screenshot...',
+        click: () => {
+          console.log('export screenshot');
+          win.webContents.send('export-screenshot')
+        },
+      },
+      {
+        label: 'Export CSV...',
+        click: () => {
+          console.log('export csv');
+          win.webContents.send('export-csv')
+        },
+      },
+    ]
+  },
   {
     label: 'Edit',
     submenu: [
@@ -117,7 +90,6 @@ const template = [
       ])
     ]
   },
-  // { role: 'viewMenu' }
   {
     label: 'View',
     submenu: [
@@ -128,7 +100,6 @@ const template = [
       { role: 'togglefullscreen' }
     ]
   },
-  // { role: 'windowMenu' }
   {
     label: 'Window',
     submenu: [
@@ -171,39 +142,6 @@ if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 if (!app.requestSingleInstanceLock()) {
   app.quit()
   process.exit(0)
-}
-
-function registerListeners() {
-  ipcMain.handle('open-sample-network', async () => {
-    // Load the sample network when in dev mode
-    const SAMPLE_NETWORK_PATH = join(__dirname, '../../complex-example.case')
-    const data = await fse.readFile(SAMPLE_NETWORK_PATH, 'utf8');
-    win?.webContents.send('case-opened', JSON.parse(data), SAMPLE_NETWORK_PATH);
-  });
-
-  ipcMain.handle('save-file', async (event, options, data, existingPath) => {
-      // do stuff
-      if (!existingPath) {
-        const path = await dialog.showSaveDialog(win, {
-          title: 'Save Case',
-          defaultPath: '',
-          filters: [
-            { name: 'Case', extensions: ['case'] }
-          ],
-          ...options
-        });
-
-        if (path.canceled) {
-          return;
-        }
-
-        const filePath = parse(path.filePath);
-        const jsonFilePath = join(filePath.dir, `${filePath.name}.case`);
-        return fse.writeFile(jsonFilePath, data, 'utf8');
-      }
-
-      return fse.writeFile(existingPath, data, 'utf8');
-  });
 }
 
 async function installDevtools() {
