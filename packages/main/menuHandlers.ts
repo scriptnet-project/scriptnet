@@ -2,6 +2,7 @@ import { dialog } from 'electron';
 import { join } from 'path';
 import { readFile, writeFile } from 'fs-extra';
 import { getBrowserWindow } from '.';
+import { openFile } from './fileOperations';
 
 /**
  * New Case:
@@ -50,8 +51,7 @@ export const handleOpenCase = async () => {
 
   const filePath = filePaths[0];
 
-  const data = await readFile(filePath, 'utf8');
-  getBrowserWindow()?.webContents.send('file-opened', JSON.parse(data), filePath);
+  await openFile(filePath);
 };
 
 /**

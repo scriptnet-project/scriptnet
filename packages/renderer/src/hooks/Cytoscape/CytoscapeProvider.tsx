@@ -77,6 +77,7 @@ const CyProvider = ({ children }) => {
 
     window.api.onTriggerSaveCSV((event: IpcMainEvent) => {
       const response = exportActions.getCSVData();
+      console.log('onTriggerSaveCSV', response);
       event.sender.send('trigger-save-csv-response', response);
     })
 

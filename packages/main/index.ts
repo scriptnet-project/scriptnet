@@ -2,8 +2,15 @@ import { app, BrowserWindow, shell, Menu } from 'electron'
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { release } from 'os'
 import { join } from 'path'
-import { handleNewCase, handleOpenCase, handleSaveAsCase, handleSaveCase } from './menuHandlers';
-import { registerListeners } from './fileOperations';
+import {
+  handleNewCase,
+  handleOpenCase,
+  handleSaveAsCase,
+  handleSaveCase,
+  handleExportScreenshot,
+  handleExportCSV,
+} from './menuHandlers';
+import { openFile, registerListeners, SAMPLE_NETWORK_PATH } from './fileOperations';
 
 const isMac = process.platform === 'darwin'
 
@@ -57,17 +64,11 @@ const template = [
     submenu: [
       {
         label: 'Export Screenshot...',
-        click: () => {
-          console.log('export screenshot');
-          win.webContents.send('export-screenshot')
-        },
+        click: handleExportScreenshot,
       },
       {
         label: 'Export CSV...',
-        click: () => {
-          console.log('export csv');
-          win.webContents.send('export-csv')
-        },
+        click: handleExportCSV,
       },
     ]
   },
@@ -144,6 +145,13 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
+const openSampleProtocol = async () => {
+  console.log('Open sample protocol', app.isPackaged);
+  if (!app.isPackaged) {
+    await openFile(SAMPLE_NETWORK_PATH);
+  }
+}
+
 async function installDevtools() {
   return installExtension([REDUX_DEVTOOLS.id, REACT_DEVELOPER_TOOLS.id])
     .then((name) => console.log(`Added Extension:  ${name}`))
@@ -180,7 +188,7 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(installDevtools).then(createWindow).then(registerListeners)
+app.whenReady().then(installDevtools).then(createWindow).then(registerListeners).then(openSampleProtocol)
 
 app.on('window-all-closed', () => {
   win = null
