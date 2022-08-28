@@ -16,6 +16,8 @@ contextBridge.exposeInMainWorld('devMode', devMode);
 
 contextBridge.exposeInMainWorld('api', {
   onTriggerSave: (callback) => ipcRenderer.on('trigger-save', callback),
+  onTriggerSaveCSV: (callback) => ipcRenderer.on('trigger-save-csv', callback),
+  onTriggerSaveScreenshot: (callback) => ipcRenderer.on('trigger-save-screenshot', callback),
   onFileOpened: (callback) => ipcRenderer.on('file-opened', callback),
   onFileSaved: (callback) => ipcRenderer.on('file-saved', callback),
   removeListeners: () => ipcRenderer.removeAllListeners(),

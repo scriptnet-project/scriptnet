@@ -75,6 +75,15 @@ const CyProvider = ({ children }) => {
       event.sender.send('trigger-save-response', response)
     });
 
+    window.api.onTriggerSaveCSV((event: IpcMainEvent) => {
+      const response = exportActions.getCSVData();
+      event.sender.send('trigger-save-csv-response', response);
+    })
+
+    window.api.onTriggerSaveScreenshot((event: IpcMainEvent) => {
+      event.sender.send('trigger-save-screenshot-response')
+    })
+
     return () => {
       console.log('remove IPC events');
       window.api.removeListeners();

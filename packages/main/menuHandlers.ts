@@ -92,4 +92,12 @@ export const handleSaveAsCase = async () => {
   getBrowserWindow()?.webContents.send('file-saved', filePath);
 
   getBrowserWindow()?.webContents.send('trigger-save');
-}
+};
+
+export const handleExportCSV = async () => {
+  getBrowserWindow()?.webContents.send('trigger-save-csv');
+};
+
+export const handleExportScreenshot = async () => {
+  getBrowserWindow()?.webContents.send('trigger-save-screenshot');
+};
