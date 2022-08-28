@@ -81,8 +81,9 @@ const CyProvider = ({ children }) => {
       event.sender.send('trigger-save-csv-response', response);
     })
 
-    window.api.onTriggerSaveScreenshot((event: IpcMainEvent) => {
-      event.sender.send('trigger-save-screenshot-response')
+    window.api.onTriggerSaveScreenshot(async (event: IpcMainEvent) => {
+      const imageData = await modeActions.getImageData();
+      event.sender.send('trigger-save-screenshot-response', imageData)
     })
 
     return () => {

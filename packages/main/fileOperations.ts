@@ -87,7 +87,21 @@ export const registerListeners = async () => {
     await saveCSV(response);
   })
 
-  ipcMain.on('trigger-save-screenshot-response', () => {
+  ipcMain.on('trigger-save-screenshot-response', async (_, response) => {
+    const options = {
+      properties: ['createDirectory', 'showOverwriteConfirmation'],
+      defaultPath: 'ScriptNet Export.png',
+      filters: [
+        { name: 'Images', extensions: ['png'] }
+      ]
+    };
+
+    const { canceled, filePath } = await dialog.showSaveDialog(getBrowserWindow(), options);
+    if (canceled) { return; }
+
+    const buffer = Buffer.from(response, "base64");
+
+    await writeFile(filePath, buffer);
   });
 
   return;

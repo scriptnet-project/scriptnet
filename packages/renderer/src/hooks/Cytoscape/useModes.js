@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
-import { saveAs } from 'file-saver';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import {
   baseStylesheet,
@@ -178,7 +177,7 @@ const useCyModes = (cy, id) => {
       layout.current = cy.current.layout(layoutOptions);
       layout.current.run();
 
-      }
+    }
   };
 
   const runLayout = debounce(actualRunLayout, 100, { trailing: true });
@@ -200,7 +199,7 @@ const useCyModes = (cy, id) => {
       if (ele.isNode()) {
         const edges = ele.connectedEdges().filter((edge) => !localHideEdges.includes(edge.data('type')));
 
-        if (edges.length === 0 ) {
+        if (edges.length === 0) {
           ele.addClass('half-opacity');
         }
       }
@@ -244,7 +243,8 @@ const useCyModes = (cy, id) => {
           stroke: colors[index],
           strokeWidth: 4,
           fill: colors[index],
-        }});
+        }
+      });
     });
   }
 
@@ -278,7 +278,8 @@ const useCyModes = (cy, id) => {
           stroke: colors[index],
           strokeWidth: 4,
           fill: colors[index],
-        }});
+        }
+      });
     });
   }
 
@@ -322,7 +323,7 @@ const useCyModes = (cy, id) => {
 
     cy.current.autounselectify(true);
     eh.current = cy.current.edgehandles({
-      edgeParams: ( sourceNode, targetNode, i ) => {
+      edgeParams: (sourceNode, targetNode, i) => {
         // for edges between the specified source and target
         // return element object to be passed to cy.add() for edge
         // NB: i indicates edge index in case of edgeType: 'node'
@@ -351,7 +352,7 @@ const useCyModes = (cy, id) => {
 
     // Get nodes with attribute and apply .highlighted class
     const selector = `node[${attribute} = "true"]`;
-    cy.current.nodes(selector).addClass('highlighted') ;
+    cy.current.nodes(selector).addClass('highlighted');
 
     cy.current.on('tap', 'node', (event) => {
       // determine if attribute is already set
@@ -369,11 +370,11 @@ const useCyModes = (cy, id) => {
 
   const disableNodeHighlighting = () => {
     cy.current.autounselectify(false);
-    cy.current.nodes().removeClass('highlighted') ;
+    cy.current.nodes().removeClass('highlighted');
     cy.current.removeListener('tap');
   };
 
-  const exportPNG = async () => {
+  const getImageData = async () => {
     if (!cy.current) { return; }
 
     const drawImageToVirtualCanvas = async (imageData) => {
@@ -393,12 +394,12 @@ const useCyModes = (cy, id) => {
 
     const virtualCanvas = document.createElement('canvas');
     const cytoElement = document.getElementsByClassName('Visualisation')[0];
-    const {width, height} = cytoElement.getBoundingClientRect();
+    const { width, height } = cytoElement.getBoundingClientRect();
     virtualCanvas.width = width * 4;
     virtualCanvas.height = height * 4;
     const context = virtualCanvas.getContext('2d');
 
-    if(
+    if (
       mode == modes.CONFIGURE &&
       (modeOptions.preset === 'scene' || modeOptions.preset === 'geography' || modeOptions.preset === 'jurisdiction')
     ) {
@@ -406,7 +407,7 @@ const useCyModes = (cy, id) => {
       context.putImageData(svgImage, 0, 0);
     }
 
-    const cytopng = cy.current.png({scale: 4});
+    const cytopng = cy.current.png({ scale: 4 });
     await drawImageToVirtualCanvas(cytopng);
     const legendImage = await getLegendImage();
 
@@ -416,7 +417,8 @@ const useCyModes = (cy, id) => {
     context.putImageData(legendImage, legendX, legendY);
 
     let canvasBitmap = virtualCanvas.toDataURL();
-    saveAs(canvasBitmap, 'Scriptnet Export.png');
+    const data = canvasBitmap.replace(/^data:image\/\w+;base64,/, "");
+    return data;
   }
 
   const applyFocalIndividualPreset = () => {
@@ -488,7 +490,7 @@ const useCyModes = (cy, id) => {
     disableEdgeCreation,
     enableNodeHighlighting,
     disableNodeHighlighting,
-    exportPNG,
+    getImageData,
   };
 
   return [mode, actions];
