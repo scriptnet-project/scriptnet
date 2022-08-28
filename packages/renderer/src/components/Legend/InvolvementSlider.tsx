@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+// @ts-ignore:next-line
 import { useCytoscape, useCytoscapeActions } from '@/hooks/Cytoscape';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Slider } from '@fluentui/react';
 import { isEmpty } from 'lodash';
+// @ts-ignore:next-line
 import { getMode } from '../../store/selectors/mode';
+// @ts-ignore:next-line
 import { modes } from '../../store/mode';
 import { CollectionGraphManipulation, NodeSingular } from 'cytoscape';
 import { useSelector } from 'react-redux';
@@ -193,7 +196,7 @@ const InvolvementSlider = () => {
 };
 
 const Wrapper = () => {
-  const mode = useSelector(getMode);
+  const mode: string = useSelector(getMode);
 
   return (
     <AnimatePresence>

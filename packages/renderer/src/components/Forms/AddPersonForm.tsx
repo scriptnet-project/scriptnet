@@ -1,4 +1,4 @@
-import { useRef, useCallback, ReactNode, ReactComponentElement } from 'react';
+import { MouseEventHandler } from 'react';
 import {
   DefaultButton,
   PrimaryButton,
@@ -10,15 +10,18 @@ import {
   FontWeights,
   getTheme,
   mergeStyleSets,
-  useTheme,
 } from '@fluentui/react';
 import * as Yup from 'yup';
+// @ts-ignore:next-line
 import { useCytoscapeActions } from 'Hooks/Cytoscape';
 import { Form, Formik } from 'formik';
+// @ts-ignore:next-line
 import { baseJurisdictionOptions, baseRoleOptions } from './sharedOptions';
 import LocationSelector from '../Fields/LocationSelector';
 import ActivePeriodSelector from '../Fields/ActivePeriodSelector';
+// @ts-ignore:next-line
 import TextField from '../Fields/TextField';
+// @ts-ignore:next-line
 import Dropdown from '../Fields/Dropdown';
 import Field from '../Fields/Field';
 import FieldArray from '../Fields/FieldArray';
@@ -45,14 +48,22 @@ const defaultValues = {
   notes: '',
 }
 
+type AddPersonFormProps = {
+  initialValues: {
+    id: string,
+  },
+  isEditing: boolean,
+  closeDialog: Function,
+};
+
 export const AddPersonForm = ({
   initialValues,
   isEditing,
   closeDialog,
-}) => {
+}: AddPersonFormProps) => {
   const cyActions = useCytoscapeActions();
 
-  const handleFormSubmit = async (formData) => {
+  const handleFormSubmit = async (formData: { id: string}) => {
     if (isEditing) {
       const { id, ...data } = formData;
       cyActions.update(id, data);
@@ -85,6 +96,7 @@ export const AddPersonForm = ({
 
   return (
     <Formik
+        // @ts-ignore:next-line
         initialValues={{ ...defaultValues, ...initialValues }}
         onSubmit={handleFormSubmit}
         validationSchema={addPersonSchema}
@@ -102,6 +114,7 @@ export const AddPersonForm = ({
             className={formStyles.body}
           >
             <Field
+              // @ts-ignore:next-line
               name="name"
               label="Name"
               placeholder="Enter the person's name"
@@ -109,6 +122,7 @@ export const AddPersonForm = ({
               required
             />
             <Field
+              // @ts-ignore:next-line
               name="role"
               label="Role"
               placeholder="Select a role"
@@ -117,12 +131,14 @@ export const AddPersonForm = ({
               required
             />
             <Field
+              // @ts-ignore:next-line
               name="location"
               label="Location"
               placeholder="Select a location"
               component={LocationSelector}
             />
             <Field
+              // @ts-ignore:next-line
               name="jurisdiction"
               label="Jurisdiction"
               placeholder="Select a jurisdiction"
@@ -130,18 +146,21 @@ export const AddPersonForm = ({
               options={baseJurisdictionOptions}
             />
             <Field
+              // @ts-ignore:next-line
               name="gender"
               label="Gender"
               component={Dropdown}
               options={genderOptions}
             />
             <FieldArray
+              // @ts-ignore:next-line
               name="involvements"
               label="Period(s) of involvement"
               component={ActivePeriodSelector}
               required
             />
             <Field
+              // @ts-ignore:next-line
               name="notes"
               label="Notes"
               multiline
@@ -157,7 +176,11 @@ export const AddPersonForm = ({
           >
             { isEditing ? (
               <>
-                <DefaultButton text="Cancel" onClick={closeDialog} />
+                <DefaultButton
+                  text="Cancel"
+                  // @ts-ignore:next-line
+                  onClick={closeDialog}
+                />
                 <PrimaryButton
                   iconProps={{ iconName: 'delete', children: theme.palette.red}}
                   style={{backgroundColor: theme.palette.red, color:'white'}}
@@ -172,7 +195,11 @@ export const AddPersonForm = ({
               </>
             ) : (
               <>
-                <DefaultButton text="Cancel" onClick={closeDialog} />
+                <DefaultButton
+                  text="Cancel"
+                  // @ts-ignore:next-line
+                  onClick={closeDialog}
+                />
                 <PrimaryButton type="submit" text="Add to Case" />
               </>
             )}
@@ -230,6 +257,7 @@ export const FormDialog = ({
         />
       </div>
       <Form
+        // @ts-ignore:next-line
         initialValues={initialValues}
         isEditing={isEditing}
         closeDialog={onClose}
@@ -272,11 +300,7 @@ export const formStyles = mergeStyleSets({
     justifyContent: 'space-between',
   },
 });
-const stackProps: Partial<IStackProps> = {
-  horizontal: true,
-  tokens: { childrenGap: 40 },
-  styles: { root: { marginBottom: 20 } },
-};
+
 const iconButtonStyles: Partial<IButtonStyles> = {
   root: {
     color: theme.palette.neutralPrimary,
@@ -289,6 +313,7 @@ const iconButtonStyles: Partial<IButtonStyles> = {
   },
 };
 
+// @ts-ignore:next-line
 const AddPersonDialog = (props) => (
   <FormDialog
     {...props}

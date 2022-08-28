@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useField } from 'formik';
+import { FieldHookConfig, useField } from 'formik';
 import {
   DetailsList,
   getTheme,
@@ -14,8 +14,9 @@ import {
   ConstrainMode,
   Text,
 } from '@fluentui/react';
+import { get } from 'lodash';
 
-const getFormattedValue = (data) => {
+const getFormattedValue = (data: Date) => {
   if (!data) {
     return undefined;
   }
@@ -25,6 +26,10 @@ const getFormattedValue = (data) => {
   }
 
   return new Date(data);
+}
+
+type Item = {
+  key: number
 }
 
 const detailsStyles: IDetailsListStyles = {
@@ -62,7 +67,14 @@ const columns: IColumn[] = [
   },
 ];
 
-const ActivePeriodSelector = (props) => {
+type ActivePeriodSelectorProps = {
+  name: string,
+  push: Function,
+  remove: Function,
+  replace: Function
+};
+
+const ActivePeriodSelector = (props: ActivePeriodSelectorProps) => {
   const {
     name,
     push,
@@ -71,12 +83,13 @@ const ActivePeriodSelector = (props) => {
   } = props;
 
   const theme = getTheme();
-  const [field, meta, helpers] = useField(name);
-  const [selectedItem, setSelectedItem] = useState(undefined);
+  const [field, meta] = useField(name);
+  const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
 
   const selection = new Selection({
     onSelectionChanged: () => {
-      setSelectedItem(selection.getSelection()[0])
+      const selected = selection.getSelection()[0] as Item;
+      setSelectedItem(selected);
     },
   })
 
@@ -96,14 +109,17 @@ const ActivePeriodSelector = (props) => {
 
   const handleDeleteSelectedItem = () => {
     // Find index of selected item by key
-    const index = field.value.findIndex(item => item.key === selectedItem.key);
+    const index = field.value.findIndex((item: Item) => {
+      if (!selectedItem) { return; }
+      return item.key === selectedItem.key
+    } );
     remove(index);
     setSelectedItem(undefined);
   }
 
-  const renderSingleError = error => <Text variant="small" styles={{ root: { color: theme.palette.red } }}>{error}</Text>
+  const renderSingleError = (error: string) => <Text variant="small" styles={{ root: { color: theme.palette.red } }}>{error}</Text>
 
-  const renderError = (error) => {
+  const renderError = (error: string | []) => {
     if (typeof error === 'string') {
       return renderSingleError(error);
     }
@@ -138,7 +154,6 @@ const ActivePeriodSelector = (props) => {
     )
   }
 
-
   return (
     <Stack>
         <div
@@ -155,8 +170,9 @@ const ActivePeriodSelector = (props) => {
           checkboxVisibility={2}
           layoutMode={DetailsListLayoutMode.fixedColumns}
           constrainMode={ConstrainMode.horizontalConstrained}
-          onRenderItemColumn={(item, index, { fieldName }: IColumn) => {
-            const data = item[fieldName];
+          onRenderItemColumn={(item, index, column) => {
+            const dataIndex = get(column, 'fieldName', 0);
+            const data = item[dataIndex];
 
             return (
               <DatePicker
@@ -164,7 +180,7 @@ const ActivePeriodSelector = (props) => {
                 onSelectDate={(date) => {
                   replace(index, {
                     ...item,
-                    [fieldName]: date,
+                    [dataIndex]: date,
                   })
                 }}
               />

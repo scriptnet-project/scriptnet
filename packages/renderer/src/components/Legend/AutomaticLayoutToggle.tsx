@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Toggle } from '@fluentui/react';
+// @ts-ignore:next-line
 import { actionCreators as visualisationActions } from '../../store/visualisation';
+import { get } from 'lodash';
 
 const AutomaticLayoutToggle = () => {
-  const automaticLayout = useSelector(state => state.visualisation.automaticLayout);
-  const showMap = useSelector(state => state.visualisation.showMap);
+  const automaticLayout = useSelector(state => get(state, 'visualisation.automaticLayout'));
+  const showMap = useSelector(state => get(state, 'visualisation.showMap'));
   const dispatch = useDispatch();
   const toggleAutomaticLayout = () => dispatch(visualisationActions.toggleAutomaticLayout());
 

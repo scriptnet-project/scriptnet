@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StackItem, Text, Stack, Toggle } from '@fluentui/react';
+import { StackItem, Stack, Toggle } from '@fluentui/react';
+// @ts-ignore:next-line
 import { actionCreators as visualisationActions } from '../../store/visualisation';
+// @ts-ignore:next-line
 import IconWithCallout from '../IconWithCallout';
+import { get } from 'lodash';
 
 const Callout = () => (
   <IconWithCallout
@@ -13,11 +15,17 @@ const Callout = () => (
           padding: '10px',
         }}
       >
-        <StackItem block>
+        <StackItem
+          // @ts-ignore:next-line
+          block
+        >
           Toggle between the default background, and a map of the world. When in map mode
           the position of the nodes will be determined by their location property.
         </StackItem>
-        <StackItem block>
+        <StackItem
+          // @ts-ignore:next-line
+          block
+        >
           <strong>Please note: </strong> nodes without a location will be hidden from the map.
         </StackItem>
       </Stack>
@@ -29,11 +37,9 @@ const Callout = () => (
 
 // Toggle between map and default background
 const ShowMapToggle = () => {
-  const showMap = useSelector(state => state.visualisation.showMap);
+  const showMap = useSelector(state => get(state, 'visualisation.showMap'));
   const dispatch = useDispatch();
   const toggleShowMap = () => dispatch(visualisationActions.toggleShowMap());
-
-  const numberOfHiddenNodes = 4;
 
   return (
   <>
@@ -43,11 +49,6 @@ const ShowMapToggle = () => {
       checked={showMap}
       onChange={toggleShowMap}
     />
-    {/* {showMap && (
-      <Stack>
-        <Text>{numberOfHiddenNodes} node(s) are currently hidden.</Text>
-      </Stack>
-    )} */}
   </>
   );
 }

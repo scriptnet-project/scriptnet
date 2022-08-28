@@ -6,7 +6,7 @@ const API_KEY = null; // if too many calls are made you need to provide an email
 
 export interface GeoLocationResult extends SearchResult { };
 
-export const searchReverseLocation = async ({ latitude, longitude, zoom = 18 }): Promise<GeoLocationResult> => {
+export const searchReverseLocation = async ({ latitude, longitude, zoom = 18 }: { latitude: number, longitude: number, zoom?: number}): Promise<GeoLocationResult | null> => {
     let url = `${service_url}&lat=${latitude}&lon=${longitude}&zoom=${zoom}`;
     url = API_KEY ? `${url}&key=${API_KEY}` : url;
     try {
@@ -19,8 +19,9 @@ export const searchReverseLocation = async ({ latitude, longitude, zoom = 18 }):
             bounds: response.data.boundingbox,
             raw: response.data
         }
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(error);
-        return error.toString();
     }
+
+    return null;
 }

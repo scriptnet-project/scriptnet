@@ -1,15 +1,23 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, PropsWithChildren } from 'react';
 import { v4 as uuid } from 'uuid';
 import Cytoscape, { CytoscapeOptions } from 'cytoscape';
-// import cytoscapeLeaflet from 'cytoscape-leaflet';
+// @ts-ignore:next-line
 import leaflet from 'cytoscape-leaf';
+// @ts-ignore:next-line
 import cola from 'cytoscape-cola';
+// @ts-ignore:next-line
 import BubbleSets from 'cytoscape-bubblesets';
+// @ts-ignore:next-line
 import edgeHandles from 'cytoscape-edgehandles';
+// @ts-ignore:next-line
 import CytoScapeContext from './CytoscapeContext';
+// @ts-ignore:next-line
 import useLoader from './useLoader';
+// @ts-ignore:next-line
 import useModes from './useModes';
+// @ts-ignore:next-line
 import useHelpers from './useHelpers';
+// @ts-ignore:next-line
 import useExportCSV from './useExportCSV';
 import { IpcMainEvent } from 'electron';
 
@@ -28,7 +36,17 @@ const cyOptions: CytoscapeOptions = {
   styleEnabled: true,
 };
 
-const CyProvider = ({ children }) => {
+declare global {
+    interface Window { api: {
+      onFileSaved: Function,
+      onFileOpened: Function,
+      onTriggerSave: Function,
+      onTriggerSaveCSV: Function,
+      onTriggerSaveScreenshot: Function,
+    }; }
+}
+
+const CyProvider = ({ children }: PropsWithChildren<{}>) => {
   const cyRef = useRef(Cytoscape(cyOptions));
 
   const [state, setState] = useState(() => ({
@@ -88,6 +106,7 @@ const CyProvider = ({ children }) => {
 
     return () => {
       console.log('remove IPC events');
+      // @ts-ignore:next-line
       window.api.removeListeners();
     }
   }, [loadState])

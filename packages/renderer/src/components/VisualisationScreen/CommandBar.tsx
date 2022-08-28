@@ -2,16 +2,19 @@ import {
   CommandBar,
   Toggle,
 } from '@fluentui/react';
-import { useCytoscape, useCytoscapeActions } from '../../hooks/Cytoscape';
+// @ts-ignore:next-line
+import { useCytoscape } from '../../hooks/Cytoscape';
 import './CommandBar.scss';
+// @ts-ignore:next-line
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import { useDispatch, useSelector } from 'react-redux';
 import ShowMapToggle from '../Legend/ShowMapToggle';
 import AutomaticLayoutToggle from '../Legend/AutomaticLayoutToggle';
 import './CommandBar.scss';
+import { get } from 'lodash';
 
 const ShowLabelToggle = () => {
-  const showLabels = useSelector(state => state.visualisation.showLabels);
+  const showLabels = useSelector(state => get(state, 'visualisation.showLabels'));
   const dispatch = useDispatch();
   const toggleShowLabels = () => dispatch(visualisationActions.toggleShowLabels());
 
@@ -29,64 +32,6 @@ const TopCommandBar = ({
 }) => {
   const { cy, id } = useCytoscape();
 
-  const {
-    openNetwork,
-    newNetwork,
-    exportPNG,
-    exportCSV,
-  } = useCytoscapeActions();
-
-  const items = [
-    // {
-    //   key: 'Cases',
-    //   text: 'Cases',
-    //   iconProps: { iconName: 'Album' },
-    //   subMenuProps: {
-    //     items: [
-    //       {
-    //         key: 'New',
-    //         text: 'New Case',
-    //         iconProps: { iconName: 'Add' },
-    //         onClick: newNetwork,
-    //       },
-    //       {
-    //         key: 'Save',
-    //         text: 'Save Case',
-    //         iconProps: { iconName: 'Save' },
-    //         onClick: saveNetwork,
-    //       },
-    //       {
-    //         key: 'Open',
-    //         text: 'Open Case...',
-    //         iconProps: { iconName: 'FolderOpen' },
-    //         onClick: openNetwork,
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   key: 'Export',
-    //   text: 'Export',
-    //   iconProps: { iconName: 'ShareiOS' },
-    //   subMenuProps: {
-    //     items: [
-    //       {
-    //         key: 'Export',
-    //         text: 'Export Screenshot',
-    //         iconProps: { iconName: 'Share' },
-    //         onClick: () => exportPNG(),
-    //       },
-    //       {
-    //         key: 'ExportCSV',
-    //         text: 'Export CSV',
-    //         iconProps: { iconName: 'Export' },
-    //         onClick: exportCSV,
-    //       }
-    //     ],
-    //   },
-    // },
-  ];
-
   const farItems = [
     {
       key: 'map',
@@ -100,26 +45,6 @@ const TopCommandBar = ({
       key: 'layout',
       commandBarButtonAs: AutomaticLayoutToggle,
     },
-    // {
-    //   key: 'zoomin',
-    //   iconOnly: true,
-    //   iconProps: { iconName: 'ZoomIn' },
-    //   onClick: () => {
-    //     cy.current.animate({
-    //       'zoom': cy.current.zoom() + 0.5,
-    //    });
-    //   },
-    // },
-    // {
-    //   key: 'zoomout',
-    //   iconOnly: true,
-    //   iconProps: { iconName: 'ZoomOut' },
-    //   onClick: () => {
-    //     cy.current.animate({
-    //       'zoom': cy.current.zoom() - 0.5,
-    //    });
-    //   },
-    // },
     {
       key: 'fit',
       text: 'Center view',
@@ -138,7 +63,7 @@ const TopCommandBar = ({
   return (
     <div className="CommandBar">
       <CommandBar
-        items={items}
+        items={[]}
         farItems={farItems}
         ariaLabel="Use left and right arrow keys to navigate between commands"
       />

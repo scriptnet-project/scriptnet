@@ -1,22 +1,18 @@
-import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect, MouseEventHandler } from 'react';
 import { get, throttle } from 'lodash';
-import { Text, getTheme, mergeStyleSets, Modal, SearchBox, Stack, TextField, IIconProps, IStackProps, FontWeights, IButtonStyles, PrimaryButton, Icon, Link, useTheme, BaseButton, FontIcon } from "@fluentui/react";
+import { Text, Stack, TextField, Icon } from "@fluentui/react";
+// @ts-ignore:next-line
 import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { useField } from 'formik';
+import { LatLng, Map as LeafletMap } from 'leaflet';
 import { searchReverseLocation } from '@/utils/searchReverseLocation';
-
-type SearchControlProps = {
-  onSelectResult: (location: any) => void;
-}
 
 const provider = new OpenStreetMapProvider();
 
 const search = async (term: string) => await provider.search({ query: term });
 
-const ClearButton = ({ onClick }) => {
-  const theme = useTheme();
-
+const ClearButton = ({ onClick }: { onClick: MouseEventHandler}) => {
   return (
     <Icon
       iconName="Clear"
@@ -30,16 +26,16 @@ const ClearButton = ({ onClick }) => {
   );
 };
 
-const LocationSelector = ({ label, ...props }) => {
+const LocationSelector = ({ label, ...props }: { label: string, field: { name: string } }) => {
   const [field, meta, helpers] = useField(props.field.name);
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<LeafletMap | null>(null);
   const [searchTerm, setSearchTerm ] = useState(get(field, ['value', 'label'], null));
   const [searchStatus, setSearchStatus] = useState('idle');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[] | any[]>([]);
   const [showSearchResultsPanel, setShowSearchResultsPanel] = useState(false);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const [markerPosition, setMarkerPosition] = useState([get(field, ['value', 'x'], 0), get(field, ['value', 'y'], 0)]);
-  const markerRef = useRef(null);
+  const defaultLatLng = new LatLng(get(field, ['value', 'x'], 0), get(field, ['value', 'y'], 0));
+  const [markerPosition, setMarkerPosition] = useState<LatLng>(defaultLatLng);
+  const markerRef = useRef<L.Marker | null>(null);
 
   const style = {
     map: {
@@ -59,7 +55,8 @@ const LocationSelector = ({ label, ...props }) => {
         x: lon,
         y: lat,
       } = field.value;
-      setMarkerPosition([lat, lon]);
+
+      setMarkerPosition(new LatLng(lat, lon));
       map.setView([lat, lon], map.getZoom());
     }
 
@@ -67,6 +64,9 @@ const LocationSelector = ({ label, ...props }) => {
       setMarkerPosition(e.latlng);
       map.flyTo(e.latlng, map.getZoom());
       const result = await searchReverseLocation({ latitude: e.latlng.lat, longitude: e.latlng.lng, zoom: map.getZoom() });
+
+      if (!result ) { return; }
+
       helpers.setValue(result);
       setSearchTerm(result.label);
     });
@@ -93,8 +93,7 @@ const LocationSelector = ({ label, ...props }) => {
   const resetState = () => {
     setSearchTerm(null);
     setSearchResults([]);
-    setSelectedResult(null);
-    setMarkerPosition(null);
+    setMarkerPosition(new LatLng(0,0));
     setShowSearchResultsPanel(false);
   }
 
@@ -115,7 +114,7 @@ const LocationSelector = ({ label, ...props }) => {
 
   const throttledSearch = useCallback(throttle(doSearch, 500, { leading: false, trailing: true }), []);
 
-  const handleSearch = (searchTerm: string) => {
+  const handleSearch = (searchTerm: string | undefined) => {
     if(!searchTerm) {
       resetState();
       return;
@@ -130,7 +129,13 @@ const LocationSelector = ({ label, ...props }) => {
     throttledSearch(searchTerm);
   };
 
-  const handleSelectResult = (location) => {
+  type SearchResult = {
+    x: number,
+    y: number,
+    label: string,
+  }
+
+  const handleSelectResult = (location: SearchResult) => {
     console.log('handleselectresult', location);
     const {
       x: lon,
@@ -140,12 +145,10 @@ const LocationSelector = ({ label, ...props }) => {
 
     resetState();
 
-    setMarkerPosition([lat, lon]);
+    setMarkerPosition(new LatLng(lat, lon));
     setSearchTerm(label);
     helpers.setValue(location);
   };
-
-  const theme = getTheme();
 
   return (
     <Stack
@@ -156,14 +159,11 @@ const LocationSelector = ({ label, ...props }) => {
       <TextField
         value={searchTerm}
         onChange={(e, newValue) => handleSearch(newValue)}
+        // @ts-ignore:next-line
         prefix={<Icon iconName="MapPin" />}
         autoAdjustHeight
         placeholder='Search for a location...'
         onRenderSuffix={() => <ClearButton onClick={handleClear} />}
-        // onBlur={(e) => {
-        //   console.log('onBlur', e);
-        //   setShowSearchResultsPanel(false);
-        // }}
       />
       { showSearchResultsPanel && (
         <div
@@ -223,6 +223,7 @@ const LocationSelector = ({ label, ...props }) => {
                     longitude: markerPosition.lng,
                   });
 
+                  if (!result) { return; }
                   handleSelectResult(result);
                 }
               },
