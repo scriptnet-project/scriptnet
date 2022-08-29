@@ -78,6 +78,11 @@ const saveCSV = async ({ edges, nodes, filePath }) => {
 }
 
 export const registerListeners = async () => {
+  ipcMain.handle('open-sample-protocol', async () => {
+    console.log('Open sample protocol');
+    await openFile(SAMPLE_NETWORK_PATH);
+  })
+
   ipcMain.on('trigger-save-response', async (_, response) => {
     console.log('trigger-save-response', response);
     await saveFile(response);

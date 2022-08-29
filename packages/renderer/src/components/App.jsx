@@ -10,6 +10,10 @@ function App() {
 
   loadTheme(baseTheme);
 
+  if (window.devMode) {
+    window.api.openSampleProtocol();
+  }
+
   return (
     <CytoscapeProvider>
       <ThemeProvider theme={baseTheme}>

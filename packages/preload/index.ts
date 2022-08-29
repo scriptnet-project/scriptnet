@@ -15,6 +15,7 @@ const devMode = process.env.NODE_ENV === 'development'
 contextBridge.exposeInMainWorld('devMode', devMode);
 
 contextBridge.exposeInMainWorld('api', {
+  openSampleProtocol: () => ipcRenderer.invoke('open-sample-protocol'),
   onTriggerSave: (callback) => ipcRenderer.on('trigger-save', callback),
   onTriggerSaveCSV: (callback) => ipcRenderer.on('trigger-save-csv', callback),
   onTriggerSaveScreenshot: (callback) => ipcRenderer.on('trigger-save-screenshot', callback),

@@ -145,13 +145,6 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
-const openSampleProtocol = async () => {
-  console.log('Open sample protocol', app.isPackaged);
-  if (!app.isPackaged) {
-    await openFile(SAMPLE_NETWORK_PATH);
-  }
-}
-
 async function installDevtools() {
   return installExtension([REDUX_DEVTOOLS.id, REACT_DEVELOPER_TOOLS.id])
     .then((name) => console.log(`Added Extension:  ${name}`))
@@ -188,15 +181,15 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(installDevtools).then(createWindow).then(registerListeners).then(openSampleProtocol)
+app.whenReady().then(installDevtools).then(createWindow).then(registerListeners)
 
 app.on('window-all-closed', () => {
-  win = null
+  win.destroy()
   if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('second-instance', () => {
-  if (win) {
+  if (win && !win.isDestroyed()) {
     // Focus on the main window if the user tried to open another
     if (win.isMinimized()) win.restore()
     win.focus()
