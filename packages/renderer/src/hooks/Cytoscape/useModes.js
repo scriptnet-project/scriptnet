@@ -1,17 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
 import {
   baseStylesheet,
   labelledNodes,
-  defaultEntityColours,
+  withEntityColors,
+  unlabelledNodes,
 } from '../../components/Cytoscape/stylesheets';
 import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
 import { getMode, getModeOptions } from '../../store/selectors/mode';
 import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
-import { debounce } from 'lodash';
+import { debounce, get } from 'lodash';
 
 let filteredElements;
 
@@ -22,13 +23,13 @@ const useCyModes = (cy, id) => {
   const showLabels = useSelector(getShowLabels);
   const automaticLayout = useSelector(getAutomaticLayout);
   const showMap = useSelector(getShowMap);
+  const [nodeCount, setNodeCount] = useState(0);
 
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
 
   const initializeMap = () => {
-    stopLayout();
     // Filter nodes that don't have a location
     filteredElements = cy.current.nodes().filter('[!location]').remove();
 
@@ -47,10 +48,11 @@ const useCyModes = (cy, id) => {
 
     // Disable automatic layout
     // Do I need to update state here?
-    dispatch(visualisationActions.setAutomaticLayout(false));
+    stopLayout();
   }
 
   const destroyMap = () => {
+    console.log('Destroy map');
     if (window.leaf) {
       console.info('Removing leaflet map with id', window.leaf.map._container._leaflet_id);
       window.leaf.destroy();
@@ -61,11 +63,11 @@ const useCyModes = (cy, id) => {
       filteredElements = null;
     }
 
-    resetStyles();
-    dispatch(visualisationActions.setAutomaticLayout(true));
+    runLayout();
   }
 
   useEffect(() => {
+    console.log('Show Map changed', showMap);
     if (!cy.current) { return; }
 
     if (showMap) {
@@ -73,7 +75,9 @@ const useCyModes = (cy, id) => {
     }
 
     if (!showMap) {
-      destroyMap();
+      if (window.leaf) {
+        destroyMap();
+      }
     }
 
   }, [showMap])
@@ -81,17 +85,12 @@ const useCyModes = (cy, id) => {
   useEffect(() => {
     if (!cy.current) { return; }
 
-    resetStyles()
+    resetStyles();
+    runLayout();
 
     // Bind event handlers for interactions
-    cy.current.on('add', (event) => {
-      if (!event.target.hasClass('eh-ghost') && !event.target.hasClass('eh-preview')) { runLayout(); }
-
-      if (showMap) {
-        if (window.leaf) {
-          window.leaf.fit();
-        }
-      }
+    cy.current.on('add remove', (event) => {
+      setNodeCount(cy.current.nodes().length);
     });
 
     cy.current.on('select', 'node', (event) => {
@@ -136,12 +135,10 @@ const useCyModes = (cy, id) => {
 
     // 'eh' is the edge creation extension: https://github.com/cytoscape/cytoscape.js-edgehandles
     cy.current.on('ehstart', (event) => {
-      stopLayout();
     });
 
     cy.current.on('ehcomplete', (event) => {
       console.log('ehcompleteevent');
-      runLayout();
     });
 
     return () => {
@@ -153,7 +150,7 @@ const useCyModes = (cy, id) => {
   }, [id]);
 
   useEffect(() => {
-    console.log('automaticLayout', automaticLayout);
+    console.log('layout use effect');
     if (automaticLayout) {
       runLayout();
     } else {
@@ -161,31 +158,34 @@ const useCyModes = (cy, id) => {
     }
   }, [automaticLayout]);
 
-  const actualRunLayout = () => {
-    stopLayout();
+  const runLayout = () => {
+    console.log('runLayout', automaticLayout);
     if (!cy.current) { return; }
-    if (layout.current) { stopLayout() }
+    if (!automaticLayout) { return; }
+    if (showMap) { return; }
 
-    if (automaticLayout) {
-      // See: https://github.com/cytoscape/cytoscape.js-cola#api
-      const layoutOptions = {
-        name: 'cola',
-        infinite: true,
-        fit: false,
-      };
-
-      layout.current = cy.current.layout(layoutOptions);
-      layout.current.run();
-
+    if (layout.current) {
+      console.log('stopping existing layout');
+      stopLayout();
     }
+
+    // See: https://github.com/cytoscape/cytoscape.js-cola#api
+    const layoutOptions = {
+      name: 'cola',
+      infinite: true,
+      fit: false,
+    };
+
+    layout.current = cy.current.layout(layoutOptions);
+    layout.current.run();
   };
 
-  const runLayout = debounce(actualRunLayout, 100, { trailing: true });
-
   const stopLayout = () => {
+    console.log('stop layout');
     if (!layout.current) return;
 
     layout.current.stop();
+    layout.current.destroy();
     layout.current = null;
   }
 
@@ -206,17 +206,7 @@ const useCyModes = (cy, id) => {
     });
   }
 
-  const applyScenePreset = () => {
-    if (!cy.current) { return; }
-
-    enableAttributeBoundingBoxes();
-
-    // Apply styles:
-    applyStylesheet([
-      ...baseStylesheet,
-      ...(showLabels ? labelledNodes : []),
-    ]);
-
+  const generateBubblesFromScenes = () => {
     const colors = [
       '#ffb90033',
       '#e7485633',
@@ -231,14 +221,14 @@ const useCyModes = (cy, id) => {
       'post-activity',
     ]
 
-    scenes.forEach((scene, index) => {
-      if (modeOptions.hideScenes && modeOptions.hideScenes.includes(scene)) {
-        return;
-      }
+    const bubbleScenes = scenes.filter(scene => !get(modeOptions, 'hideScenes', []).includes(scene))
 
+    bubbleScenes.forEach((scene, index) => {
       const selector = `node[${scene}="true"]`;
-      bb.current.addPath(cy.current.nodes(selector), null, null, {
+      const nodes = cy.current.nodes(selector)
+      bb.current.addPath(nodes, null, null, {
         virtualEdges: true,
+        drawPotentialArea: true,
         style: {
           stroke: colors[index],
           strokeWidth: 4,
@@ -248,15 +238,40 @@ const useCyModes = (cy, id) => {
     });
   }
 
-  const applyJurisdictionPreset = () => {
+  const applyScenePreset = () => {
+    console.log('applyscenepreset');
     if (!cy.current) { return; }
 
-    enableAttributeBoundingBoxes();
+    if (!bb.current) {
+      enableAttributeBoundingBoxes();
+    } else {
+      disableAttributeBoundingBoxes();
+      enableAttributeBoundingBoxes();
+    }
 
     // Apply styles:
     applyStylesheet([
       ...baseStylesheet,
-      ...(showLabels ? labelledNodes : []),
+      ...(showLabels ? labelledNodes : unlabelledNodes),
+    ]);
+
+    generateBubblesFromScenes();
+  }
+
+  const applyJurisdictionPreset = () => {
+    if (!cy.current) { return; }
+
+    if (!bb.current) {
+      enableAttributeBoundingBoxes();
+    } else {
+      disableAttributeBoundingBoxes();
+      enableAttributeBoundingBoxes();
+    }
+
+    // Apply styles:
+    applyStylesheet([
+      ...baseStylesheet,
+      ...(showLabels ? labelledNodes : unlabelledNodes),
     ]);
 
     const colors = [
@@ -289,34 +304,34 @@ const useCyModes = (cy, id) => {
   }
 
   const resetStyles = () => {
+    console.log('Reset styles');
     if (!cy.current) { return; }
-
 
     cy.current.elements().removeClass('hidden half-opacity');
 
     applyStylesheet([
       ...baseStylesheet,
-      ...defaultEntityColours,
-      ...(showLabels ? labelledNodes : []),
+      ...withEntityColors,
+      ...(showLabels ? labelledNodes : unlabelledNodes),
     ]);
   }
 
+  const disableAttributeBoundingBoxes = () => {
+    if (!bb.current) { return; }
+    // Remove any existing paths
+    bb.current.getPaths().forEach((path) => {
+      console.log('Disabling path');
+      path.remove();
+    })
+    bb.current.destroy();
+    bb.current = null;
+  };
+
   const enableAttributeBoundingBoxes = () => {
     if (!cy.current) { return; }
-
-    if (bb.current) {
-      disableAttributeBoundingBoxes();
-    }
-
+    disableAttributeBoundingBoxes();
     bb.current = cy.current.bubbleSets();
   }
-
-  const disableAttributeBoundingBoxes = () => {
-    if (!cy.current || !bb.current) { return; }
-    // Remove any existing paths
-    bb.current.getPaths().forEach(path => bb.current.removePath(path));
-    bb.current.destroy();
-  };
 
   const enableEdgeCreation = (type) => {
     if (!cy.current) { return; }
@@ -436,6 +451,7 @@ const useCyModes = (cy, id) => {
   }
 
   const applyPreset = () => {
+    console.log('apply preset');
     switch (modeOptions.preset) {
       case 'scene':
         applyScenePreset();
@@ -455,6 +471,23 @@ const useCyModes = (cy, id) => {
   }
 
   useEffect(() => {
+    console.log('node count changed', nodeCount);
+    applyPreset();
+    runLayout();
+  }, [nodeCount])
+
+  useEffect(() => {
+    if (showMap) {
+      if (window.leaf) {
+        window.leaf.fit();
+      }
+    }
+  }, [showMap, window.leaf])
+
+  const previousMode = useRef();
+
+  useEffect(() => {
+    console.log('Main use Effect');
     if (!cy.current) { return; }
 
     disableNodeHighlighting();
@@ -474,12 +507,22 @@ const useCyModes = (cy, id) => {
         break;
       default:
     };
+
+    previousMode.current = mode;
   }, [
-    id,
-    showLabels,
+    // id,
+    // showLabels,
     mode,
     modeOptions,
   ]); // could even respond to modeOptions?
+
+  useEffect(() => {
+    if (!cy.current) { return; }
+    applyStylesheet([
+      ...cy.current.style().json(),
+      ...(showLabels ? labelledNodes : unlabelledNodes),
+    ]);
+  }, [showLabels])
 
   const actions = {
     runLayout,

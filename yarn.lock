@@ -514,7 +514,7 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@types/cytoscape@^3.14.7", "@types/cytoscape@^3.19.0":
+"@types/cytoscape@^3.19.0":
   version "3.19.7"
   resolved "https://registry.yarnpkg.com/@types/cytoscape/-/cytoscape-3.19.7.tgz#a15f2905f6a0803f6efda60a00024a5974aeedba"
   integrity sha512-JPM9gkXd302QvChbT7vnMli0QYbithROlQQQ9u0ur9YhmMkN0E/y++mKreHEhBvSf3ffiMH6RwemwPM5qbOGEw==
@@ -565,6 +565,18 @@
   integrity sha512-VwAYom2pfIAf/pLj1VR5aLltd4tOtHyvfaJlNYCoejzP2nu52PrMi1ehsLRMUS+bgafmIIKBV1cMfKeS+uJ0Vg==
   dependencies:
     "@types/geojson" "*"
+
+"@types/lodash.throttle@^4.1.6":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.throttle/-/lodash.throttle-4.1.7.tgz#4ef379eb4f778068022310ef166625f420b6ba58"
+  integrity sha512-znwGDpjCHQ4FpLLx19w4OXDqq8+OvREa05H89obtSyXyOFKL3dDjCslsmfBz0T2FU8dmf5Wx1QvogbINiGIu9g==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.184"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.184.tgz#23f96cd2a21a28e106dc24d825d4aa966de7a9fe"
+  integrity sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==
 
 "@types/lodash@^4.14.175":
   version "4.14.182"
@@ -917,6 +929,11 @@ browserslist@^4.17.5:
     node-releases "^2.0.2"
     picocolors "^1.0.0"
 
+bubblesets-js@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/bubblesets-js/-/bubblesets-js-2.2.0.tgz#2ffca57450fa45952e320e8e52aa8f38a67c8abc"
+  integrity sha512-RHrOwJqFetEgkg7ZgjDr9qrvQXUw6JjZTkFtB0EHSp6QCobeLRYh7djmkJKTpy43ENiOJJgmMagNex5z5TbQXQ==
+
 buffer-alloc-unsafe@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-alloc-unsafe/-/buffer-alloc-unsafe-1.1.0.tgz#bd7dc26ae2972d0eda253be061dba992349c19f0"
@@ -1259,14 +1276,17 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.11.tgz#d66700c5eacfac1940deb4e3ee5642792d85cd33"
   integrity sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==
 
-cytoscape-bubblesets@2:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/cytoscape-bubblesets/-/cytoscape-bubblesets-2.0.0.tgz#2360b7bda9873a9d1c15209c7ca7686d078435cb"
-  integrity sha512-Um5QLz/dBW0I1ctta2PqbqLWVwR/T0I9DhiAiDVoYGU8/4+csNA5a/XtK3xZkWodg2/v1FH+emkm8lbx063oyg==
+cytoscape-bubblesets@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-bubblesets/-/cytoscape-bubblesets-3.1.0.tgz#846f3251f049ade67470f9560bb4141a5b89dfbe"
+  integrity sha512-Jt4qKK0VCXe0rV88Kgel86hC4ziI4AXq9VyMOp+WiFlvtdLg3EKtIiyTWSF/Cw5KRSGuE+u+tSVTgwgkHig85w==
   dependencies:
-    "@types/cytoscape" "^3.14.7"
+    "@types/cytoscape" "^3.19.0"
+    "@types/lodash.throttle" "^4.1.6"
+    bubblesets-js "^2.2.0"
+    lodash.throttle "^4.1.1"
 
-cytoscape-cola@^2.4.0:
+cytoscape-cola@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/cytoscape-cola/-/cytoscape-cola-2.5.1.tgz#1ec25dfd92533485f29943adf740ecd4feb2ea16"
   integrity sha512-4/2S9bW1LvdsEPmxXN1OEAPFPbk7DvCx2c9d+TblkQAAvptGaSgtPWCByTEGgT8UxCxcVqes2aFPO5pzwo7R2w==

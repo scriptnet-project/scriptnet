@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // @ts-ignore:next-line
-import { useCytoscape, useCytoscapeActions } from '@/hooks/Cytoscape';
+import { useCytoscape } from '@/hooks/Cytoscape';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Slider } from '@fluentui/react';
 import { isEmpty } from 'lodash';
@@ -35,10 +35,6 @@ let filteredElements: CollectionGraphManipulation | null;
 
 const InvolvementSlider = () => {
   const { cy, id } = useCytoscape();
-  const {
-    runLayout,
-    applyPreset,
-  } = useCytoscapeActions();
 
   const [ dates, setDates ] = useState([] as Date[]);
   const [sliderValue, setSliderValue] = useState([0, 0]);
@@ -88,8 +84,6 @@ const InvolvementSlider = () => {
       filteredElements.restore();
       filteredElements = null;
     }
-
-    runLayout();
   }
 
   // Change handler
@@ -128,15 +122,12 @@ const InvolvementSlider = () => {
         return true;
       }
 
-      if (nodeHasInvolvementWithinRange(nodeInvolvements, lowerValueDate, upperValueDate)) {
-        return false;
+      if (!nodeHasInvolvementWithinRange(nodeInvolvements, lowerValueDate, upperValueDate)) {
+        return true;
       }
 
-      return true;
+      return false;
     }).remove();
-
-    runLayout();
-    applyPreset();
   };
 
   // Function to format the slider values in YYYY-MM-DD format

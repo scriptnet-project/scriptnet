@@ -6,7 +6,6 @@ const initialState = {
 };
 
 const useCyLoader = (cy, initializeCy) => {
-  console.log('useCyLoader');
   const [state, setState] = useState(initialState);
 
   const resetLoader = () => {

@@ -2,7 +2,7 @@ import { getTheme } from '@fluentui/react';
 
 const theme = getTheme();
 
-export const defaultEntityColours = [
+export const withEntityColors = [
   {
     selector: 'edge[type = "personal"]',
     style: {
@@ -70,6 +70,15 @@ export const labelledNodes = [
     selector: 'node',
     style: {
       'label': 'data(name)'
+    }
+  }
+];
+
+export const unlabelledNodes = [
+  {
+    selector: 'node',
+    style: {
+      'label': ''
     }
   }
 ];

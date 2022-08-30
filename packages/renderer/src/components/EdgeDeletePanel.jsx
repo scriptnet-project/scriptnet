@@ -16,7 +16,6 @@ const EdgeDeletePanel = () => {
   const handleCancel = () => {
     cy.current.edges().unselect();
     dispatch(actionCreators.clearSelected());
-    cyActions.runLayout();
     cyActions.centerGraph();
   }
 
@@ -45,14 +44,14 @@ const EdgeDeletePanel = () => {
           }}
         >
           <PrimaryButton
-            iconProps={{ iconName: 'delete', children: theme.palette.red}}
-            style={{backgroundColor: theme.palette.red, color:'white'}}
+            iconProps={{ iconName: 'delete', children: theme.palette.red }}
+            style={{ backgroundColor: theme.palette.red, color: 'white' }}
             onClick={() => {
               cyActions.remove(selectedEdge);
               handleCancel();
             }}
-            >
-              Delete
+          >
+            Delete
           </PrimaryButton>
           <IconButton
             iconProps={{ iconName: 'Cancel' }}
