@@ -9,7 +9,8 @@
   "main": "dist/main/index.cjs",
   "scripts": {
     "dev": "node scripts/watch.mjs",
-    "build": "npm run typecheck && node scripts/build.mjs && electron-builder -mlw --config .electron-builder.config.js",
+    "build": "npm run typecheck && node scripts/build.mjs",
+    "package": "npx electron-builder -mlw --config .electron-builder.config.js",
     "typecheck": "tsc --noEmit --project packages/renderer/tsconfig.json",
     "debug": "cross-env-shell NODE_ENV=debug \"npm run typecheck && node scripts/build.mjs && vite ./packages/renderer\""
   },
