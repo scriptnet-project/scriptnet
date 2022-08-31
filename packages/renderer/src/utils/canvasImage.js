@@ -15,7 +15,7 @@ export const getLegendImage = () => {
 
 export const getSVGImage = () => {
   const svg = document.getElementsByTagName('svg')[0];
-
+  console.log(svg);
   return html2canvas(svg, { scale: 4 })
     .then((canvas) => {
       const width = canvas.getAttribute('width');

@@ -4,7 +4,6 @@ const exportState = {};
 
 // Transform collection of involvements into string for CSV encoding
 const involvementsToString = (involvements) => involvements.reduce((acc, involvement, index) => {
-  console.log('involvementsToString', involvement);
   const formattedStartDate = new Date(involvement.start).toDateString();
   const formattedEndDate = new Date(involvement.end).toDateString();
   return `${acc}\r\n${formattedStartDate} - ${formattedEndDate}`;

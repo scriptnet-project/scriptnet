@@ -86,6 +86,8 @@ const CyProvider = ({ children }: PropsWithChildren<{}>) => {
     { ...loadActions, ...modeActions, ...exportActions, ...helperActions },
   ];
 
+  console.log('provider', modeState);
+
   useEffect(() => {
     console.log('bind IPC events');
 
@@ -118,7 +120,7 @@ const CyProvider = ({ children }: PropsWithChildren<{}>) => {
       // @ts-ignore:next-line
       window.api.removeListeners();
     }
-  }, [loadState])
+  }, [loadState, modeState]); // modeState needed so that getImageData has latest state
 
   return (
     <CytoScapeContext.Provider value={value}>

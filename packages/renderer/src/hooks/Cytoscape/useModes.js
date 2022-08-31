@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modes } from '../../store/mode';
 import { actionCreators as visualisationActions } from '../../store/visualisation';
@@ -239,8 +239,6 @@ const useCyModes = (cy, id) => {
   }
 
   const generateBubblesFromAttribute = (bubbles, selector = (bubble) => `node[${bubble}="true"]`) => {
-
-    console.log('generateBubblesFromAttribute', bubbles, selector);
     if (!cy.current) { return; }
 
     const bubbleKeys = Object.keys(bubbles);
@@ -447,7 +445,10 @@ const useCyModes = (cy, id) => {
       (modeOptions.preset === 'scene' || modeOptions.preset === 'geography' || modeOptions.preset === 'jurisdiction')
     ) {
       const svgImage = await getSVGImage();
+      console.log("Got SVG image", svgImage);
       context.putImageData(svgImage, 0, 0);
+    } else {
+      console.log('SVG not needed', mode, modeOptions.preset, mode == modes.CONFIGURE, (modeOptions.preset === 'scene' || modeOptions.preset === 'geography' || modeOptions.preset === 'jurisdiction'))
     }
 
     const cytopng = cy.current.png({ scale: 4 });
@@ -462,7 +463,7 @@ const useCyModes = (cy, id) => {
     let canvasBitmap = virtualCanvas.toDataURL();
     const data = canvasBitmap.replace(/^data:image\/\w+;base64,/, "");
     return data;
-  }
+  };
 
   const applyFocalIndividualPreset = () => {
     if (!cy.current) { return; }
