@@ -5,8 +5,17 @@ import { Text, Stack, TextField, Icon } from "@fluentui/react";
 import { OpenStreetMapProvider  } from 'react-leaflet-geosearch';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { useField } from 'formik';
-import { LatLng, Map as LeafletMap } from 'leaflet';
+import L, { LatLng, Map as LeafletMap } from 'leaflet';
 import { searchReverseLocation } from '@/utils/searchReverseLocation';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const provider = new OpenStreetMapProvider();
 
