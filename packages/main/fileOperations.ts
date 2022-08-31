@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { ipcMain, dialog, OpenDialogOptions } from 'electron';
 import { writeFile, readFile } from 'fs-extra';
 import { join, parse, dirname } from 'path';
 import Papa from 'papaparse';
@@ -44,18 +44,21 @@ export const saveFile = async ({ data, filePath }) => {
 
 const saveCSV = async ({ edges, nodes, filePath }) => {
   const path = await ensureFilePath(filePath, saveDialogOptions);
+  const browserWindow = await getBrowserWindow();
+
   if (!path) { return; }
+  if (!browserWindow) { return; }
 
   const cwd = dirname(path);
 
-  const dialogOptions = {
+  const dialogOptions: OpenDialogOptions = {
     title: 'Select location for CSV files',
     buttonLabel: 'Save',
     defaultPath: cwd,
     properties: ['openDirectory', 'createDirectory'],
-  }
+  };
 
-  const { canceled, filePaths } = await dialog.showOpenDialog(getBrowserWindow(), dialogOptions);
+  const { canceled, filePaths } = await dialog.showOpenDialog(browserWindow, dialogOptions);
 
   if (canceled) { return; }
 
