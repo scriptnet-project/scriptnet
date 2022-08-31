@@ -9,15 +9,12 @@
   "main": "dist/main/index.cjs",
   "scripts": {
     "dev": "node scripts/watch.mjs",
-    "build": "npm run typecheck && node scripts/build.mjs && electron-builder --config .electron-builder.config.js",
+    "build": "npm run typecheck && node scripts/build.mjs && electron-builder -mlw --config .electron-builder.config.js",
     "typecheck": "tsc --noEmit --project packages/renderer/tsconfig.json",
     "debug": "cross-env-shell NODE_ENV=debug \"npm run typecheck && node scripts/build.mjs && vite ./packages/renderer\""
   },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
-  },
-  "dependencies": {
-    "electron-store": "^8.0.1"
   },
   "devDependencies": {
     "@fluentui/react": "^8.64.3",
