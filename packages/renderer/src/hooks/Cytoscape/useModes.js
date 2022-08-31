@@ -13,6 +13,7 @@ import { getMode, getModeOptions } from '../../store/selectors/mode';
 import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
 import { get } from 'lodash';
+import { jurisdictions, scenes } from '../../components/Legend/Legend';
 
 let filteredElements;
 
@@ -28,6 +29,7 @@ const useCyModes = (cy, id) => {
   const dispatch = useDispatch();
   const eh = useRef(null);
   const bb = useRef(null);
+  const leaf = useRef(null);
 
   const initializeMap = () => {
     // Filter nodes that don't have a location
@@ -43,8 +45,8 @@ const useCyModes = (cy, id) => {
       longitude: (data) => data.location.x,
     };
 
-    window.leaf = cy.current.leaflet(options);
-    console.info('Created leaflet map with ID', window.leaf.map._container._leaflet_id);
+    leaf.current = cy.current.leaflet(options);
+    console.info('Created leaflet map with ID', leaf.current.map._container._leaflet_id);
 
     // Disable automatic layout
     // Do I need to update state here?
@@ -53,9 +55,9 @@ const useCyModes = (cy, id) => {
 
   const destroyMap = () => {
     console.log('Destroy map');
-    if (window.leaf) {
-      console.info('Removing leaflet map with id', window.leaf.map._container._leaflet_id);
-      window.leaf.destroy();
+    if (leaf.current && leaf.current.map._container._leaflet_id) {
+      console.info('Removing leaflet map with id', leaf.current.map._container._leaflet_id);
+      leaf.current.destroy();
     }
 
     if (filteredElements && !showMap) {
@@ -75,7 +77,7 @@ const useCyModes = (cy, id) => {
     }
 
     if (!showMap) {
-      if (window.leaf) {
+      if (leaf.current) {
         destroyMap();
       }
     }
@@ -84,6 +86,9 @@ const useCyModes = (cy, id) => {
 
   useEffect(() => {
     if (!cy.current) { return; }
+
+    // if ID has changed we have a new cytoscape instance. Reset vis state
+    dispatch(visualisationActions.reset());
 
     resetStyles();
     runLayout();
@@ -98,7 +103,6 @@ const useCyModes = (cy, id) => {
     // Bind event handlers for interactions
     cy.current.on('add remove', 'node', (event) => {
       const node = event.target;
-      console.log('test', node.classes(), isForbiddenType(node.classes()));
 
       if (isForbiddenType(node.classes())) {
         return;
@@ -163,7 +167,7 @@ const useCyModes = (cy, id) => {
         cy.current.removeAllListeners();
       }
 
-      if (window.leaf) {
+      if (leaf.current) {
         destroyMap();
       }
     }
@@ -234,33 +238,22 @@ const useCyModes = (cy, id) => {
     });
   }
 
-  const generateBubblesFromScenes = () => {
-    const colors = [
-      '#ffb90033',
-      '#e7485633',
-      '#0078d733',
-      '#6b69d633',
-    ];
+  const generateBubblesFromAttribute = (bubbles, selector = (bubble) => `node[${bubble}="true"]`) => {
 
-    const scenes = [
-      'preparation',
-      'pre-activity',
-      'activity',
-      'post-activity',
-    ]
+    console.log('generateBubblesFromAttribute', bubbles, selector);
+    if (!cy.current) { return; }
 
-    const bubbleScenes = scenes.filter(scene => !get(modeOptions, 'hideScenes', []).includes(scene))
+    const bubbleKeys = Object.keys(bubbles);
 
-    bubbleScenes.forEach((scene, index) => {
-      const selector = `node[${scene}="true"]`;
-      const nodes = cy.current.nodes(selector)
+    bubbleKeys.forEach((bubble) => {
+      const nodes = cy.current.nodes(selector(bubble))
       bb.current.addPath(nodes, null, null, {
         virtualEdges: true,
         drawPotentialArea: true,
         style: {
-          stroke: colors[index],
+          stroke: bubbles[bubble],
           strokeWidth: 4,
-          fill: colors[index],
+          fill: bubbles[bubble],
         }
       });
     });
@@ -285,11 +278,25 @@ const useCyModes = (cy, id) => {
       ...(showLabels ? labelledNodes : unlabelledNodes),
     ]);
 
-    generateBubblesFromScenes();
+    const bubbles = scenes.reduce((acc, scene) => {
+      return {
+        ...acc,
+        [scene.label]: scene.color,
+      };
+    }, {});
+
+    const hiddenScenes = get(modeOptions, 'hideScenes', []);
+    hiddenScenes.forEach((scene) => {
+      delete bubbles[scene];
+    });
+
+    generateBubblesFromAttribute(bubbles);
   }
 
   const applyJurisdictionPreset = () => {
     if (!cy.current) { return; }
+
+    cy.current.autounselectify(true);
 
     if (!bb.current) {
       enableAttributeBoundingBoxes();
@@ -304,28 +311,19 @@ const useCyModes = (cy, id) => {
       ...(showLabels ? labelledNodes : unlabelledNodes),
     ]);
 
-    const colors = [
-      '#ffb90033',
-      '#e7485633',
-      '#0078d733',
-      '#6b69d633',
-    ];
+    const bubbles = jurisdictions.reduce((acc, jurisdiction) => {
+      return {
+        ...acc,
+        [jurisdiction.label]: jurisdiction.color,
+      };
+    }, {});
 
-    baseJurisdictionOptions.forEach((jurisdiction, index) => {
-      if (modeOptions.hideJurisdiction && modeOptions.hideJurisdiction.includes(jurisdiction.key)) {
-        return;
-      }
-
-      const selector = `node[jurisdiction="${jurisdiction.key}"]`;
-      bb.current.addPath(cy.current.nodes(selector), null, cy.current.nodes().difference(cy.current.nodes(selector)), {
-        virtualEdges: true,
-        style: {
-          stroke: colors[index],
-          strokeWidth: 4,
-          fill: colors[index],
-        }
-      });
+    const hiddenJurisdictions = get(modeOptions, 'hideJurisdiction', []);
+    hiddenJurisdictions.forEach((jurisdiction) => {
+      delete bubbles[jurisdiction];
     });
+
+    generateBubblesFromAttribute(bubbles, (bubble) => `node[jurisdiction="${bubble}"]`);
   }
 
   const applyStylesheet = (stylesheet) => {
@@ -511,11 +509,11 @@ const useCyModes = (cy, id) => {
 
   useEffect(() => {
     if (showMap) {
-      if (window.leaf) {
-        window.leaf.fit();
+      if (leaf.current) {
+        leaf.current.fit();
       }
     }
-  }, [showMap, window.leaf])
+  }, [showMap, leaf.current])
 
   useEffect(() => {
     console.log('Main use Effect');

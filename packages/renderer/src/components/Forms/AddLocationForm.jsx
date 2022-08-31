@@ -19,17 +19,17 @@ import FieldArray from '../Fields/FieldArray';
 const theme = getTheme();
 
 const functionOptions = [
-  {key: 'Offending location', text: 'Offending location' },
-  {key: 'Meeting', text: 'Meeting' },
-  {key: 'Storage', text: 'Storage' },
-  {key: 'Hideaway', text: 'Hideaway' },
-  {key: 'Unknown', text: 'Unknown' },
+  { key: 'Offending location', text: 'Offending location' },
+  { key: 'Meeting', text: 'Meeting' },
+  { key: 'Storage', text: 'Storage' },
+  { key: 'Hideaway', text: 'Hideaway' },
+  { key: 'Unknown', text: 'Unknown' },
 ];
 
 const defaultValues = {
   name: '',
   location: null,
-  jurisdiction: 'local',
+  jurisdiction: 'Local',
   function: null,
   involvements: [],
   notes: '',
@@ -135,18 +135,18 @@ const AddLocationForm = ({
             flex: '0 0 auto',
           }}
         >
-          { isEditing ? (
+          {isEditing ? (
             <>
               <DefaultButton text="Cancel" onClick={closeDialog} />
               <PrimaryButton
-                iconProps={{ iconName: 'delete', children: theme.palette.red}}
-                style={{backgroundColor: theme.palette.red, color:'white'}}
+                iconProps={{ iconName: 'delete', children: theme.palette.red }}
+                style={{ backgroundColor: theme.palette.red, color: 'white' }}
                 onClick={() => {
                   cyActions.remove(initialValues.id);
                   closeDialog();
                 }}
-                >
-                  Delete
+              >
+                Delete
               </PrimaryButton>
               <PrimaryButton type="submit" text="Save and Close" />
             </>

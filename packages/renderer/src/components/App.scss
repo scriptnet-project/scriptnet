@@ -14,8 +14,10 @@
   }
 }
 
-.leaflet-tile-pane {
-  filter: grayscale(1);
+#Visualisation {
+  .leaflet-tile-pane {
+    filter: grayscale(1);
+  }
 }
 
 .involvement-slider-container {

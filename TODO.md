@@ -1,6 +1,4 @@
 # TODO List
-- Involvement slider is misbehaving
-- Edit shouldn't trigger when in scene visualisation mode
 - Scenes arent included in export
 - Marker Icon is missing
 - Jurisdiction preset isn't working

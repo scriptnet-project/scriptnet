@@ -9,7 +9,7 @@ import './Legend.scss';
 
 const theme = getTheme();
 
-const edges = [
+export const edges = [
   { glyph: 'line', type: 'edge', label: 'personal', color: theme.palette.yellow },
   { glyph: 'line', type: 'edge', label: 'communication', color: theme.palette.purpleLight },
   { glyph: 'line', type: 'edge', label: 'financial', color: theme.palette.greenLight },
@@ -18,24 +18,24 @@ const edges = [
   { glyph: 'line', type: 'edge', label: 'working', color: theme.palette.red },
 ];
 
-const nodes = [
+export const nodes = [
   { glyph: 'circle', type: 'node', label: 'person', color: theme.palette.blue },
   { glyph: 'square', type: 'node', label: 'location', color: theme.palette.purple },
   { glyph: 'triangle', type: 'node', label: 'resource', color: theme.palette.tealLight },
   { glyph: 'diamond', type: 'node', label: 'organisation', color: theme.palette.orange },
 ];
 
-const scenes = [
+export const scenes = [
   { glyph: 'group', type: 'scene', label: 'preparation', color: '#ffb90033' },
   { glyph: 'group', type: 'scene', label: 'pre-activity', color: '#e7485633' },
   { glyph: 'group', type: 'scene', label: 'activity', color: '#0078d733' },
   { glyph: 'group', type: 'scene', label: 'post-activity', color: '#6b69d633' },
 ];
 
-const jurisdictions = [
-  { glyph: 'group', type: 'jurisdiction', label: 'local', color: '#ffb90033' },
-  { glyph: 'group', type: 'jurisdiction', label: 'regional', color: '#e7485633' },
-  { glyph: 'group', type: 'jurisdiction', label: 'national', color: '#0078d733' },
+export const jurisdictions = [
+  { glyph: 'group', type: 'jurisdiction', label: 'Local', color: '#ffb90033' },
+  { glyph: 'group', type: 'jurisdiction', label: 'Regional', color: '#e7485633' },
+  { glyph: 'group', type: 'jurisdiction', label: 'National', color: '#0078d733' },
   { glyph: 'group', type: 'jurisdiction', label: 'Transnational', color: '#6b69d633' },
 ];
 
@@ -66,7 +66,7 @@ const getElements = (mode, options) => {
 const LegendItem = ({ type, label, ...options }) => {
   return (
     <motion.p layout className="Legend__element">
-      <span className={`glyph glyph--${options.glyph}`} style={{ '--color': options.color }}/>
+      <span className={`glyph glyph--${options.glyph}`} style={{ '--color': options.color }} />
       {label}
     </motion.p>
   );
@@ -77,22 +77,22 @@ const Legend = () => {
   const elements = groupBy(getElements(mode, options), 'type');
 
   return (
-      <motion.div
-        className="Legend"
-        whileHover={{ opacity: 0.1 }}
-        id="legend"
-        layout
-      >
-        {Object.keys(elements).map((group) => (
-          <div className="Legend__group" key={group}>
-            <Text>
-              <h4 style={{ textTransform: 'capitalize'}}>{group}</h4>
-              {elements[group].map(elementProps => (<LegendItem {...elementProps} key={elementProps.label} />))}
-            </Text>
-          </div>
-        ))}
-      </motion.div>
+    <motion.div
+      className="Legend"
+      whileHover={{ opacity: 0.1 }}
+      id="legend"
+      layout
+    >
+      {Object.keys(elements).map((group) => (
+        <div className="Legend__group" key={group}>
+          <Text>
+            <h4 style={{ textTransform: 'capitalize' }}>{group}</h4>
+            {elements[group].map(elementProps => (<LegendItem {...elementProps} key={elementProps.label} />))}
+          </Text>
+        </div>
+      ))}
+    </motion.div>
   );
- };
+};
 
 export default Legend;

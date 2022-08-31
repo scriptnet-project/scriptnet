@@ -19,18 +19,18 @@ import FieldArray from '../Fields/FieldArray';
 const theme = getTheme();
 
 const functionOptions = [
-  {key: 'Production', text: 'Production' },
-  {key: 'Distribution', text: 'Distribution' },
-  {key: 'Aquisition', text: 'Aquisition' },
-  {key: 'Exchange', text: 'Exchange' },
-  {key: 'Facilitation', text: 'Facilitation' },
-  {key: 'Finances', text: 'Finances' },
+  { key: 'Production', text: 'Production' },
+  { key: 'Distribution', text: 'Distribution' },
+  { key: 'Aquisition', text: 'Aquisition' },
+  { key: 'Exchange', text: 'Exchange' },
+  { key: 'Facilitation', text: 'Facilitation' },
+  { key: 'Finances', text: 'Finances' },
 ];
 
 const defaultValues = {
   name: '',
   location: null,
-  jurisdiction: 'local',
+  jurisdiction: 'Local',
   function: null,
   involvements: [],
   notes: '',
@@ -138,18 +138,18 @@ const AddResourceForm = ({
             flex: '0 0 auto',
           }}
         >
-          { isEditing ? (
+          {isEditing ? (
             <>
               <DefaultButton text="Cancel" onClick={closeDialog} />
               <PrimaryButton
-                iconProps={{ iconName: 'delete', children: theme.palette.red}}
-                style={{backgroundColor: theme.palette.red, color:'white'}}
+                iconProps={{ iconName: 'delete', children: theme.palette.red }}
+                style={{ backgroundColor: theme.palette.red, color: 'white' }}
                 onClick={() => {
                   cyActions.remove(initialValues.id);
                   closeDialog();
                 }}
-                >
-                  Delete
+              >
+                Delete
               </PrimaryButton>
               <PrimaryButton type="submit" text="Save and Close" />
             </>

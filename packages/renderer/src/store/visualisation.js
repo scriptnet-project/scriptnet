@@ -3,6 +3,7 @@ import { actionCreators as modeActions } from './mode';
 
 const actionCreators = createActions({
   SET_SELECTED: (id, type = 'node') => ({ id, type }),
+  RESET: () => ({}),
   CLEAR_SELECTED: undefined, // noop
   TOGGLE_SHOW_LABELS: undefined,
   TOGGLE_AUTOMATIC_LAYOUT: undefined,
@@ -19,6 +20,7 @@ const initialState = {
 };
 
 const reducer = handleActions({
+  [actionCreators.reset]: () => initialState,
   [actionCreators.setSelected]: (state, action) => ({
     ...state,
     selected: {

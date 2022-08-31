@@ -41,7 +41,7 @@ const genderOptions = [
 const defaultValues = {
   name: '',
   location: null,
-  jurisdiction: 'local',
+  jurisdiction: 'Local',
   role: null,
   gender: 'Male',
   involvements: [],

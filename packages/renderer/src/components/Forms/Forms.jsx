@@ -50,7 +50,7 @@ const Forms = () => {
       return;
     }
 
-    console.log(typeToUpperCase, formForType);
+    console.log('selectedNodeData', selectedNodeData);
     setInitialValues(selectedNodeData);
     dispatch(formActions.setForm(forms[typeToUpperCase]));
   }, [selectedNode])

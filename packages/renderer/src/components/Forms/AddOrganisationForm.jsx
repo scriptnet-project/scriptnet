@@ -19,41 +19,41 @@ import FieldArray from '../Fields/FieldArray';
 const theme = getTheme();
 
 const functionOptions = [
-  {key: 'Production', text: 'Production' },
-  {key: 'Distribution', text: 'Distribution' },
-  {key: 'Trading and Wholesale', text: 'Trading and Wholesale' },
-  {key: 'Transportation', text: 'Transportation' },
-  {key: 'Retail', text: 'Retail' },
-  {key: 'Disposal', text: 'Disposal' },
+  { key: 'Production', text: 'Production' },
+  { key: 'Distribution', text: 'Distribution' },
+  { key: 'Trading and Wholesale', text: 'Trading and Wholesale' },
+  { key: 'Transportation', text: 'Transportation' },
+  { key: 'Retail', text: 'Retail' },
+  { key: 'Disposal', text: 'Disposal' },
 ];
 
 const typeOptions = [
-  {key: 'Private', text: 'Private' },
-  {key: 'Public', text: 'Public' },
-  {key: 'Other', text: 'Other' },
+  { key: 'Private', text: 'Private' },
+  { key: 'Public', text: 'Public' },
+  { key: 'Other', text: 'Other' },
 ];
 
 const sectorOptions = [
-  {key: 'Construction', text: 'Construction'},
-  {key: 'Real Estate', text: 'Real Estate'},
-  {key: 'Power', text: 'Power'},
-  {key: 'Oil and Gas / Energy', text: 'Oil and Gas / Energy'},
-  {key: 'Financial Services - Banking', text: 'Financial Services - Banking'},
-  {key: 'Financial Services - Other', text: 'Financial Services - Other'},
-  {key: 'Pharmaceuticals', text: 'Pharmaceuticals'},
-  {key: 'Healthcare', text: 'Healthcare'},
-  {key: 'Technology', text: 'Technology'},
-  {key: 'Manufacturing', text: 'Manufacturing'},
-  {key: 'Defense', text: 'Defence'},
-  {key: 'Logistics', text: 'Logistics'},
-  {key: 'Food and Beverage', text: 'Food and Beverage'},
-  {key: 'Other', text: 'Other'},
+  { key: 'Construction', text: 'Construction' },
+  { key: 'Real Estate', text: 'Real Estate' },
+  { key: 'Power', text: 'Power' },
+  { key: 'Oil and Gas / Energy', text: 'Oil and Gas / Energy' },
+  { key: 'Financial Services - Banking', text: 'Financial Services - Banking' },
+  { key: 'Financial Services - Other', text: 'Financial Services - Other' },
+  { key: 'Pharmaceuticals', text: 'Pharmaceuticals' },
+  { key: 'Healthcare', text: 'Healthcare' },
+  { key: 'Technology', text: 'Technology' },
+  { key: 'Manufacturing', text: 'Manufacturing' },
+  { key: 'Defense', text: 'Defence' },
+  { key: 'Logistics', text: 'Logistics' },
+  { key: 'Food and Beverage', text: 'Food and Beverage' },
+  { key: 'Other', text: 'Other' },
 ];
 
 const defaultValues = {
   name: '',
   location: null,
-  jurisdiction: 'local',
+  jurisdiction: 'Local',
   function: null,
   organisationType: 'Private',
   sector: null,
@@ -185,18 +185,18 @@ const AddOrganisationForm = ({
             flex: '0 0 auto',
           }}
         >
-          { isEditing ? (
+          {isEditing ? (
             <>
               <DefaultButton text="Cancel" onClick={closeDialog} />
               <PrimaryButton
-                iconProps={{ iconName: 'delete', children: theme.palette.red}}
-                style={{backgroundColor: theme.palette.red, color:'white'}}
+                iconProps={{ iconName: 'delete', children: theme.palette.red }}
+                style={{ backgroundColor: theme.palette.red, color: 'white' }}
                 onClick={() => {
                   cyActions.remove(initialValues.id);
                   closeDialog();
                 }}
-                >
-                  Delete
+              >
+                Delete
               </PrimaryButton>
               <PrimaryButton type="submit" text="Save and Close" />
             </>
