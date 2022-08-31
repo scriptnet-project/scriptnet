@@ -13,8 +13,8 @@ Cite as follows:
 ## Documentation and Downloads
 
 You can download the software for Windows and macOS from the following links:
-  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/0.0.6/ScriptNet.Setup.0.0.6.exe)
-  - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/0.0.6/ScriptNet-0.0.6.dmg)
+  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/1.0.0/ScriptNet.Setup.1.0.0.exe)
+  - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/1.0.0/ScriptNet-1.0.0.dmg)
   
 To view all available versions of the software, visit the [releases page](https://github.com/scriptnet-project/scriptnet/releases/).
 
@@ -27,16 +27,7 @@ This program is free software; you can redistribute it and/or modify it under th
 
 ## Developer Information
 
-This is built on top of electron-webpack-quick-start, which is a bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
-
-Thanks to the power of `electron-webpack` this template comes packed with...
-
-* Use of [`webpack-dev-server`](https://github.com/webpack/webpack-dev-server) for development
-* HMR for both `renderer` and `main` processes
-* Use of [`babel-preset-env`](https://github.com/babel/babel-preset-env) that is automatically configured based on your `electron` version
-* Use of [`electron-builder`](https://github.com/electron-userland/electron-builder) to package and build a distributable electron application
-
-Make sure to check out [`electron-webpack`'s documentation](https://webpack.electron.build/) for more details.
+This is built on top of [electron-vite-react](https://github.com/electron-vite/electron-vite-react).
 
 ### Development Scripts
 
@@ -54,4 +45,3 @@ yarn dist
 # `yarn compile` & create unpacked build with electron-builder
 yarn dist:dir
 ```
-

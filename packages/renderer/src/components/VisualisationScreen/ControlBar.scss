@@ -1,0 +1,29 @@
+.ControlBar {
+  flex: 0 0 5rem;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-top: 4px solid #0078d4;
+  z-index: 2;
+
+  .primary-stack {
+    .primary-action-button {
+      flex: 1;
+      height: 100%;
+
+      &__button {
+        height: 100%;
+        width: 100%;
+        border: 0;
+
+        &:not(.ms-Button--compoundPrimary) {
+          color: #0078d4;
+        }
+      }
+    }
+  }
+}
+

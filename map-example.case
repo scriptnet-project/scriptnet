@@ -1,0 +1,89 @@
+{
+  "network": {
+    "elements": [
+      {
+        "data": {
+          "name": "Person",
+          "type": "person",
+          "lng": "-2.2451148",
+          "lat": "53.4794892",
+          "id": "654eda0e-081d-4e1c-930e-4b08a54cf3ed",
+          "pre-activity": "true",
+          "preparation": "true",
+          "jurisdiction": "local",
+          "role": "Suspected Primary Offender",
+          "gender": "Male",
+          "notes": "notes about this person",
+          "location": {
+            "x": "-2.2451148",
+            "y": "53.4794892",
+            "label": "Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom",
+            "bounds": [
+              [
+                53.3194892,
+                -2.4051148
+              ],
+              [
+                53.6394892,
+                -2.0851148
+              ]
+            ],
+            "raw": {
+              "place_id": 692549,
+              "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+              "osm_type": "node",
+              "osm_id": 294001443,
+              "lat": "53.4794892",
+              "lon": "-2.2451148",
+              "display_name": "Manchester, Lancashire, North West England, England, M60 2UB, United Kingdom",
+              "address": {
+                "city": "Manchester",
+                "county": "Lancashire",
+                "ISO3166-2-lvl6": "GB-LAN",
+                "state_district": "North West England",
+                "state": "England",
+                "ISO3166-2-lvl4": "GB-ENG",
+                "postcode": "M60 2UB",
+                "country": "United Kingdom",
+                "country_code": "gb"
+              },
+              "boundingbox": [
+                "53.3194892",
+                "53.6394892",
+                "-2.4051148",
+                "-2.0851148"
+              ]
+            }
+          },
+          "involvements": [
+            {
+              "key": 1,
+              "start": "2022-03-31T22:00:00.000Z",
+              "end": "2022-04-04T22:00:00.000Z"
+            },
+            {
+              "key": 2,
+              "start": "2022-04-12T22:00:00.000Z",
+              "end": "2022-04-15T22:00:00.000Z"
+            }
+          ]
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": "eh-preview-active"
+      }
+    ]
+  },
+  "options": {
+    "visualisation": {
+      "selected": null,
+      "showLabels": true,
+      "automaticLayout": true
+    }
+  }
+}
