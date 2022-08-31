@@ -3,7 +3,7 @@
   "productName": "ScriptNet",
   "private": true,
   "version": "1.0.0",
-  "description": "Vite React Electron boilerplate.",
+  "description": "A tool for visualising crime networks using the Script Network Analysis method.",
   "author": "University of Manchester",
   "license": "MIT",
   "main": "dist/main/index.cjs",
