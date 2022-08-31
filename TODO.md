@@ -1,6 +1,3 @@
-# TODO List
-- Marker Icon is missing
-
 # Known issues
 - No user facing feedback when opening, saving or exporting.
 - No prompt to confirm overwriting CSV files when exporting to the same directory as a previous export.
