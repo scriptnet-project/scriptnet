@@ -12,7 +12,7 @@ import { baseJurisdictionOptions } from '../../components/Forms/sharedOptions';
 import { getMode, getModeOptions } from '../../store/selectors/mode';
 import { getAutomaticLayout, getShowLabels, getShowMap } from '../../store/selectors/visualisation';
 import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
-import { debounce, get } from 'lodash';
+import { get } from 'lodash';
 
 let filteredElements;
 
@@ -88,12 +88,27 @@ const useCyModes = (cy, id) => {
     resetStyles();
     runLayout();
 
+    // Use regex to check if any class in the classes array begins with 'eh-'
+    const isForbiddenType = (classes) => {
+      const re = new RegExp('^eh-');
+      const forbidden = classes.some(c => re.test(c));
+      return forbidden;
+    }
+
     // Bind event handlers for interactions
-    cy.current.on('add remove', (event) => {
+    cy.current.on('add remove', 'node', (event) => {
+      const node = event.target;
+      console.log('test', node.classes(), isForbiddenType(node.classes()));
+
+      if (isForbiddenType(node.classes())) {
+        return;
+      }
+
       setNodeCount(cy.current.nodes().length);
     });
 
     cy.current.on('select', 'node', (event) => {
+      // Don't select if we are in anything other than default mode
       const selectedID = event.target.data().id;
       console.log('A node was selected', selectedID);
 
@@ -135,15 +150,21 @@ const useCyModes = (cy, id) => {
 
     // 'eh' is the edge creation extension: https://github.com/cytoscape/cytoscape.js-edgehandles
     cy.current.on('ehstart', (event) => {
+      stopLayout();
     });
 
     cy.current.on('ehcomplete', (event) => {
       console.log('ehcompleteevent');
+      runLayout();
     });
 
     return () => {
       if (cy.current) {
         cy.current.removeAllListeners();
+      }
+
+      if (window.leaf) {
+        destroyMap();
       }
     }
 
@@ -158,14 +179,19 @@ const useCyModes = (cy, id) => {
     }
   }, [automaticLayout]);
 
-  const runLayout = () => {
+  const runLayout = (force = false) => {
     console.log('runLayout', automaticLayout);
-    if (!cy.current) { return; }
-    if (!automaticLayout) { return; }
-    if (showMap) { return; }
+
+    if (!force) {
+      if (!cy.current) { return; }
+      if (!automaticLayout) { return; }
+      if (showMap) { return; }
+    } else {
+      console.info('Forcing runLayout()!');
+    }
+
 
     if (layout.current) {
-      console.log('stopping existing layout');
       stopLayout();
     }
 
@@ -191,6 +217,8 @@ const useCyModes = (cy, id) => {
 
   const applyRelationshipPreset = () => {
     if (!cy.current) { return; }
+
+    cy.current.autounselectify(true);
 
     const localHideEdges = modeOptions.hideEdges || [];
 
@@ -241,6 +269,8 @@ const useCyModes = (cy, id) => {
   const applyScenePreset = () => {
     console.log('applyscenepreset');
     if (!cy.current) { return; }
+
+    cy.current.autounselectify(true);
 
     if (!bb.current) {
       enableAttributeBoundingBoxes();
@@ -472,7 +502,10 @@ const useCyModes = (cy, id) => {
 
   useEffect(() => {
     console.log('node count changed', nodeCount);
-    applyPreset();
+
+    if (mode == modes.CONFIGURE) {
+      applyPreset();
+    }
     runLayout();
   }, [nodeCount])
 
@@ -483,8 +516,6 @@ const useCyModes = (cy, id) => {
       }
     }
   }, [showMap, window.leaf])
-
-  const previousMode = useRef();
 
   useEffect(() => {
     console.log('Main use Effect');
@@ -507,14 +538,11 @@ const useCyModes = (cy, id) => {
         break;
       default:
     };
-
-    previousMode.current = mode;
   }, [
     // id,
-    // showLabels,
     mode,
     modeOptions,
-  ]); // could even respond to modeOptions?
+  ]);
 
   useEffect(() => {
     if (!cy.current) { return; }

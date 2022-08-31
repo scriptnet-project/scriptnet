@@ -79,14 +79,13 @@ const LocationSelector = ({ label, ...props }: { label: string, field: { name: s
   }, [map]);
 
   useEffect(() => {
-    console.log('field value', field.value);
     if (map && field.value && field.value.x && field.value.y) {
       const location = {
         lng: field.value.x,
         lat: field.value.y,
       };
 
-      map.flyTo(location, map.getZoom());
+      map.setView(location);
     }
   }, [field.value])
 

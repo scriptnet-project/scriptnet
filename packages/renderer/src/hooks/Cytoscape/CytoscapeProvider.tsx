@@ -58,8 +58,17 @@ const CyProvider = ({ children }: PropsWithChildren<{}>) => {
     if (cyRef.current) {
       cyRef.current.destroy();
     }
+
     const cy = Cytoscape(cyOptions);
     cy.add(elements);
+
+    // There was a bug in the edge handles extension that caused it to fail to
+    // remove the .eh-preview-active class. This was then written to all data
+    // files.
+    //
+    // As a bodge, we remove this class from all nodes here.
+    cy.nodes().removeClass('eh-preview-active');
+
     cyRef.current = cy;
 
     setState(() => ({ id: uuid() }));
