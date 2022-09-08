@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "description": "A tool for visualising crime networks using the Script Network Analysis method.",
   "author": "University of Manchester",
-  "license": "MIT",
+  "license": "GPL v2",
   "main": "dist/main/index.cjs",
   "scripts": {
     "dev": "node scripts/watch.mjs",
