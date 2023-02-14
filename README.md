@@ -13,15 +13,15 @@ Cite as follows:
 ## Documentation and Downloads
 
 You can download the software for Windows and macOS from the following links:
-  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/1.0.0/ScriptNet.Setup.1.0.0.exe)
-  - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/1.0.0/ScriptNet-1.0.0.dmg)
+  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/v1.0.0/ScriptNet.Setup.1.0.0.exe)
+  - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/v1.0.0/ScriptNet-1.0.0-Installer.dmg)
   
 To view all available versions of the software, visit the [releases page](https://github.com/scriptnet-project/scriptnet/releases/).
 
 A user manual for the software is available as a Microsoft Word formatted document from [this link](https://github.com/scriptnet-project/scriptnet/raw/master/Scriptnet%20investigator%20manual_FINAL.docx).
 
 ## License and Copyright
-Copyright 2020, Nick Lord, Elisa Bellotti, Cecilia Flores-Elizondo, Joshua Melville, and Steve McKellar.
+Copyright 2023, Nick Lord, Elisa Bellotti, Cecilia Flores-Elizondo, Joshua Melville, and Steve McKellar.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. See the LICENSE file for further details.
 
