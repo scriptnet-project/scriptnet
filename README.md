@@ -13,7 +13,7 @@ Cite as follows:
 ## Documentation and Downloads
 
 You can download the software for Windows and macOS from the following links:
-  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/v1.0.0/ScriptNet.Setup.1.0.0.exe)
+  - [Windows](https://github.com/scriptnet-project/scriptnet/releases/download/v1.0.0/ScriptNet-1.0.0-Setup.exe)
   - [macOS](https://github.com/scriptnet-project/scriptnet/releases/download/v1.0.0/ScriptNet-1.0.0-Installer.dmg)
   
 To view all available versions of the software, visit the [releases page](https://github.com/scriptnet-project/scriptnet/releases/).
