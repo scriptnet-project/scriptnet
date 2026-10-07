@@ -32,16 +32,22 @@ This is built on top of [electron-vite-react](https://github.com/electron-vite/e
 ### Development Scripts
 
 ```bash
-# run application in development mode
+# Node 24 and Yarn 1.22.22
+yarn install --frozen-lockfile
 yarn dev
 
-# compile source code and create webpack output
-yarn compile
+yarn test
+yarn build
+yarn test:e2e
 
-# `yarn compile` & create build with electron-builder
-yarn dist
-# To disable code signing on macOS set the env var CSC_IDENTITY_AUTO_DISCOVERY=false
-
-# `yarn compile` & create unpacked build with electron-builder
-yarn dist:dir
+# Native installers (no automatic publishing)
+yarn package:win:x64
+yarn package:mac:x64
+yarn package:mac:arm64
 ```
+
+Map settings supports a saved personal CARTO basemap key and an optional key
+supplied during release builds. Current draft installers are personal-key-only.
+See [release instructions](docs/RELEASING.md) for the maintainer-controlled key
+handoff, three-platform builds, signing limits, and draft publication workflow.
+See [QA notes](docs/QA.md) for verified behavior and remaining limitations.

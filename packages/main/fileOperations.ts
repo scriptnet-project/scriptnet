@@ -1,4 +1,4 @@
-import { ipcMain, dialog, OpenDialogOptions } from 'electron';
+import { ipcMain, dialog, OpenDialogOptions, BrowserWindow } from 'electron';
 import { writeFile, readFile } from 'fs-extra';
 import { join, parse, dirname } from 'path';
 import Papa from 'papaparse';
@@ -80,22 +80,30 @@ const saveCSV = async ({ edges, nodes, filePath }) => {
   await writeFile(edgesFilePath, Papa.unparse(edges), 'utf8');
 }
 
+const isTrustedSender = (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  return !!window && event.senderFrame === window.webContents.mainFrame;
+};
+
 export const registerListeners = async () => {
-  ipcMain.handle('open-sample-protocol', async () => {
+  ipcMain.handle('open-sample-protocol', async (event) => {
+    if (!isTrustedSender(event)) return;
     console.log('Open sample protocol');
     await openFile(SAMPLE_NETWORK_PATH);
   })
 
-  ipcMain.on('trigger-save-response', async (_, response) => {
-    console.log('trigger-save-response', response);
+  ipcMain.on('trigger-save-response', async (event, response) => {
+    if (!isTrustedSender(event)) return;
     await saveFile(response);
   })
 
-  ipcMain.on('trigger-save-csv-response', async (_, response) => {
+  ipcMain.on('trigger-save-csv-response', async (event, response) => {
+    if (!isTrustedSender(event)) return;
     await saveCSV(response);
   })
 
-  ipcMain.on('trigger-save-screenshot-response', async (_, response) => {
+  ipcMain.on('trigger-save-screenshot-response', async (event, response) => {
+    if (!isTrustedSender(event)) return;
     const options = {
       properties: ['createDirectory', 'showOverwriteConfirmation'],
       defaultPath: 'ScriptNet Export.png',

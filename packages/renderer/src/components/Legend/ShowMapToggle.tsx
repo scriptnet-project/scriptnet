@@ -45,6 +45,7 @@ const ShowMapToggle = () => {
   <>
     <Toggle
       label={<div>Show Map <Callout /></div>}
+      ariaLabel="Show map"
       inlineLabel
       checked={showMap}
       onChange={toggleShowMap}

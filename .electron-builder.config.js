@@ -2,6 +2,9 @@
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
+const { readFileSync } = require('node:fs');
+const info = JSON.parse(readFileSync('dist/build-info.json', 'utf8'));
+const variant = info.includedBasemapKey ? '' : '-personal-key-only';
 module.exports = {
   appId: "ScriptNet",
   productName: "ScriptNet",
@@ -19,7 +22,7 @@ module.exports = {
         arch: ["x64"],
       },
     ],
-    artifactName: "${productName}-${version}-Setup.${ext}",
+    artifactName: '${productName}-${version}-${arch}' + variant + '-Setup.${ext}',
   },
   nsis: {
     oneClick: false,
@@ -29,10 +32,13 @@ module.exports = {
   },
   mac: {
     target: ["dmg"],
-    artifactName: "${productName}-${version}-Installer.${ext}",
+    minimumSystemVersion: "13.0",
+    identity: "-",
+    notarize: false,
+    artifactName: '${productName}-${version}-${arch}' + variant + '-Installer.${ext}',
   },
   linux: {
     target: ["AppImage"],
-    artifactName: "${productName}-${version}-Installer.${ext}",
+    artifactName: '${productName}-${version}-${arch}' + variant + '-Installer.${ext}',
   },
 }

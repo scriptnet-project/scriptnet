@@ -1,32 +1,72 @@
-name: Build/release
-
-on: push
-
+name: Build desktop installers
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+    inputs:
+      bundle_key:
+        description: 'Include the maintainer-entered CARTO key (requires CARTO_BASEMAPS_KEY secret; key is observable in distributed apps)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-
+  build:
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-
+        include:
+          - os: windows-2025
+            platform: win
+            arch: x64
+          - os: macos-15-intel
+            platform: mac
+            arch: x64
+          - os: macos-15
+            platform: mac
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v1
-
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
-          node-version: 16
-
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+          node-version: '24'
+          cache: yarn
+      - run: yarn install --frozen-lockfile --non-interactive
+      - run: yarn test
+      - run: yarn build
+      - run: yarn test:e2e
+      - name: Test included-key override and reset with a synthetic key
+        if: matrix.platform == 'mac' && matrix.arch == 'arm64'
+        run: yarn test:included-key
+      # Ordinary branch/PR builds are keyless. A maintainer can explicitly
+      # dispatch a credential-bearing build after entering the secret themselves.
+      - name: Rebuild with maintainer-provided key
+        if: github.event_name == 'workflow_dispatch' && inputs.bundle_key
+        run: yarn build
+        env:
+          SCRIPTNET_REQUIRE_BUNDLED_KEY: '1'
+          VITE_CARTO_BASEMAPS_KEY: ${{ secrets.CARTO_BASEMAPS_KEY }}
+      - run: yarn package:${{ matrix.platform }}:${{ matrix.arch }}
+      - name: Inspect native Windows Authenticode status
+        if: matrix.platform == 'win'
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $signature = Get-AuthenticodeSignature -LiteralPath "release/$version/win-unpacked/ScriptNet.exe"
+          $signature.Status.ToString() | Set-Content -Path "release/$version/authenticode-status.txt" -Encoding utf8NoBOM
+      - run: node scripts/write-release-metadata.mjs ${{ matrix.platform }} ${{ matrix.arch }}
+      - name: Test packaged app with isolated synthetic cases
+        if: github.event_name != 'workflow_dispatch' || !inputs.bundle_key
+        run: node scripts/test-packaged.mjs ${{ matrix.platform }} ${{ matrix.arch }}
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
-
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-          args: "--config .electron-builder.config.js"
+          name: ScriptNet-${{ matrix.platform }}-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            release/*/*.exe
+            release/*/*.dmg
+            release/*/build-info-*.json
+          retention-days: 14

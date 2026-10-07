@@ -19,7 +19,6 @@ import useModes from './useModes';
 import useHelpers from './useHelpers';
 // @ts-ignore:next-line
 import useExportCSV from './useExportCSV';
-import { IpcMainEvent } from 'electron';
 
 // Initialise extensions
 Cytoscape.use(cola);
@@ -36,18 +35,10 @@ const cyOptions: CytoscapeOptions = {
   styleEnabled: true,
 };
 
-declare global {
-    interface Window { api: {
-      onFileSaved: Function,
-      onFileOpened: Function,
-      onTriggerSave: Function,
-      onTriggerSaveCSV: Function,
-      onTriggerSaveScreenshot: Function,
-    }; }
-}
 
 const CyProvider = ({ children }: PropsWithChildren<{}>) => {
-  const cyRef = useRef(Cytoscape(cyOptions));
+  const cyRef = useRef<Cytoscape.Core | null>(null);
+  if (!cyRef.current) cyRef.current = Cytoscape(cyOptions);
 
   const [state, setState] = useState(() => ({
     id: uuid(),
@@ -56,6 +47,8 @@ const CyProvider = ({ children }: PropsWithChildren<{}>) => {
   const initializeCy = (elements = []) => {
     console.info("Initializing Cytoscape");
     if (cyRef.current) {
+      modeActions.destroyMap();
+      modeActions.stopLayout();
       cyRef.current.destroy();
     }
 
@@ -89,38 +82,32 @@ const CyProvider = ({ children }: PropsWithChildren<{}>) => {
   console.log('provider', modeState);
 
   useEffect(() => {
-    console.log('bind IPC events');
 
-    window.api.onFileSaved((_: Event, filePath: string) => loadActions.updateFilePath(filePath));
+    window.api.onFileSaved((filePath: string) => loadActions.updateFilePath(filePath));
 
-    window.api.onFileOpened((_: Event, data: Object, filePath: string) => {
-      console.log('onFileOpened', data, filePath);
+    window.api.onFileOpened((data: Object, filePath: string) => {
       loadActions.loadCase(data, filePath);
     });
 
-    window.api.onTriggerSave((event: IpcMainEvent) => {
-      const response = loadActions.getSaveableData();
-      console.log('onTriggerSave', event, response);
-      event.sender.send('trigger-save-response', response)
+    window.api.onTriggerSave(() => {
+      const response = loadActions.getSaveableData(modeActions.getAllElements());
+      window.api.saveCase(response);
     });
 
-    window.api.onTriggerSaveCSV((event: IpcMainEvent) => {
-      const response = exportActions.getCSVData();
-      console.log('onTriggerSaveCSV', response);
-      event.sender.send('trigger-save-csv-response', response);
+    window.api.onTriggerSaveCSV(() => {
+      const response = exportActions.getCSVData(modeActions.getAllElements());
+      window.api.saveCSV(response);
     })
 
-    window.api.onTriggerSaveScreenshot(async (event: IpcMainEvent) => {
+    window.api.onTriggerSaveScreenshot(async () => {
       const imageData = await modeActions.getImageData();
-      event.sender.send('trigger-save-screenshot-response', imageData)
+      window.api.saveScreenshot(imageData);
     })
 
     return () => {
-      console.log('remove IPC events');
-      // @ts-ignore:next-line
       window.api.removeListeners();
     }
-  }, [loadState, modeState]); // modeState needed so that getImageData has latest state
+  }, [loadState, modeState, state.id]); // modeState needed so that getImageData has latest state
 
   return (
     <CytoScapeContext.Provider value={value}>

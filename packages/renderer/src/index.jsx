@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css";
 import "cytoscape-leaf/cytoscape-leaf.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import App from './components/App';
+import { MapSettingsProvider } from './hooks/MapSettings';
 
 const { store, persistor } = getStore();
 initializeIcons();
@@ -15,7 +16,7 @@ initializeIcons();
 ReactDOM.render((
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <App />
+      <MapSettingsProvider><App /></MapSettingsProvider>
     </PersistGate>
   </Provider>
 ), document.getElementById('root'));

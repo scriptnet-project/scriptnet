@@ -15,10 +15,13 @@ import { getLegendImage, getSVGImage } from '../../utils/canvasImage';
 import { get } from 'lodash';
 import { jurisdictions, scenes } from '../../components/Legend/Legend';
 
-let filteredElements;
+import { useMapSettings } from '../MapSettings';
+import { cartoTileUrl } from '../../../../shared/mapKey.mjs';
 
 const useCyModes = (cy, id) => {
   const mode = useSelector(getMode);
+  const { mapKey, retry, setError } = useMapSettings();
+  const filteredElements = useRef(null);
   const layout = useRef();
   const modeOptions = useSelector(getModeOptions);
   const showLabels = useSelector(getShowLabels);
@@ -31,58 +34,54 @@ const useCyModes = (cy, id) => {
   const bb = useRef(null);
   const leaf = useRef(null);
 
-  const initializeMap = () => {
-    // Filter nodes that don't have a location
-    filteredElements = cy.current.nodes().filter('[!location]').remove();
-
-    const options = {
-      // the container in which the map should live, should be a sibling of the cytoscape container
-      container: document.getElementById('cy-leaflet'),
-
-      // the data field for latitude
-      latitude: (data) => data.location.y,
-      // the data field for longitude
-      longitude: (data) => data.location.x,
-    };
-
-    leaf.current = cy.current.leaflet(options);
-    console.info('Created leaflet map with ID', leaf.current.map._container._leaflet_id);
-
-    // Disable automatic layout
-    // Do I need to update state here?
-    stopLayout();
-  }
-
   const destroyMap = () => {
-    console.log('Destroy map');
-    if (leaf.current && leaf.current.map._container._leaflet_id) {
-      console.info('Removing leaflet map with id', leaf.current.map._container._leaflet_id);
+    if (leaf.current) {
       leaf.current.destroy();
+      leaf.current = null;
     }
-
-    if (filteredElements && !showMap) {
-      filteredElements.restore();
-      filteredElements = null;
+    if (filteredElements.current) {
+      const elements = filteredElements.current;
+      filteredElements.current = null;
+      if (!elements.cy().destroyed()) elements.restore();
     }
-
-    runLayout();
-  }
+  };
 
   useEffect(() => {
-    console.log('Show Map changed', showMap);
-    if (!cy.current) { return; }
+    if (!cy.current || !showMap || !mapKey) return;
+    stopLayout();
+    filteredElements.current = cy.current.nodes().filter('[!location]').remove();
+    leaf.current = cy.current.leaflet({
+      container: document.getElementById('cy-leaflet'),
+      latitude: data => data.location.y,
+      longitude: data => data.location.x,
+      tileUrl: cartoTileUrl(mapKey),
+    });
+    leaf.current.appliedMapKey = mapKey;
+    leaf.current.appliedMapRetry = retry;
+    leaf.current.defaultTileLayer.on('tileerror', () => {
+      setError('Map tiles could not load. Check your connection and CARTO key in map settings.');
+    });
+    return destroyMap;
+  }, [showMap, id, Boolean(mapKey)]);
 
-    if (showMap) {
-      initializeMap();
+  useEffect(() => {
+    if (!showMap || !mapKey || !leaf.current) return;
+    let cancelled = false;
+    setError('');
+    if (leaf.current.appliedMapKey !== mapKey) {
+      leaf.current.defaultTileLayer.setUrl(cartoTileUrl(mapKey));
+    } else if (leaf.current.appliedMapRetry !== retry) {
+      leaf.current.defaultTileLayer.redraw();
     }
-
-    if (!showMap) {
-      if (leaf.current) {
-        destroyMap();
-      }
-    }
-
-  }, [showMap])
+    leaf.current.appliedMapKey = mapKey;
+    leaf.current.appliedMapRetry = retry;
+    window.api.validateMapKey(mapKey).then(result => {
+      if (!cancelled && !result.ok) setError(result.message);
+    }).catch(() => {
+      if (!cancelled) setError('Could not check the CARTO key. Open map settings to try again.');
+    });
+    return () => { cancelled = true; };
+  }, [showMap, id, mapKey, retry]);
 
   useEffect(() => {
     if (!cy.current) { return; }
@@ -551,7 +550,12 @@ const useCyModes = (cy, id) => {
     ]);
   }, [showLabels])
 
+  const getAllElements = () => cy.current.elements().union(filteredElements.current || []);
+
   const actions = {
+    getAllElements,
+    destroyMap,
+    stopLayout,
     runLayout,
     applyStylesheet,
     applyScenePreset,
