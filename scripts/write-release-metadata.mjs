@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 const [platform, arch] = process.argv.slice(2);
@@ -20,9 +20,14 @@ if (platform === 'win') {
 if (actual !== arch) throw new Error('Packaged application architecture does not match its label.');
 let signing;
 if (platform === 'win') {
-  const checked = spawnSync('powershell', ['-NoProfile', '-NonInteractive', '-File', 'scripts/check-authenticode.ps1', executable], { encoding: 'utf8' });
-  if (checked.status !== 0) throw new Error('Could not inspect Windows application signature.');
-  signing = `Authenticode status: ${checked.stdout.trim()}; no distribution certificate configured.`;
+  const statusPath = join(root, 'authenticode-status.txt');
+  if (existsSync(statusPath)) {
+    signing = `Authenticode status: ${readFileSync(statusPath, 'utf8').trim()}; no distribution certificate configured.`;
+  } else {
+    const pe = binary.readUInt32LE(0x3c);
+    const certificateSize = binary.readUInt32LE(pe + 24 + 112 + 4 * 8 + 4);
+    signing = certificateSize === 0 ? 'Unsigned PE; no Authenticode certificate present.' : 'Authenticode directory present; trust not assessed locally.';
+  }
 }
 if (platform === 'mac') {
   const bundle = join(root, arch === 'arm64' ? 'mac-arm64' : 'mac', 'ScriptNet.app');

@@ -50,6 +50,13 @@ jobs:
           SCRIPTNET_REQUIRE_BUNDLED_KEY: '1'
           VITE_CARTO_BASEMAPS_KEY: ${{ secrets.CARTO_BASEMAPS_KEY }}
       - run: yarn package:${{ matrix.platform }}:${{ matrix.arch }}
+      - name: Inspect native Windows Authenticode status
+        if: matrix.platform == 'win'
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $signature = Get-AuthenticodeSignature -LiteralPath "release/$version/win-unpacked/ScriptNet.exe"
+          $signature.Status.ToString() | Set-Content -Path "release/$version/authenticode-status.txt" -Encoding utf8NoBOM
       - run: node scripts/write-release-metadata.mjs ${{ matrix.platform }} ${{ matrix.arch }}
       - name: Test packaged app with isolated synthetic cases
         if: github.event_name != 'workflow_dispatch' || !inputs.bundle_key
