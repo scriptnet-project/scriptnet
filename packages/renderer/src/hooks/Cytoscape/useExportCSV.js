@@ -10,8 +10,8 @@ const involvementsToString = (involvements) => involvements.reduce((acc, involve
 }, '');
 
 const useExportCSV = (cy, state) => {
-  const getCSVData = () => {
-    const nodes = cy.current.nodes().map((node) => {
+  const getCSVData = (allElements = cy.current.elements()) => {
+    const nodes = allElements.nodes().map((node) => {
       const nodeData = Object.assign({}, node.data());
       nodeData.location = get(nodeData, 'location.label', '');
       nodeData.involvements = involvementsToString(get(nodeData, 'involvements', []));
@@ -22,7 +22,7 @@ const useExportCSV = (cy, state) => {
       }
     });
 
-    const edges = cy.current.edges().map((edge) => ({
+    const edges = allElements.edges().map((edge) => ({
       ...edge.data(),
     }));
 

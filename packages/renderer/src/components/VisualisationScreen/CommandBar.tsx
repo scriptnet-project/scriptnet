@@ -12,6 +12,8 @@ import ShowMapToggle from '../Legend/ShowMapToggle';
 import AutomaticLayoutToggle from '../Legend/AutomaticLayoutToggle';
 import './CommandBar.scss';
 import { get } from 'lodash';
+// @ts-ignore: JavaScript settings context
+import { useMapSettings } from '../../hooks/MapSettings';
 
 const ShowLabelToggle = () => {
   const showLabels = useSelector(state => get(state, 'visualisation.showLabels'));
@@ -31,6 +33,7 @@ const ShowLabelToggle = () => {
 const TopCommandBar = ({
 }) => {
   const { cy, id } = useCytoscape();
+  const { setSettingsOpen } = useMapSettings();
 
   const farItems = [
     {
@@ -63,7 +66,7 @@ const TopCommandBar = ({
   return (
     <div className="CommandBar">
       <CommandBar
-        items={[]}
+        items={[{ key: 'map-settings', text: 'Map settings', iconProps: { iconName: 'MapLayers' }, onClick: () => setSettingsOpen(true) }]}
         farItems={farItems}
         ariaLabel="Use left and right arrow keys to navigate between commands"
       />

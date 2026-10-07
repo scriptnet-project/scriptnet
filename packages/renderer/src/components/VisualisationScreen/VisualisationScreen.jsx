@@ -4,6 +4,7 @@ import PanelManager from './PanelManager';
 import TopCommandBar from './CommandBar';
 import Visualisation from './Visualisation';
 import WelcomeNotice from './WelcomeNotice';
+import MapSettings, { MapStatus } from '../MapSettings';
 import { useCytoscape } from '../../hooks/Cytoscape';
 
 const VisualisationScreen = () => {
@@ -18,6 +19,8 @@ const VisualisationScreen = () => {
   return (
     <>
       <TopCommandBar />
+      <MapStatus />
+      <MapSettings />
       <div style={{ flex: '1 auto', display: 'flex' }}>
         <Visualisation />
         <PanelManager />

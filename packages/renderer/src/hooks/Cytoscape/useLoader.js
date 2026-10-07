@@ -19,10 +19,10 @@ const useCyLoader = (cy, initializeCy) => {
     setState(s => ({ ...s, filePath }));
   }
 
-  const getSaveableData = () => {
+  const getSaveableData = (allElements = cy.current.elements()) => {
     console.log('saveCase', state);
 
-    const elements = cy.current.elements().jsons();
+    const elements = allElements.jsons();
     const data = JSON.stringify({ network: { elements } });
 
     // Call main process here

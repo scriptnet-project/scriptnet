@@ -1,7 +1,7 @@
-import { app, BrowserWindow, shell, Menu } from 'electron'
-import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-import { release } from 'os'
+import { app, BrowserWindow, shell, Menu, ipcMain } from 'electron'
 import { join } from 'path'
+import { pathToFileURL } from 'url'
+import { validateMapKey } from '../shared/mapKey.mjs'
 import {
   handleNewCase,
   handleOpenCase,
@@ -12,6 +12,9 @@ import {
 } from './menuHandlers';
 import { openFile, registerListeners, SAMPLE_NETWORK_PATH } from './fileOperations';
 
+if (process.env.NODE_ENV === 'test' && process.env.SCRIPTNET_USER_DATA_DIR) {
+  app.setPath('userData', process.env.SCRIPTNET_USER_DATA_DIR);
+}
 const isMac = process.platform === 'darwin'
 
 let win: BrowserWindow;
@@ -134,9 +137,6 @@ const menu = Menu.buildFromTemplate(template);
 
 Menu.setApplicationMenu(menu);
 
-// Disable GPU Acceleration for Windows 7
-if (release().startsWith('6.1')) app.disableHardwareAcceleration()
-
 // Set application name for Windows 10+ notifications
 if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
@@ -145,11 +145,6 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
-async function installDevtools() {
-  return installExtension([REDUX_DEVTOOLS.id, REACT_DEVELOPER_TOOLS.id])
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err));
-}
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -157,22 +152,29 @@ async function createWindow() {
     width: 1280,
     height: 800,
     webPreferences: {
-      preload: join(__dirname, '../preload/index.cjs')
+      preload: join(__dirname, '../preload/index.cjs'),
+      sandbox: true,
+      contextIsolation: true,
+      nodeIntegration: false
     },
   })
 
-  if (app.isPackaged || process.env['DEBUG']) {
-    win.loadFile(join(__dirname, '../renderer/index.html'))
+  const rendererPath = join(__dirname, '../renderer/index.html');
+  const development = process.env.NODE_ENV === 'development';
+  const allowedUrl = development
+    ? `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
+    : pathToFileURL(rendererPath).href;
+  win.webContents.on('will-navigate', (event, url) => {
+    if (url !== allowedUrl && url !== `${allowedUrl}/`) event.preventDefault();
+  });
+  win.webContents.session.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
+  win.webContents.session.setPermissionCheckHandler(() => false);
+  if (development) {
+    await win.loadURL(allowedUrl);
+    win.webContents.openDevTools();
   } else {
-    // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
-    const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
-
-    win.loadURL(url)
-    win.webContents.openDevTools()
+    await win.loadFile(rendererPath);
   }
-
-  win.webContents.on('did-finish-load', async () => {
-  })
 
   // Make all links open with the browser, not with the application
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -181,10 +183,18 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(installDevtools).then(createWindow).then(registerListeners)
+app.whenReady().then(async () => {
+  registerListeners();
+  ipcMain.handle('validate-map-key', (event, key) => {
+    if (event.sender !== win?.webContents || event.senderFrame !== win.webContents.mainFrame) {
+      return { ok: false, message: 'Map key validation is unavailable.' };
+    }
+    return validateMapKey(key);
+  });
+  await createWindow();
+});
 
 app.on('window-all-closed', () => {
-  win.destroy()
   if (process.platform !== 'darwin') app.quit()
 })
 
