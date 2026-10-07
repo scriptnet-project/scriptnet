@@ -35,7 +35,7 @@ CARTO_BASEMAPS_KEY --repo scriptnet-project/scriptnet` and enter the key at its
 hidden prompt themselves. Then explicitly dispatch the `Build desktop
 installers` workflow on the reviewed branch with `bundle_key=true`. That action
 transmits the credential to GitHub and includes it in downloadable build
-artifacts. Ordinary push and PR builds do not access that secret. No workflow
+artifacts. Ordinary branch builds do not access that secret. No workflow
 publishes a release. The maintainer reviews the outputs and manually uploads them
 to the draft before publishing. Do not allow an assistant to retrieve the key or
 dispatch credential-bearing builds during the pending handoff.
@@ -62,7 +62,7 @@ PE/Mach-O architecture before the upload. Artifact names include architecture.
 
 Build with `yarn package:win:x64`, `yarn package:mac:x64`, or
 `yarn package:mac:arm64`. Distribution signing and notarization credentials are
-not configured. Builds may carry Electron's existing/ad-hoc signature, but that
+not configured. Mac builds carry a verified ad-hoc app signature, but that
 does not mean ScriptNet is Developer ID signed or notarized. Document the actual
 signing state and OS warnings before distribution. Do not change Gatekeeper,
 SmartScreen, or other system security settings to bypass them.

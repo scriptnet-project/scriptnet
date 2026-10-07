@@ -37,3 +37,18 @@ Distribution signing/notarization credentials are not configured. Exact artifact
 architecture, signing observations, native packaged-app results, installer payload
 checks, and downloaded-asset hash verification are recorded below after builds.
 Windows SmartScreen and macOS Gatekeeper installation approval are not bypassed.
+
+## Initial native and local packaging checks
+
+All three native build jobs and their packaged-app UI suites passed in Actions
+run 37608565589 (commit 2c69236). Mac signature verification then found that
+skipping signing left an incomplete linker-only bundle signature. Release
+packaging now explicitly uses an ad-hoc identity and verifies the complete
+bundle seal before upload. This needs no signing account or credential.
+
+The corrected Apple Silicon DMG builds locally. Its arm64 Mach-O executable,
+complete ad-hoc hardened-runtime signature and resource seal verify. All three
+packaged-app desktop scenarios pass again. TeamIdentifier is unset: the app is
+not Developer ID signed or notarized. The final native CI run checks the
+corrected Mac signing on both architectures and records Windows Authenticode
+status. Final release asset checks are supplied with the draft.

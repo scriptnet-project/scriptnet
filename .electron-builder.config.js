@@ -33,6 +33,8 @@ module.exports = {
   mac: {
     target: ["dmg"],
     minimumSystemVersion: "13.0",
+    identity: "-",
+    notarize: false,
     artifactName: '${productName}-${version}-${arch}' + variant + '-Installer.${ext}',
   },
   linux: {

@@ -1,8 +1,7 @@
 name: Build desktop installers
 on:
   push:
-    branches: [master, fix/map-key-security-1.1.0]
-  pull_request:
+    branches: ['**']
   workflow_dispatch:
     inputs:
       bundle_key:
